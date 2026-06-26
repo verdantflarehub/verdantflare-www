@@ -2,14 +2,14 @@
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
 const navItems = [
-  { href: "#seedance", label: "Seedance" },
+  { href: "#model", label: "青焰模型" },
   { href: "#scenes", label: "使用场景" },
   { href: "#flow", label: "交付流程" },
   { href: "#faq", label: "FAQ" },
 ];
 
 const heroMeta = [
-  { title: "首期接入", text: "Seedance 视频生成" },
+  { title: "核心服务", text: "青焰视频生成" },
   { title: "交付方式", text: "下单前人工确认" },
   { title: "服务对象", text: "创作者、团队、开发者" },
   { title: "大额需求", text: "先确认库存和有效期" },
@@ -26,11 +26,11 @@ const storyLines = [
   },
   {
     label: "Delivery",
-    text: "Seedance 套餐咨询，额度和交付方式下单前确认。",
+    text: "青焰模型服务咨询，额度和交付方式下单前确认。",
   },
 ];
 
-const seedanceItems = [
+const modelItems = [
   {
     title: "额度咨询",
     text: "下单前确认套餐内容、额度、有效期和交付方式，避免购买后才发现限制。",
@@ -151,7 +151,7 @@ const faqs = [
   {
     question: "青焰Hub 现在主要提供什么？",
     answer:
-      "第一阶段主要提供 Seedance 视频生成相关的额度咨询、套餐交付和使用协助。",
+      "第一阶段主要提供青焰视频生成模型服务的额度咨询、套餐交付和使用协助。",
   },
   {
     question: "下单后多久交付？",
@@ -163,17 +163,18 @@ const faqs = [
       "如果套餐和库存稳定，可以写固定价格；如果还在早期，建议先用咨询套餐和获取报价。",
   },
   {
-    question: "Seedance 额度是否永久有效？",
+    question: "青焰额度是否永久有效？",
     answer: "不建议承诺永久有效。有效期、限制和售后规则应以下单前确认为准。",
   },
   {
-    question: "是否是官方授权？",
-    answer: "没有明确授权证明时，不要写官方授权。可以写第三方额度与交付服务。",
+    question: "青焰模型是什么？",
+    answer:
+      "青焰模型是面向视频生成的智能体模型服务，统一调度文本理解、分镜生成、视频生成和超分增强能力，对外提供青焰自己的模型服务入口。",
   },
   {
-    question: "后续会支持 LTX 和 vLLM 吗？",
+    question: "后续会支持更多模型能力吗？",
     answer:
-      "可以作为路线图展示，但第一版首页重点仍然是 Seedance。vLLM 应表述为推理服务能力。",
+      "会持续增强生成、编辑、超分和工作流能力，但官网对外统一以青焰模型服务呈现。",
   },
 ];
 </script>
@@ -203,13 +204,12 @@ const faqs = [
       <div class="hero-inner">
         <div>
           <p class="eyebrow">www.verdantflarehub.com</p>
-          <h1 id="hero-title">青焰Hub <span>Seedance 视频生成</span></h1>
+          <h1 id="hero-title">青焰Hub <span>青焰视频生成</span></h1>
           <p class="hero-copy">
-            面向短视频创作者、内容团队和开发者，提供 Seedance
-            额度咨询、套餐交付与使用协助。大额需求可先确认库存、有效期与交付方式。
+            面向短视频创作者、内容团队和开发者，提供青焰模型服务额度咨询、套餐交付与使用协助。大额需求可先确认库存、有效期与交付方式。
           </p>
           <div class="hero-actions">
-            <a class="button primary" href="#contact">咨询 Seedance 套餐</a>
+            <a class="button primary" href="#contact">咨询青焰套餐</a>
             <a class="button" href="#flow">了解交付流程</a>
           </div>
           <div class="hero-meta" aria-label="服务摘要">
@@ -229,13 +229,12 @@ const faqs = [
       </div>
     </section>
 
-    <section id="seedance" class="section dark">
+    <section id="model" class="section dark">
       <div class="wrap">
-        <p class="section-kicker">Seedance Service</p>
-        <h2 class="section-title">先把 Seedance 视频生成交付做好。</h2>
+        <p class="section-kicker">Qingyan Model Service</p>
+        <h2 class="section-title">先把青焰视频生成交付做好。</h2>
         <p class="section-lead">
-          第一阶段不做复杂平台包装，只聚焦 Seedance
-          视频生成相关服务：额度咨询、套餐确认、交付说明和基础使用协助。
+          第一阶段不做复杂平台包装，只聚焦青焰模型服务：额度咨询、套餐确认、交付说明和基础使用协助。
         </p>
 
         <div class="intro-grid">
@@ -248,7 +247,7 @@ const faqs = [
           </figure>
           <div class="plain-list">
             <article
-              v-for="item in seedanceItems"
+              v-for="item in modelItems"
               :key="item.title"
               class="plain-item"
             >
@@ -265,8 +264,7 @@ const faqs = [
         <p class="section-kicker">Use Cases</p>
         <h2 class="section-title">让首页展示视频结果，而不是堆概念词。</h2>
         <p class="section-lead">
-          Seedance
-          的转化重点在“我可以拿它做什么”。样片区优先展示短视频、广告、电商和分镜预演四类高频场景。
+          青焰模型服务的转化重点在“我可以拿它做什么”。样片区优先展示短视频、广告、电商和分镜预演四类高频场景。
         </p>
 
         <div class="gallery" aria-label="使用场景样片">
@@ -367,7 +365,7 @@ const faqs = [
       <div class="contact-inner">
         <div>
           <p class="section-kicker">Contact</p>
-          <h2>先确认 Seedance 额度，再决定套餐。</h2>
+          <h2>先确认青焰额度，再决定套餐。</h2>
           <p>
             上线第一版时，这里可以放微信、Telegram、邮箱或在线客服入口。大额需求建议先沟通用途、预计用量、交付时间和售后规则。
           </p>
