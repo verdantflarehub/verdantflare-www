@@ -1,4 +1,4 @@
-ARG NGINX_BASE=registry.cn-qingdao.aliyuncs.com/wod/nginx:1.27
+ARG NGINX_BASE=docker.io/library/nginx:1.27-alpine
 
 FROM ${NGINX_BASE}
 
