@@ -1,12 +1,58 @@
 <script setup>
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import Login from "./view/login/index.vue";
+import ModelDetail from "./view/model/detail/index.vue";
+import ModelList from "./view/model/list/index.vue";
+import ModelOrder from "./view/model/order/index.vue";
+
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
 const navItems = [
-  { href: "#model", label: "青焰模型" },
-  { href: "#scenes", label: "使用场景" },
-  { href: "#flow", label: "交付流程" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/view/model/list", label: "模型市场" },
+  { href: "/#model", label: "青焰模型" },
+  { href: "/#scenes", label: "使用场景" },
+  { href: "/#flow", label: "交付流程" },
+  { href: "/#faq", label: "FAQ" },
 ];
+
+const currentPath = ref(window.location.pathname);
+
+const route = computed(() => {
+  const path = currentPath.value.replace(/\/+$/, "") || "/";
+
+  if (path === "/view/model/list") {
+    return { name: "model-list" };
+  }
+
+  if (path === "/view/model/order") {
+    return { name: "model-order" };
+  }
+
+  if (path === "/login") {
+    return { name: "login" };
+  }
+
+  if (path.startsWith("/view/model/detail")) {
+    const segments = path.split("/").filter(Boolean);
+    return { name: "model-detail", modelId: segments.at(-1) };
+  }
+
+  return { name: "home" };
+});
+
+const isModelRoute = computed(() => route.value.name.startsWith("model-"));
+
+const handleNavigation = () => {
+  currentPath.value = window.location.pathname;
+};
+
+onMounted(() => {
+  window.addEventListener("popstate", handleNavigation);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("popstate", handleNavigation);
+});
 
 const heroMeta = [
   { title: "核心服务", text: "青焰视频生成" },
@@ -182,7 +228,7 @@ const faqs = [
 <template>
   <header class="site-header">
     <nav class="nav" aria-label="主导航">
-      <a class="brand" href="#top" aria-label="青焰Hub 首页">
+      <a class="brand" href="/" aria-label="青焰Hub 首页">
         <i class="brand-mark" aria-hidden="true"></i>
         <span>青焰Hub</span>
       </a>
@@ -191,11 +237,24 @@ const faqs = [
           {{ item.label }}
         </a>
       </div>
-      <a class="nav-cta" href="#contact">联系购买</a>
+      <div class="nav-actions">
+        <a class="nav-login" href="/login">登录</a>
+        <a class="nav-cta" :href="isModelRoute ? '/view/model/order' : '#contact'">
+          {{ isModelRoute ? "购买积分" : "联系购买" }}
+        </a>
+      </div>
     </nav>
   </header>
 
-  <main id="top">
+  <ModelList v-if="route.name === 'model-list'" />
+  <ModelDetail
+    v-else-if="route.name === 'model-detail'"
+    :model-id="route.modelId"
+  />
+  <ModelOrder v-else-if="route.name === 'model-order'" />
+  <Login v-else-if="route.name === 'login'" />
+
+  <main v-else id="top">
     <section
       class="hero"
       aria-labelledby="hero-title"
