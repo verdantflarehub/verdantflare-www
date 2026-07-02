@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  VERSION: www-1.0.0
+  VERSION: www-1.0.1
 
 jobs:
   build:
