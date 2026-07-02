@@ -31,7 +31,7 @@ const submitLogin = () => {
   <main class="login-page">
     <section class="login-shell" aria-labelledby="login-title">
       <div class="login-copy">
-        <p class="market-kicker">Qingyan Account</p>
+        <p class="market-kicker">verdantflare Account</p>
         <h1 id="login-title">手机号登录</h1>
         <p>
           登录后用于模型订单、积分购买和交付记录确认。当前测试账号为

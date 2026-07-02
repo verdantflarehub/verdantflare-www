@@ -87,7 +87,7 @@ export const models = [
     tags: ["低延迟", "稳定", "青焰推荐"],
   },
   {
-    id: "qingyan-dance-2",
+    id: "verdantflare-dance-2",
     name: "青焰Dance-2.0",
     provider: "青焰",
     categories: ["视频生成", "全模态"],
@@ -340,7 +340,7 @@ print(completion.choices[0].message.content)`,
   openai: `import OpenAI from "openai";
 
 const client = new OpenAI({
-  apiKey: process.env.QINGYAN_API_KEY,
+  apiKey: process.env.VERDANTFLARE_API_KEY,
   baseURL: "https://api.verdantflarehub.com/v1",
 });
 
