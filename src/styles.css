@@ -1313,6 +1313,7 @@ textarea {
 }
 
 .api-call-head a,
+.api-call-head button,
 .inline-action {
   display: inline-flex;
   width: fit-content;

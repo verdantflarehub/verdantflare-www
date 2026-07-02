@@ -8,7 +8,7 @@ import ModelOrder from "./view/model/order/index.vue";
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
 const navItems = [
-  { href: "/view/model/list", label: "模型市场" },
+  { href: "/#market", label: "模型市场" },
   { href: "/#model", label: "青焰模型" },
   { href: "/#scenes", label: "使用场景" },
   { href: "/#flow", label: "交付流程" },
@@ -16,9 +16,28 @@ const navItems = [
 ];
 
 const currentPath = ref(window.location.pathname);
+const currentHash = ref(window.location.hash);
 
 const route = computed(() => {
   const path = currentPath.value.replace(/\/+$/, "") || "/";
+  const hash = currentHash.value.replace(/^#\/?/, "").replace(/\/+$/, "");
+
+  if (hash === "login") {
+    return { name: "login" };
+  }
+
+  if (hash === "market") {
+    return { name: "model-list" };
+  }
+
+  if (hash === "market/order") {
+    return { name: "model-order" };
+  }
+
+  if (hash.startsWith("market/detail/")) {
+    const segments = hash.split("/").filter(Boolean);
+    return { name: "model-detail", modelId: segments.at(-1) };
+  }
 
   if (path === "/view/model/list") {
     return { name: "model-list" };
@@ -44,14 +63,17 @@ const isModelRoute = computed(() => route.value.name.startsWith("model-"));
 
 const handleNavigation = () => {
   currentPath.value = window.location.pathname;
+  currentHash.value = window.location.hash;
 };
 
 onMounted(() => {
   window.addEventListener("popstate", handleNavigation);
+  window.addEventListener("hashchange", handleNavigation);
 });
 
 onUnmounted(() => {
   window.removeEventListener("popstate", handleNavigation);
+  window.removeEventListener("hashchange", handleNavigation);
 });
 
 const heroMeta = [
@@ -228,7 +250,7 @@ const faqs = [
 <template>
   <header class="site-header">
     <nav class="nav" aria-label="主导航">
-      <a class="brand" href="/" aria-label="青焰Hub 首页">
+      <a class="brand" href="/#top" aria-label="青焰Hub 首页">
         <i class="brand-mark" aria-hidden="true"></i>
         <span>青焰Hub</span>
       </a>
@@ -238,8 +260,8 @@ const faqs = [
         </a>
       </div>
       <div class="nav-actions">
-        <a class="nav-login" href="/login">登录</a>
-        <a class="nav-cta" :href="isModelRoute ? '/view/model/order' : '#contact'">
+        <a class="nav-login" href="/#login">登录</a>
+        <a class="nav-cta" :href="isModelRoute ? '/#market/order' : '/#contact'">
           {{ isModelRoute ? "购买积分" : "联系购买" }}
         </a>
       </div>

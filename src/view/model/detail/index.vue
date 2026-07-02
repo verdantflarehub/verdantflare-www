@@ -208,13 +208,28 @@ const copyExample = async () => {
     copied.value = false;
   }
 };
+
+const showApiPanel = () => {
+  activePanel.value = "api";
+  requestAnimationFrame(() => {
+    document
+      .getElementById("api-call")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+};
+
+const scrollToGuide = () => {
+  document
+    .getElementById("api-guide")
+    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+};
 </script>
 
 <template>
   <main class="market-page model-detail-page">
     <section class="market-detail-hero">
       <div class="market-wrap">
-        <a class="market-back" href="/view/model/list">返回模型市场</a>
+        <a class="market-back" href="/#market">返回模型市场</a>
         <div class="model-detail-head">
           <div :class="['model-logo large', model.accent]">
             {{ model.name.slice(0, 1) }}
@@ -227,8 +242,10 @@ const copyExample = async () => {
             </div>
             <p>{{ model.summary }}</p>
             <div class="detail-actions">
-              <a class="button primary" href="#api-call">API 调用</a>
-              <a class="button" href="/view/model/order">购买积分</a>
+              <button class="button primary" type="button" @click="showApiPanel">
+                API 调用
+              </button>
+              <a class="button" href="/#market/order">购买积分</a>
             </div>
           </div>
         </div>
@@ -334,7 +351,7 @@ const copyExample = async () => {
                 Chat Completions 接口接入。
               </p>
             </div>
-            <a href="#api-guide">调用指南</a>
+            <button type="button" @click="scrollToGuide">调用指南</button>
           </div>
 
           <div class="api-steps">
@@ -421,7 +438,7 @@ const copyExample = async () => {
           <div id="api-guide" class="api-guide">
             <h2>方式二：在开发工具中接入使用</h2>
             <p>按照官方文档完成对接配置，或把上方示例复制到现有服务中调整。</p>
-            <a class="button" href="/view/model/order">查看官方文档</a>
+            <a class="button" href="/#market/order">查看官方文档</a>
           </div>
         </div>
       </div>

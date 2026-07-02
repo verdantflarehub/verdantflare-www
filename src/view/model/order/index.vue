@@ -31,7 +31,7 @@ const orderPlans = [
   <main class="market-page model-order-page">
     <section class="market-hero order-hero" aria-labelledby="order-title">
       <div class="market-wrap">
-        <a class="market-back" href="/view/model/list">返回模型市场</a>
+        <a class="market-back" href="/#market">返回模型市场</a>
         <p class="market-kicker">Model Order</p>
         <h1 id="order-title">模型订单</h1>
         <p>

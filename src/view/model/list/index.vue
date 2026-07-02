@@ -70,10 +70,10 @@ onUnmounted(() => {
             统一浏览青焰可调用模型、价格、能力和 API 接入方式。支持文本、推理、图片理解、视频生成和多模态工作流。
           </p>
           <div class="market-hero-actions">
-            <a class="button primary" href="/view/model/detail/deepseek-v4-pro">
+            <a class="button primary" href="/#market/detail/deepseek-v4-pro">
               查看推荐模型
             </a>
-            <a class="button" href="/view/model/order">模型订单</a>
+            <a class="button" href="/#market/order">模型订单</a>
           </div>
         </div>
 
@@ -142,7 +142,7 @@ onUnmounted(() => {
             v-for="model in visibleModels"
             :key="model.id"
             class="model-card"
-            :href="`/view/model/detail/${model.id}`"
+            :href="`/#market/detail/${model.id}`"
           >
             <div class="model-card-top">
               <div :class="['model-logo', model.accent]">
