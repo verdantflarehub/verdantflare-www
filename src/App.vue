@@ -1,5 +1,8 @@
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
+import AppDetail from "./view/app/detail/index.vue";
+import AppHistory from "./view/app/history/index.vue";
+import AppList from "./view/app/list/index.vue";
 import Login from "./view/login/index.vue";
 import ModelDetail from "./view/model/detail/index.vue";
 import ModelList from "./view/model/list/index.vue";
@@ -10,6 +13,7 @@ const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 const navItems = [
   { href: "/#home", label: { zh: "首页", en: "Home" } },
   { href: "/#model", label: { zh: "模型", en: "Model" } },
+  { href: "/#apps", label: { zh: "应用", en: "Apps" } },
   { href: "/#video", label: { zh: "视频", en: "Video" } },
   {
     href: "https://github.com/verdantflarehub",
@@ -45,12 +49,40 @@ const route = computed(() => {
     return { name: "model-detail", modelId: segments.at(-1) };
   }
 
+  if (hash === "app-market") {
+    return { name: "app-list" };
+  }
+
+  if (hash.startsWith("app-market/detail/")) {
+    const segments = hash.split("/").filter(Boolean);
+    return { name: "app-detail", appId: segments.at(-1) };
+  }
+
+  if (hash.startsWith("app-market/history/")) {
+    const segments = hash.split("/").filter(Boolean);
+    return { name: "app-history", appId: segments.at(-1) };
+  }
+
   if (path === "/view/model/list") {
     return { name: "model-list" };
   }
 
   if (path === "/view/model/order") {
     return { name: "model-order" };
+  }
+
+  if (path === "/app" || path === "/view/app/list") {
+    return { name: "app-list" };
+  }
+
+  if (path.startsWith("/app/detail") || path.startsWith("/view/app/detail")) {
+    const segments = path.split("/").filter(Boolean);
+    return { name: "app-detail", appId: segments.at(-1) };
+  }
+
+  if (path.startsWith("/app/history") || path.startsWith("/view/app/history")) {
+    const segments = path.split("/").filter(Boolean);
+    return { name: "app-history", appId: segments.at(-1) };
   }
 
   if (path === "/login") {
@@ -89,6 +121,11 @@ const copy = {
     modelLead:
       "首页先说明产品和服务边界，模型区负责把用户引导到模型市场，继续查看模型列表、价格、API 接入方式和订单入口。",
     modelCta: "进入模型市场",
+    appKicker: "Apps",
+    appTitle: "应用市场负责承接工具、工作流和应用安装入口。",
+    appLead:
+      "应用区按照模型区的方式展示核心应用能力，用户先在首页了解应用类型，再进入应用市场查看应用列表、详情、版本和权限说明。",
+    appCta: "进入应用市场",
     videoKicker: "Video Generation",
     videoTitle: "从脚本、分镜和商品卖点生成可测试的视频素材。",
     videoLead:
@@ -126,6 +163,11 @@ const copy = {
     modelLead:
       "The home page explains the product and service boundaries, while the model section guides users to model lists, pricing, API integration, and ordering.",
     modelCta: "Enter Model Market",
+    appKicker: "Apps",
+    appTitle: "The app market hosts tools, workflows, and installable app entries.",
+    appLead:
+      "The app section mirrors the model section: introduce app capabilities on the home page, then guide users into the app market for lists, details, versions, and permissions.",
+    appCta: "Enter App Market",
     videoKicker: "Video Generation",
     videoTitle: "Generate testable video assets from scripts, storyboards, and product ideas.",
     videoLead:
@@ -157,7 +199,7 @@ const text = computed(() => copy[locale.value] || copy.zh);
 const scrollToHash = () => {
   const hash = window.location.hash.replace(/^#/, "");
   if (
-    !["home", "model", "video", "scenes", "flow", "price", "faq"].includes(hash)
+    !["home", "model", "apps", "video", "scenes", "flow", "price", "faq"].includes(hash)
   ) {
     return;
   }
@@ -176,10 +218,19 @@ const scrollRouteToTop = () => {
     hash === "market" ||
     hash === "market/order" ||
     hash.startsWith("market/detail/") ||
+    hash === "app-market" ||
+    hash.startsWith("app-market/detail/") ||
+    hash.startsWith("app-market/history/") ||
     path === "/login" ||
     path === "/view/model/list" ||
     path === "/view/model/order" ||
-    path.startsWith("/view/model/detail");
+    path.startsWith("/view/model/detail") ||
+    path === "/app" ||
+    path === "/view/app/list" ||
+    path.startsWith("/app/detail") ||
+    path.startsWith("/app/history") ||
+    path.startsWith("/view/app/detail") ||
+    path.startsWith("/view/app/history");
 
   if (!shouldReset) return;
 
@@ -270,6 +321,30 @@ const modelItems = [
     text: {
       zh: "面向团队采购、长期额度和生产环境接入，提前确认模型范围、交付周期和售后边界。",
       en: "For team purchases, long-term credits, and production access, confirm model scope, delivery schedule, and support boundaries first.",
+    },
+  },
+];
+
+const appItems = [
+  {
+    title: { zh: "本地 AI 与 Agent", en: "Local AI and Agents" },
+    text: {
+      zh: "围绕 Ollama、OpenClaw、Open WebUI 等应用，提供本地模型、对话入口和智能体能力。",
+      en: "Provide local models, chat surfaces, and agent capabilities through apps such as Ollama, OpenClaw, and Open WebUI.",
+    },
+  },
+  {
+    title: { zh: "创作与工作流", en: "Creation and Workflows" },
+    text: {
+      zh: "支持 ComfyUI、n8n 等创作和自动化应用，把模型能力接到真实生产流程。",
+      en: "Support creation and automation apps such as ComfyUI and n8n, connecting model capabilities to real workflows.",
+    },
+  },
+  {
+    title: { zh: "版本和权限透明", en: "Transparent Versions and Permissions" },
+    text: {
+      zh: "详情页展示版本历史、资源规格、权限说明和安装入口，降低试用和部署成本。",
+      en: "Detail pages expose version history, resource specs, permissions, and install actions to reduce deployment friction.",
     },
   },
 ];
@@ -516,6 +591,17 @@ const faqs = [
     :locale="locale"
   />
   <ModelOrder v-else-if="route.name === 'model-order'" :locale="locale" />
+  <AppList v-else-if="route.name === 'app-list'" :locale="locale" />
+  <AppDetail
+    v-else-if="route.name === 'app-detail'"
+    :app-id="route.appId"
+    :locale="locale"
+  />
+  <AppHistory
+    v-else-if="route.name === 'app-history'"
+    :app-id="route.appId"
+    :locale="locale"
+  />
   <Login v-else-if="route.name === 'login'" />
 
   <main v-else id="home">
@@ -578,6 +664,43 @@ const faqs = [
           <div class="plain-list">
             <article
               v-for="item in modelItems"
+              :key="getLabel(item.title)"
+              class="plain-item"
+            >
+              <h3>{{ getLabel(item.title) }}</h3>
+              <p>{{ getLabel(item.text) }}</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="apps" class="section dark">
+      <div class="wrap">
+        <p class="section-kicker">{{ text.appKicker }}</p>
+        <h2 class="section-title">{{ text.appTitle }}</h2>
+        <p class="section-lead">
+          {{ text.appLead }}
+        </p>
+        <div class="section-actions">
+          <a class="button primary" href="/#app-market">{{ text.appCta }}</a>
+        </div>
+
+        <div class="intro-grid">
+          <figure class="feature-image">
+            <img
+              :src="assetPath('usecase-script-video.webp')"
+              :alt="
+                isEnglish
+                  ? 'App workflows and AI application market preview'
+                  : '应用市场和 AI 工作流预览画面'
+              "
+              loading="lazy"
+            />
+          </figure>
+          <div class="plain-list">
+            <article
+              v-for="item in appItems"
               :key="getLabel(item.title)"
               class="plain-item"
             >
