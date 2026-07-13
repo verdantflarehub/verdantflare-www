@@ -128,7 +128,7 @@ jobs:
 
       - name: Update WWW deployment
         run: |
-          image="registry-vpc.cn-qingdao.aliyuncs.com/wod/verdantflare:${VERSION}-${GITHUB_SHA}"
+          image="registry.cn-qingdao.aliyuncs.com/wod/verdantflare:${VERSION}-${GITHUB_SHA}"
           kubectl set image deployment/verdantflare-www verdantflare-www="$image"
           kubectl rollout status deployment/verdantflare-www --timeout=5m
           kubectl get deployment/verdantflare-www -o jsonpath='{.spec.template.spec.containers[?(@.name=="verdantflare-www")].image}{"\n"}'
