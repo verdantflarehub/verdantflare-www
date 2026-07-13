@@ -84,7 +84,6 @@ jobs:
       - name: Image push success
         run: |
           echo "${{ steps.image.outputs.image_name }}:${{ env.VERSION }} built and pushed successfully!"
-          echo "${{ steps.image.outputs.image_name }}:${{ env.VERSION }}-${GITHUB_SHA} built and pushed successfully!"
 
   deploy:
     name: Deploy WWW to Kubernetes
@@ -128,7 +127,7 @@ jobs:
 
       - name: Update WWW deployment
         run: |
-          image="registry.cn-qingdao.aliyuncs.com/wod/verdantflare:${VERSION}-${GITHUB_SHA}"
+          image="registry.cn-qingdao.aliyuncs.com/wod/verdantflare:${VERSION}"
           kubectl set image deployment/verdantflare-www verdantflare-www="$image"
           kubectl rollout status deployment/verdantflare-www --timeout=5m
           kubectl get deployment/verdantflare-www -o jsonpath='{.spec.template.spec.containers[?(@.name=="verdantflare-www")].image}{"\n"}'
