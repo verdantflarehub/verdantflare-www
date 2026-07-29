@@ -8,6 +8,7 @@ import {
   tModelSummary,
   tProvider,
 } from "../i18n";
+import { hubHref } from "../../../config/external";
 
 const props = defineProps({
   locale: {
@@ -87,10 +88,10 @@ onUnmounted(() => {
             {{ text("marketLead") }}
           </p>
           <div class="market-hero-actions">
-            <a class="button primary" href="/#market/detail/deepseek-v4-pro">
+            <a class="button primary" href="/models/deepseek-v4-pro">
               {{ text("recommended") }}
             </a>
-            <a class="button" href="/#market/order">{{ text("order") }}</a>
+            <a class="button" :href="hubHref('/api/models', { entry: 'models-hero' })">{{ text("apiCall") }}</a>
           </div>
         </div>
 
@@ -167,7 +168,7 @@ onUnmounted(() => {
             v-for="model in visibleModels"
             :key="model.id"
             class="model-card"
-            :href="`/#market/detail/${model.id}`"
+            :href="`/models/${model.id}`"
           >
             <div class="model-card-top">
               <div :class="['model-logo', model.accent]">

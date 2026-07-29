@@ -25,7 +25,7 @@ const handleImageError = (event) => {
   <main class="market-page app-detail-page">
     <section class="market-detail-hero app-history-hero">
       <div class="market-wrap">
-      <a class="app-back" :href="`/#app-market/detail/${app.id}`">{{ text("back") }}</a>
+      <a class="app-back" :href="`/apps/${app.id}`">{{ text("back") }}</a>
       <div class="app-history-title">
         <span class="app-icon-wrap">
           <i>{{ app.name.slice(0, 2) }}</i>

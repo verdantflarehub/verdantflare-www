@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import { getAppById, getCategoryLabel, tAppMarket } from "../data";
+import { hubHref, toHubAppId } from "../../../config/external";
 
 const props = defineProps({
   appId: {
@@ -15,6 +16,13 @@ const props = defineProps({
 
 const app = computed(() => getAppById(props.appId));
 const text = computed(() => (key) => tAppMarket(props.locale, key));
+const hubAppId = computed(() => toHubAppId(app.value.id));
+const hubAppHref = computed(() =>
+  hubHref(`/market/apps/${hubAppId.value}`, {
+    entry: "app-detail",
+    public_app_id: app.value.id,
+  })
+);
 const statItems = computed(() => [
   { label: text.value("developer"), value: app.value.developer, icon: "group" },
   { label: text.value("languageLabel"), value: app.value.language, unit: app.value.languageName },
@@ -33,7 +41,7 @@ const handleImageError = (event) => {
   <main class="market-page app-detail-page">
     <section class="market-detail-hero app-detail-top">
       <div class="market-wrap">
-      <a class="app-back" href="/#app-market">{{ text("back") }}</a>
+      <a class="app-back" href="/apps">{{ text("back") }}</a>
       <div class="app-detail-identity">
         <span class="app-detail-icon">
           <i>{{ app.name.slice(0, 2) }}</i>
@@ -102,7 +110,7 @@ const handleImageError = (event) => {
           </div>
 
           <aside class="app-install-panel">
-            <button type="button">{{ text("get") }}</button>
+            <a class="app-get-link" :href="hubAppHref">{{ text("get") }}</a>
             <dl>
               <div>
                 <dt>{{ text("chartVersion") }}</dt>
@@ -111,7 +119,7 @@ const handleImageError = (event) => {
               <div>
                 <dt>{{ text("versionHistory") }}</dt>
                 <dd>
-                  <a :href="`/#app-market/history/${app.id}`">{{ text("seeAllVersions") }}</a>
+                  <a :href="`/apps/${app.id}/history`">{{ text("seeAllVersions") }}</a>
                 </dd>
               </div>
               <div>

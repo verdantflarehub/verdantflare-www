@@ -40,6 +40,14 @@ npm install
 npm run dev
 ```
 
+跨站进入 Hub 的地址通过环境变量配置：
+
+```bash
+VITE_HUB_URL=https://hub.verdantflarehub.com
+```
+
+WWW 只承载公开模型/应用目录和详情；API Key、在线体验、组织权益及安装操作统一跳转 Hub。
+
 构建静态产物：
 
 ```bash

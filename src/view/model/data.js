@@ -102,6 +102,8 @@ export const models = [
     maxInput: "图文/动作",
     maxOutput: "15s",
     tags: ["舞蹈生成", "动作一致", "青焰推荐"],
+    apiType: "video",
+    apiModel: "verdantflare-sd2",
   },
   {
     id: "glm-5-2",
@@ -354,3 +356,117 @@ const response = await client.chat.completions.create({
 
 console.log(response.choices[0].message.content);`,
 };
+
+const danceApiExamples = {
+  curl: `#!/bin/bash
+
+API_KEY="your_api_key"
+BASE_URL="https://api.verdantflarehub.com/v1"
+
+# 创建异步视频任务，返回的 id 即后续查询使用的 task_id
+curl --fail-with-body --silent --show-error \\
+  "\${BASE_URL}/videos" \\
+  -H "Authorization: Bearer \${API_KEY}" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "model": "verdantflare-sd2",
+    "messages": [{
+      "role": "user",
+      "content": [{
+        "type": "text",
+        "text": "一位舞者在霓虹舞台完成节奏鲜明的街舞，镜头稳定跟拍，动作自然连贯。"
+      }]
+    }],
+    "duration": 8,
+    "ratio": "9:16",
+    "generate_audio": false,
+    "watermark": false
+  }'
+
+# 使用创建响应中的 task_id 查询任务，完成后读取 metadata.url
+curl --fail-with-body --silent --show-error \\
+  "\${BASE_URL}/videos/{task_id}" \\
+  -H "Authorization: Bearer \${API_KEY}"`,
+  python: `import os
+import time
+import requests
+
+base_url = "https://api.verdantflarehub.com/v1"
+headers = {
+    "Authorization": f"Bearer {os.environ['VERDANTFLARE_API_KEY']}",
+    "Content-Type": "application/json",
+}
+
+response = requests.post(
+    f"{base_url}/videos",
+    headers=headers,
+    json={
+        "model": "verdantflare-sd2",
+        "messages": [{
+            "role": "user",
+            "content": [{
+                "type": "text",
+                "text": "一位舞者在霓虹舞台完成节奏鲜明的街舞，镜头稳定跟拍，动作自然连贯。",
+            }],
+        }],
+        "duration": 8,
+        "ratio": "9:16",
+        "generate_audio": False,
+        "watermark": False,
+    },
+)
+response.raise_for_status()
+task_id = response.json()["id"]
+
+while True:
+    task = requests.get(f"{base_url}/videos/{task_id}", headers=headers)
+    task.raise_for_status()
+    task = task.json()
+    if task["status"] == "completed":
+        print(task["metadata"]["url"])
+        break
+    if task["status"] in {"failed", "failure"}:
+        raise RuntimeError(task.get("error", {}).get("message", "video generation failed"))
+    time.sleep(8)`,
+  openai: `const baseUrl = "https://api.verdantflarehub.com/v1";
+const headers = {
+  Authorization: "Bearer " + process.env.VERDANTFLARE_API_KEY,
+  "Content-Type": "application/json",
+};
+
+const create = await fetch(baseUrl + "/videos", {
+  method: "POST",
+  headers,
+  body: JSON.stringify({
+    model: "verdantflare-sd2",
+    messages: [{
+      role: "user",
+      content: [{
+        type: "text",
+        text: "一位舞者在霓虹舞台完成节奏鲜明的街舞，镜头稳定跟拍，动作自然连贯。",
+      }],
+    }],
+    duration: 8,
+    ratio: "9:16",
+    generate_audio: false,
+    watermark: false,
+  }),
+});
+
+if (!create.ok) throw new Error(await create.text());
+const { id: taskId } = await create.json();
+for (;;) {
+  await new Promise((resolve) => setTimeout(resolve, 8000));
+  const task = await fetch(baseUrl + "/videos/" + taskId, { headers }).then((res) => res.json());
+  if (task.status === "completed") {
+    console.log(task.metadata.url);
+    break;
+  }
+  if (["failed", "failure"].includes(task.status)) {
+    throw new Error(task.error?.message || "video generation failed");
+  }
+}`,
+};
+
+export const getApiExamples = (model) =>
+  model.apiType === "video" ? danceApiExamples : apiExamples;

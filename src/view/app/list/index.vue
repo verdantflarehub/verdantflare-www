@@ -6,6 +6,7 @@ import {
   marketApps,
   tAppMarket,
 } from "../data";
+import { hubHref } from "../../../config/external";
 
 const props = defineProps({
   locale: {
@@ -67,10 +68,10 @@ watch([search, category], () => {
             {{ text("marketLead") }}
           </p>
           <div class="market-hero-actions">
-            <a class="button primary" href="/#app-market/detail/ollama">
+            <a class="button primary" href="/apps/ollama">
               {{ text("recommended") }}
             </a>
-            <a class="button" href="/#app-market/detail/openclaw">OpenClaw</a>
+            <a class="button" :href="hubHref('/market', { entry: 'apps-hero' })">Hub Market</a>
           </div>
         </div>
 
@@ -142,7 +143,7 @@ watch([search, category], () => {
             v-for="app in visibleApps"
             :key="app.id"
             class="model-card app-market-card"
-            :href="`/#app-market/detail/${app.id}`"
+            :href="`/apps/${app.id}`"
           >
             <div class="model-card-top">
               <div class="app-card-logo">

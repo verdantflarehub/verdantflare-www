@@ -3,16 +3,16 @@ import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import AppDetail from "./view/app/detail/index.vue";
 import AppHistory from "./view/app/history/index.vue";
 import AppList from "./view/app/list/index.vue";
-import Login from "./view/login/index.vue";
 import ModelDetail from "./view/model/detail/index.vue";
 import ModelList from "./view/model/list/index.vue";
 import ModelOrder from "./view/model/order/index.vue";
+import { hubHref } from "./config/external";
 
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
 const navItems = [
   { href: "/#home", label: { zh: "首页", en: "Home" } },
-  { href: "/#model", label: { zh: "模型", en: "Model" } },
+  { href: "/#model", label: { zh: "模型", en: "Models" } },
   { href: "/#apps", label: { zh: "应用", en: "Apps" } },
   { href: "/#video", label: { zh: "视频", en: "Video" } },
   {
@@ -33,11 +33,20 @@ const route = computed(() => {
   const hash = currentHash.value.replace(/^#\/?/, "").replace(/\/+$/, "");
 
   if (hash === "login") {
-    return { name: "login" };
+    return { name: "external-login" };
   }
 
   if (hash === "market") {
     return { name: "model-list" };
+  }
+
+  if (path === "/models") {
+    return { name: "model-list" };
+  }
+
+  if (path.startsWith("/models/")) {
+    const segments = path.split("/").filter(Boolean);
+    return { name: "model-detail", modelId: segments.at(-1) };
   }
 
   if (hash === "market/order") {
@@ -51,6 +60,18 @@ const route = computed(() => {
 
   if (hash === "app-market") {
     return { name: "app-list" };
+  }
+
+  if (path === "/apps") {
+    return { name: "app-list" };
+  }
+
+  if (path.startsWith("/apps/")) {
+    const segments = path.split("/").filter(Boolean);
+    if (segments.at(-1) === "history" && segments.length >= 3) {
+      return { name: "app-history", appId: segments.at(-2) };
+    }
+    return { name: "app-detail", appId: segments.at(-1) };
   }
 
   if (hash.startsWith("app-market/detail/")) {
@@ -86,7 +107,7 @@ const route = computed(() => {
   }
 
   if (path === "/login") {
-    return { name: "login" };
+    return { name: "external-login" };
   }
 
   if (path.startsWith("/view/model/detail")) {
@@ -232,7 +253,13 @@ const scrollRouteToTop = () => {
     path.startsWith("/view/app/detail") ||
     path.startsWith("/view/app/history");
 
-  if (!shouldReset) return;
+  const isPublicCatalogRoute =
+    path === "/models" ||
+    path.startsWith("/models/") ||
+    path === "/apps" ||
+    path.startsWith("/apps/");
+
+  if (!shouldReset && !isPublicCatalogRoute) return;
 
   nextTick(() => {
     window.scrollTo({ top: 0, left: 0 });
@@ -244,6 +271,9 @@ const handleNavigation = () => {
   currentHash.value = window.location.hash;
   scrollToHash();
   scrollRouteToTop();
+  if (route.value.name === "external-login") {
+    window.location.replace(hubHref("/", { entry: "legacy-login" }));
+  }
 };
 
 onMounted(() => {
@@ -251,6 +281,9 @@ onMounted(() => {
   window.addEventListener("hashchange", handleNavigation);
   scrollToHash();
   scrollRouteToTop();
+  if (route.value.name === "external-login") {
+    window.location.replace(hubHref("/", { entry: "legacy-login" }));
+  }
 });
 
 onUnmounted(() => {
@@ -576,7 +609,7 @@ const faqs = [
         </a>
       </div>
       <div class="nav-actions">
-        <a class="nav-login" href="/#login">{{ text.login }}</a>
+        <a class="nav-login" :href="hubHref('/', { entry: 'header-login' })">{{ text.login }}</a>
         <button class="nav-lang" type="button" @click="toggleLocale">
           {{ langLabel }}
         </button>
@@ -602,9 +635,7 @@ const faqs = [
     :app-id="route.appId"
     :locale="locale"
   />
-  <Login v-else-if="route.name === 'login'" />
-
-  <main v-else id="home">
+  <main v-else-if="route.name !== 'external-login'" id="home">
     <section
       class="hero"
       aria-labelledby="hero-title"
@@ -646,7 +677,7 @@ const faqs = [
           {{ text.modelLead }}
         </p>
         <div class="section-actions">
-          <a class="button primary" href="/#market">{{ text.modelCta }}</a>
+          <a class="button primary" :href="hubHref('/api/models', { entry: 'home-model' })">{{ text.modelCta }}</a>
         </div>
 
         <div class="intro-grid">
@@ -683,7 +714,7 @@ const faqs = [
           {{ text.appLead }}
         </p>
         <div class="section-actions">
-          <a class="button primary" href="/#app-market">{{ text.appCta }}</a>
+          <a class="button primary" :href="hubHref('/market', { entry: 'home-apps' })">{{ text.appCta }}</a>
         </div>
 
         <div class="intro-grid">
@@ -720,7 +751,7 @@ const faqs = [
           {{ text.videoLead }}
         </p>
         <div class="section-actions">
-          <a class="button primary" href="/#market/detail/kling-video-o1">
+          <a class="button primary" :href="hubHref('/experience', { entry: 'home-video' })">
             {{ text.videoCta }}
           </a>
         </div>
