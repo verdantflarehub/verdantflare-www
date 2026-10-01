@@ -6,22 +6,18 @@ import AppList from "./view/app/list/index.vue";
 import ModelDetail from "./view/model/detail/index.vue";
 import ModelList from "./view/model/list/index.vue";
 import ModelOrder from "./view/model/order/index.vue";
+import PublicContentView from "./view/content/PublicContentView.vue";
 import { hubHref } from "./config/external";
 
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
 const navItems = [
-  { href: "/#home", label: { zh: "首页", en: "Home" } },
-  { href: "/#model", label: { zh: "模型", en: "Models" } },
-  { href: "/#apps", label: { zh: "应用", en: "Apps" } },
-  { href: "/#video", label: { zh: "视频", en: "Video" } },
-  {
-    href: "https://github.com/verdantflarehub",
-    label: { zh: "Github", en: "Github" },
-    external: true,
-  },
-  { href: "/#price", label: { zh: "合作", en: "Price" } },
-  { href: "/#faq", label: { zh: "FAQ", en: "FAQ" } },
+  { href: "/", label: { zh: "首页", en: "Home" } },
+  { href: "/models", label: { zh: "模型", en: "Models" } },
+  { href: "/apps", label: { zh: "应用", en: "Apps" } },
+  { href: "/solutions/creator", label: { zh: "解决方案", en: "Solutions" } },
+  { href: "/developers", label: { zh: "开发者", en: "Developers" } },
+  { href: "/pricing", label: { zh: "套餐", en: "Pricing" } },
 ];
 
 const currentPath = ref(window.location.pathname);
@@ -108,6 +104,20 @@ const route = computed(() => {
 
   if (path === "/login") {
     return { name: "external-login" };
+  }
+
+  const contentRoutes = {
+    "/solutions/video": "solution-video",
+    "/solutions/creator": "solution-creator",
+    "/solutions/enterprise": "solution-enterprise",
+    "/developers": "developers",
+    "/docs": "docs",
+    "/pricing": "pricing",
+    "/contact": "contact",
+  };
+
+  if (contentRoutes[path]) {
+    return { name: "public-content", page: contentRoutes[path] };
   }
 
   if (path.startsWith("/view/model/detail")) {
@@ -633,6 +643,11 @@ const faqs = [
   <AppHistory
     v-else-if="route.name === 'app-history'"
     :app-id="route.appId"
+    :locale="locale"
+  />
+  <PublicContentView
+    v-else-if="route.name === 'public-content'"
+    :page="route.page"
     :locale="locale"
   />
   <main v-else-if="route.name !== 'external-login'" id="home">
