@@ -6,9 +6,8 @@ export const modelMarketCopy = {
     marketLead:
       "统一浏览青焰可调用模型、价格、能力和 API 接入方式。支持文本、推理、图片理解、视频生成和多模态工作流。",
     recommended: "查看推荐模型",
-    order: "模型订单",
     orbitLabel: "模型能力摘要",
-    orbitMeta: "按积分计价 · API 统一接入 · 下单前确认额度",
+    orbitMeta: "公开价格说明 · API 统一接入 · Hub 管理额度",
     search: "搜索",
     searchPlaceholder: "搜索模型、供应商或能力",
     capability: "能力",
@@ -30,7 +29,6 @@ export const modelMarketCopy = {
     publishedAt: "发布于",
     apiCall: "API 调用",
     apiTest: "调用测试",
-    buyCredits: "购买积分",
     modelPrice: "模型价格",
     billingOption: "计费选项",
     yuanPerMillion: "¥/百万tokens",
@@ -48,7 +46,7 @@ export const modelMarketCopy = {
     structuredOutput: "结构化输出",
     intro: "介绍",
     introText:
-      "{{name}} 通过青焰统一网关提供接入，适合在内容生产、Agent 编排、文档理解、视频前期策划和企业自动化场景中使用。实际可用额度、稳定性、有效期和售后边界以下单前确认为准。",
+      "{{name}} 通过青焰统一网关提供接入，适合在内容生产、Agent 编排、文档理解、视频前期策划和企业自动化场景中使用。实际可用额度、稳定性、有效期和支持边界以 Hub 权益或双方确认的方案为准。",
     chatCallTitle: "方式一：通过对话调用模型",
     chatCallLead:
       "可在多种 Agent 产品中调用，也可以使用兼容 OpenAI 的 Chat Completions 接口接入。",
@@ -153,13 +151,6 @@ export const modelMarketCopy = {
     keyCreateFailed: "创建 API-KEY 失败，请确认已登录后重试。",
     keyCopied: "API-KEY 已复制。",
     keyCopyFailed: "复制失败，请手动选中 API-KEY 复制。",
-    orderKicker: "Model Order",
-    orderTitle: "模型订单",
-    orderLead:
-      "选择积分套餐前请先确认模型范围、额度有效期、调用方式和售后边界。大额需求建议先联系客服确认库存和交付周期。",
-    orderConfirmTitle: "订单确认信息",
-    orderConfirmLead:
-      "请在下单前说明预计调用模型、月用量、是否需要视频生成、是否接入生产环境，以及期望交付时间。",
   },
   en: {
     backToMarket: "Back to Model Market",
@@ -168,9 +159,8 @@ export const modelMarketCopy = {
     marketLead:
       "Browse callable verdantflare models, pricing, capabilities, and API integration in one place. Supports text, reasoning, image understanding, video generation, and multimodal workflows.",
     recommended: "View Recommended Model",
-    order: "Model Orders",
     orbitLabel: "Model capability summary",
-    orbitMeta: "Credit pricing · Unified API · Confirm credits before ordering",
+    orbitMeta: "Public pricing · Unified API · Quota managed in Hub",
     search: "Search",
     searchPlaceholder: "Search models, providers, or capabilities",
     capability: "Capability",
@@ -192,7 +182,6 @@ export const modelMarketCopy = {
     publishedAt: "Published",
     apiCall: "API Call",
     apiTest: "API Test",
-    buyCredits: "Buy Credits",
     modelPrice: "Model Pricing",
     billingOption: "Billing Option",
     yuanPerMillion: "¥ / million tokens",
@@ -210,7 +199,7 @@ export const modelMarketCopy = {
     structuredOutput: "Structured output",
     intro: "Introduction",
     introText:
-      "{{name}} is available through the verdantflare unified gateway for content production, Agent orchestration, document understanding, video pre-production, and enterprise automation. Available credits, stability, validity, and support terms follow the pre-order confirmation.",
+      "{{name}} is available through the VerdantFlare unified gateway for content production, Agent orchestration, document understanding, video pre-production, and enterprise automation. Available credits, stability, validity, and support follow Hub entitlements or the confirmed service plan.",
     chatCallTitle: "Method 1: Call the model through chat",
     chatCallLead:
       "Use it in Agent products, or integrate through an OpenAI-compatible Chat Completions API.",
@@ -220,7 +209,7 @@ export const modelMarketCopy = {
     guide: "Call Guide",
     chooseKey: "Choose API Key",
     keyLead:
-      "An API key is the credential for verdantflare Hub services. Keep it private, rotate it regularly, and avoid public sharing.",
+      "An API key is the credential for VerdantFlare Hub services. Keep it private, rotate it regularly, and avoid public sharing.",
     myKey: "My API Key",
     name: "Name",
     createdAt: "Created",
@@ -316,13 +305,6 @@ export const modelMarketCopy = {
     keyCreateFailed: "Failed to create API key. Please sign in and try again.",
     keyCopied: "API key copied.",
     keyCopyFailed: "Copy failed. Select the API key manually and copy it.",
-    orderKicker: "Model Order",
-    orderTitle: "Model Orders",
-    orderLead:
-      "Before choosing a credit package, confirm model scope, credit validity, call method, and support boundaries. For large needs, contact support first to confirm availability and delivery timing.",
-    orderConfirmTitle: "Order Confirmation",
-    orderConfirmLead:
-      "Before ordering, describe expected models, monthly usage, video-generation needs, production integration, and desired delivery time.",
   },
 };
 

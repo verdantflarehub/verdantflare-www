@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from "vue";
-import { getAppById, tAppMarket } from "../data";
+import { getAppById, tAppMarket } from "../../../catalog/public";
 
 const props = defineProps({
   appId: {

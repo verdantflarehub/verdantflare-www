@@ -5,7 +5,7 @@ import {
   getCategoryLabel,
   marketApps,
   tAppMarket,
-} from "../data";
+} from "../../../catalog/public";
 import { hubHref } from "../../../config/external";
 
 const props = defineProps({

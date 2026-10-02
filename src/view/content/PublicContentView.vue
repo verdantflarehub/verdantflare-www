@@ -78,7 +78,7 @@ const pages = {
   pricing: {
     eyebrow: { zh: "套餐与合作", en: "Plans and engagement" },
     title: { zh: "先确认使用方式，再确定适合的套餐", en: "Choose a plan after confirming how you will use the platform" },
-    lead: { zh: "公开页面只说明套餐结构。模型范围、额度、并发、有效期和企业服务以下单或合同确认为准。", en: "This page explains plan structure; model scope, quota, concurrency, validity, and enterprise service are confirmed at purchase." },
+    lead: { zh: "公开页面只说明套餐结构。模型范围、额度、并发、有效期和企业服务以 Hub 权益或双方确认的方案为准。", en: "This page explains plan structure; model scope, quota, concurrency, validity, and enterprise service follow Hub entitlements or the confirmed service plan." },
     primary: { label: { zh: "咨询方案", en: "Discuss a plan" }, href: "/contact?intent=pricing" },
     secondary: { label: { zh: "先在线体验", en: "Try first" }, href: hubHref("/experience", { entry: "pricing" }) },
     image: "/assets/hero-glass-ad.webp",

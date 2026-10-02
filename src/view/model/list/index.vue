@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-import { modelCategories, models, providers } from "../data";
+import { modelCategories, models, providers } from "../../../catalog/public";
 import {
   tCategory,
   tMarket,

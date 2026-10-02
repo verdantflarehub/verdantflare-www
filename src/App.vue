@@ -5,7 +5,6 @@ import AppHistory from "./view/app/history/index.vue";
 import AppList from "./view/app/list/index.vue";
 import ModelDetail from "./view/model/detail/index.vue";
 import ModelList from "./view/model/list/index.vue";
-import ModelOrder from "./view/model/order/index.vue";
 import PublicContentView from "./view/content/PublicContentView.vue";
 import { hubHref } from "./config/external";
 
@@ -13,8 +12,8 @@ const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
 const navItems = [
   { href: "/", label: { zh: "首页", en: "Home" } },
-  { href: "/models", label: { zh: "模型", en: "Models" } },
-  { href: "/apps", label: { zh: "应用", en: "Apps" } },
+  { href: "/#model", section: "model", label: { zh: "模型", en: "Models" } },
+  { href: "/#apps", section: "apps", label: { zh: "应用", en: "Apps" } },
   { href: "/solutions/creator", label: { zh: "解决方案", en: "Solutions" } },
   { href: "/developers", label: { zh: "开发者", en: "Developers" } },
   { href: "/pricing", label: { zh: "套餐", en: "Pricing" } },
@@ -46,7 +45,7 @@ const route = computed(() => {
   }
 
   if (hash === "market/order") {
-    return { name: "model-order" };
+    return { name: "public-content", page: "pricing" };
   }
 
   if (hash.startsWith("market/detail/")) {
@@ -85,7 +84,7 @@ const route = computed(() => {
   }
 
   if (path === "/view/model/order") {
-    return { name: "model-order" };
+    return { name: "public-content", page: "pricing" };
   }
 
   if (path === "/app" || path === "/view/app/list") {
@@ -141,22 +140,24 @@ const getLabel = (label) => label[locale.value] || label.zh;
 const copy = {
   zh: {
     login: "登录",
-    heroTitle: "青焰Hub",
+    heroTitle: "青焰",
     heroSubtitle: "青焰视频生成",
     heroCopy:
-      "面向短视频创作者、企业内容团队和开发者，提供视频生成模型、模型市场、积分购买和合作入口。首页保持完整品牌介绍，也可以在站内切换到模型市场继续浏览。",
+      "面向短视频创作者、企业内容团队和开发者，提供视频生成模型、公开能力目录、在线体验和合作入口。官网负责介绍与发现，实际开通和使用统一进入 Hub。",
     heroPriceCta: "咨询青焰套餐",
     heroFlowCta: "了解交付流程",
     modelKicker: "Model",
-    modelTitle: "模型市场承接所有可调用能力和积分订单。",
+    modelTitle: "从公开目录发现模型，在 Hub 中完成授权与调用。",
     modelLead:
-      "首页先说明产品和服务边界，模型区负责把用户引导到模型市场，继续查看模型列表、价格、API 接入方式和订单入口。",
+      "官网展示已公开模型、能力、价格说明和 API 示例；组织可用范围、额度与调用记录统一由 Hub 管理。",
     modelCta: "进入模型市场",
+    publicModelCta: "查看公开模型目录",
     appKicker: "Apps",
     appTitle: "应用市场负责承接工具、工作流和应用安装入口。",
     appLead:
       "应用区按照模型区的方式展示核心应用能力，用户先在首页了解应用类型，再进入应用市场查看应用列表、详情、版本和权限说明。",
     appCta: "进入应用市场",
+    publicAppCta: "查看公开应用目录",
     videoKicker: "Video Generation",
     videoTitle: "从脚本、分镜和商品卖点生成可测试的视频素材。",
     videoLead:
@@ -169,36 +170,38 @@ const copy = {
     workflowKicker: "Workflow",
     workflowTitle: "交付流程要比视觉更清楚。",
     workflowLead:
-      "早期项目最重要的是降低沟通成本。用户下单前就应该知道额度、有效期、交付方式和售后边界。",
+      "早期项目最重要的是降低沟通成本。用户开通前就应该知道额度、有效期、交付方式和支持边界。",
     rulesKicker: "Rules",
-    rulesTitle: "下单前说清楚，比上线后讲故事更重要。",
+    rulesTitle: "开通前说清楚，比上线后补充更重要。",
     rulesLead:
-      "所有套餐以下单前确认的信息为准，包括额度、有效期、交付方式、可用范围和售后规则。大额采购、长期使用或企业需求，请先联系客服确认库存与稳定性。",
+      "公开页面只说明套餐结构，包括额度范围、有效期、交付方式和支持边界；实际权益以 Hub 配置或双方确认的方案为准。",
     priceKicker: "Price",
     priceTitle: "合作先确认模型、额度和交付方式。",
     faqKicker: "FAQ",
     faqTitle: "常见问题",
-    footerBrand: "青焰Hub · www.verdantflarehub.com",
+    footerBrand: "青焰 · VerdantFlare WWW",
     footerLinks: "服务规则 / 隐私政策 / 售后说明 / 备案信息占位",
   },
   en: {
     login: "Login",
-    heroTitle: "verdantflare Hub",
+    heroTitle: "VerdantFlare",
     heroSubtitle: "verdantflare Video Generation",
     heroCopy:
-      "Built for short-form creators, content teams, and developers. Access video generation models, the model marketplace, credit purchasing, and partnership support from one site.",
+      "Built for short-form creators, content teams, and developers. Discover public models and apps here, then use Hub for access, quota, and operations.",
     heroPriceCta: "Consult Packages",
     heroFlowCta: "View Workflow",
     modelKicker: "Model",
-    modelTitle: "The model marketplace hosts callable models, credits, and orders.",
+    modelTitle: "Discover public models, then manage access and calls in Hub.",
     modelLead:
-      "The home page explains the product and service boundaries, while the model section guides users to model lists, pricing, API integration, and ordering.",
+      "WWW presents published models, capabilities, pricing notes, and API examples. Hub manages organization access, quota, and call history.",
     modelCta: "Enter Model Market",
+    publicModelCta: "View Public Models",
     appKicker: "Apps",
     appTitle: "The app market hosts tools, workflows, and installable app entries.",
     appLead:
       "The app section mirrors the model section: introduce app capabilities on the home page, then guide users into the app market for lists, details, versions, and permissions.",
     appCta: "Enter App Market",
+    publicAppCta: "View Public Apps",
     videoKicker: "Video Generation",
     videoTitle: "Generate testable video assets from scripts, storyboards, and product ideas.",
     videoLead:
@@ -211,16 +214,16 @@ const copy = {
     workflowKicker: "Workflow",
     workflowTitle: "The delivery workflow must be clearer than the visuals.",
     workflowLead:
-      "Early-stage projects need lower communication cost. Users should know the credits, validity, delivery method, and support boundaries before ordering.",
+      "Early-stage projects need lower communication cost. Users should know the credits, validity, delivery method, and support boundaries before activation.",
     rulesKicker: "Rules",
-    rulesTitle: "Clarify terms before ordering; storytelling can wait.",
+    rulesTitle: "Clarify access before activation.",
     rulesLead:
-      "All packages follow the information confirmed before ordering, including credits, validity, delivery method, usage scope, and support rules. For large purchases, long-term use, or enterprise needs, contact support first.",
+      "Public pages explain the plan structure. Actual access follows the entitlement configured in Hub or the service plan confirmed with the customer.",
     priceKicker: "Price",
     priceTitle: "Confirm models, credits, and delivery before cooperation.",
     faqKicker: "FAQ",
     faqTitle: "Frequently Asked Questions",
-    footerBrand: "verdantflare Hub · www.verdantflarehub.com",
+    footerBrand: "VerdantFlare WWW · www.verdantflarehub.com",
     footerLinks: "Service Rules / Privacy Policy / Support Terms / ICP Placeholder",
   },
 };
@@ -237,8 +240,25 @@ const scrollToHash = () => {
 
   nextTick(() => {
     const target = document.getElementById(hash);
-    target?.scrollIntoView({ block: "start" });
+    const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto"
+      : "smooth";
+    target?.scrollIntoView({ behavior, block: "start" });
   });
+};
+
+const handleNavClick = (event, item) => {
+  if (!item.section || (currentPath.value.replace(/\/+$/, "") || "/") !== "/") {
+    return;
+  }
+
+  event.preventDefault();
+  const nextHash = `#${item.section}`;
+  if (window.location.hash !== nextHash) {
+    window.history.pushState({}, "", `/${nextHash}`);
+    currentHash.value = nextHash;
+  }
+  scrollToHash();
 };
 
 const scrollRouteToTop = () => {
@@ -247,14 +267,12 @@ const scrollRouteToTop = () => {
   const shouldReset =
     hash === "login" ||
     hash === "market" ||
-    hash === "market/order" ||
     hash.startsWith("market/detail/") ||
     hash === "app-market" ||
     hash.startsWith("app-market/detail/") ||
     hash.startsWith("app-market/history/") ||
     path === "/login" ||
     path === "/view/model/list" ||
-    path === "/view/model/order" ||
     path.startsWith("/view/model/detail") ||
     path === "/app" ||
     path === "/view/app/list" ||
@@ -338,8 +356,8 @@ const storyLines = [
   {
     label: "Delivery",
     text: {
-      zh: "青焰模型服务咨询，额度和交付方式下单前确认。",
-      en: "Consult verdantflare model service; confirm credits and delivery before ordering.",
+      zh: "青焰模型服务咨询，额度和交付方式在开通前确认。",
+      en: "Consult VerdantFlare model services; confirm credits and delivery before activation.",
     },
   },
 ];
@@ -348,8 +366,8 @@ const modelItems = [
   {
     title: { zh: "统一模型入口", en: "Unified Model Entry" },
     text: {
-      zh: "把可用模型、积分价格、API 示例和订单入口集中到模型市场，方便用户快速比较和接入。",
-      en: "Collect available models, credit pricing, API examples, and ordering in one marketplace for easier comparison and integration.",
+      zh: "公开模型、价格说明和 API 示例集中展示，方便用户比较后进入 Hub 开通。",
+      en: "Published models, pricing notes, and API examples are collected here before activation in Hub.",
     },
   },
   {
@@ -363,7 +381,7 @@ const modelItems = [
     title: { zh: "合作支持", en: "Partnership Support" },
     text: {
       zh: "面向团队采购、长期额度和生产环境接入，提前确认模型范围、交付周期和售后边界。",
-      en: "For team purchases, long-term credits, and production access, confirm model scope, delivery schedule, and support boundaries first.",
+      en: "For team requirements, long-term credits, and production access, confirm model scope, delivery schedule, and support boundaries first.",
     },
   },
 ];
@@ -445,7 +463,7 @@ const packages = [
     },
     features: [
       { zh: "小额额度咨询", en: "Small credit consultation" },
-      { zh: "下单前确认有效期", en: "Confirm validity before ordering" },
+      { zh: "开通前确认有效期", en: "Confirm validity before activation" },
       { zh: "基础使用说明", en: "Basic usage notes" },
     ],
     cta: { zh: "咨询", en: "Consult" },
@@ -486,7 +504,7 @@ const flowSteps = [
     title: { zh: "提交需求", en: "Submit Needs" },
     text: {
       zh: "说明使用量、用途、交付时间和是否批量采购。",
-      en: "Describe usage volume, purpose, delivery time, and whether it is a batch purchase.",
+      en: "Describe usage volume, purpose, delivery time, and whether batch access is required.",
     },
   },
   {
@@ -499,10 +517,10 @@ const flowSteps = [
   },
   {
     step: "03",
-    title: { zh: "完成付款", en: "Complete Payment" },
+    title: { zh: "确认方案", en: "Confirm Plan" },
     text: {
-      zh: "按确认后的套餐付款，并保留订单记录。",
-      en: "Pay for the confirmed package and keep the order record.",
+      zh: "确认适用套餐、权益范围和后续开通方式。",
+      en: "Confirm the plan, entitlement scope, and activation path.",
     },
   },
   {
@@ -517,8 +535,8 @@ const flowSteps = [
     step: "05",
     title: { zh: "售后协助", en: "Support" },
     text: {
-      zh: "遇到不可用或交付异常，按订单规则协商处理。",
-      en: "If delivery or availability issues occur, handle them according to the order terms.",
+      zh: "遇到不可用或交付异常，按已确认的服务方案处理。",
+      en: "Handle availability or delivery issues according to the confirmed service plan.",
     },
   },
 ];
@@ -527,8 +545,8 @@ const rules = [
   {
     label: { zh: "套餐内容", en: "Package Content" },
     text: {
-      zh: "以下单前确认的信息为准，页面文案不替代最终订单约定。",
-      en: "Confirmed pre-order information prevails; page copy does not replace final order terms.",
+      zh: "公开页面只作说明，实际权益以 Hub 配置或双方确认的服务方案为准。",
+      en: "Public content is informational; actual access follows Hub entitlements or the confirmed service plan.",
     },
   },
   {
@@ -541,8 +559,8 @@ const rules = [
   {
     label: { zh: "大额采购", en: "Large Purchase" },
     text: {
-      zh: "不建议直接下单，先确认库存、交付周期和稳定性。",
-      en: "Do not order directly for large purchases; confirm availability, delivery cycle, and stability first.",
+      zh: "大额需求先确认容量、交付周期和稳定性，再制定开通方案。",
+      en: "For large requirements, confirm capacity, delivery timing, and stability before activation.",
     },
   },
   {
@@ -556,17 +574,17 @@ const rules = [
 
 const faqs = [
   {
-    question: { zh: "青焰Hub 现在主要提供什么？", en: "What does verdantflare Hub provide now?" },
+    question: { zh: "青焰现在主要提供什么？", en: "What does VerdantFlare provide now?" },
     answer: {
-      zh: "第一阶段主要提供青焰视频生成模型服务的额度咨询、套餐交付和使用协助。",
-      en: "In the first phase, verdantflare Hub provides credit consultation, package delivery, and usage support for verdantflare video generation model services.",
+      zh: "官网提供公开模型、应用和解决方案说明；登录 Hub 后可查看组织权益、在线体验、API 接入和用量。",
+      en: "WWW presents public models, apps, and solutions. After signing in, Hub provides organization access, online experience, API integration, and usage.",
     },
   },
   {
-    question: { zh: "下单后多久交付？", en: "How long does delivery take after ordering?" },
+    question: { zh: "确认需求后多久可以开通？", en: "How soon can access be activated?" },
     answer: {
-      zh: "以客服下单前确认为准。不同套餐、库存和交付方式会影响交付时间。",
-      en: "Delivery time follows the confirmation before ordering. Package type, availability, and delivery method may all affect timing.",
+      zh: "以需求确认结果为准。不同套餐、容量和交付方式会影响开通时间。",
+      en: "Activation time follows the confirmed requirements and depends on plan, capacity, and delivery method.",
     },
   },
   {
@@ -579,8 +597,8 @@ const faqs = [
   {
     question: { zh: "青焰额度是否永久有效？", en: "Are verdantflare credits valid forever?" },
     answer: {
-      zh: "不建议承诺永久有效。有效期、限制和售后规则应以下单前确认为准。",
-      en: "Permanent validity should not be promised. Validity, limits, and support rules should follow the pre-order confirmation.",
+      zh: "不建议承诺永久有效。有效期、限制和支持规则以 Hub 权益或双方确认的方案为准。",
+      en: "Permanent validity should not be promised. Validity, limits, and support follow Hub entitlements or the confirmed plan.",
     },
   },
   {
@@ -603,7 +621,7 @@ const faqs = [
 <template>
   <header class="site-header">
     <nav class="nav" aria-label="主导航">
-      <a class="brand" href="/#home" aria-label="青焰Hub 首页">
+      <a class="brand" href="/#home" aria-label="VerdantFlare 官网首页">
         <i class="brand-mark" aria-hidden="true"></i>
         <span>{{ text.heroTitle }}</span>
       </a>
@@ -614,6 +632,7 @@ const faqs = [
           :href="item.href"
           :target="item.external ? '_blank' : undefined"
           :rel="item.external ? 'noopener noreferrer' : undefined"
+          @click="handleNavClick($event, item)"
         >
           {{ getLabel(item.label) }}
         </a>
@@ -633,7 +652,6 @@ const faqs = [
     :model-id="route.modelId"
     :locale="locale"
   />
-  <ModelOrder v-else-if="route.name === 'model-order'" :locale="locale" />
   <AppList v-else-if="route.name === 'app-list'" :locale="locale" />
   <AppDetail
     v-else-if="route.name === 'app-detail'"
@@ -693,6 +711,7 @@ const faqs = [
         </p>
         <div class="section-actions">
           <a class="button primary" :href="hubHref('/api/models', { entry: 'home-model' })">{{ text.modelCta }}</a>
+          <a class="button" href="/models">{{ text.publicModelCta }}</a>
         </div>
 
         <div class="intro-grid">
@@ -730,6 +749,7 @@ const faqs = [
         </p>
         <div class="section-actions">
           <a class="button primary" :href="hubHref('/market', { entry: 'home-apps' })">{{ text.appCta }}</a>
+          <a class="button" href="/apps">{{ text.publicAppCta }}</a>
         </div>
 
         <div class="intro-grid">

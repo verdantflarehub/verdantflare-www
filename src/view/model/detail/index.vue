@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { hubHref, toHubModelId } from "../../../config/external";
-import { getApiExamples, getModelById } from "../data";
+import { getApiExamples, getModelById } from "../../../catalog/public";
 import {
   tCategory,
   tMarket,

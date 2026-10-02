@@ -1,42 +1,46 @@
-# 青焰Hub WWW
+# VerdantFlare WWW
 
-## 概述
+VerdantFlare 的公开官网，部署于 `www.verdantflarehub.com`。WWW 面向未登录访客、潜在客户和开发者，负责品牌介绍、公开能力发现、公开文档与咨询转化；登录后的业务操作统一进入 VerdantFlare Hub。
 
-青焰Hub 官网第一版，聚焦青焰视频生成模型服务的额度咨询、套餐交付与使用协助。
+## 产品边界
 
-当前页面是单页门户，面向短视频创作者、内容团队和开发者，核心目标是清楚展示服务内容、使用场景、交付流程和联系入口。
+WWW 承载：
 
-## 技术选型
+- 首页品牌、视频能力和交付方式介绍。
+- `/models` 及 `/models/:modelId` 公开模型目录与详情。
+- `/apps` 及 `/apps/:appId` 公开应用目录、详情与版本记录。
+- `/solutions/*`、`/developers`、`/docs`、`/pricing` 和 `/contact`。
+- 跳转 Hub 在线体验、模型市场、应用市场、API Center 和登录入口的 CTA。
 
-- Vue 3：适合单页官网起步，后续接入套餐数据、客服入口、表单和多页面时维护成本低。
-- Vite：开发启动快，构建产物是纯静态文件，便于静态托管或容器化发布。
-- 原生 CSS：当前视觉稿以内容和图片资产为主，不额外引入 UI 组件库，避免第一版样式被组件库绑架。
-- Nginx：容器镜像中用于承载构建后的静态资源。
+WWW 不承载 API Key、组织权益、余额、订单、任务记录、客户项目或应用安装操作。相关 CTA 必须携带稳定 ID 和来源参数跳转 `hub.verdantflarehub.com`。
 
-## 项目结构
+首页顶部的“模型”和“应用”导航分别定位到 `/#model`、`/#apps`；相应区块提供公开目录入口和 Hub 业务入口。旧的模型订单地址仅展示公开套餐说明，不在 WWW 创建订单。
+
+## 公开目录事实源
+
+公开页面统一从 `src/catalog/public.js` 读取目录。该入口使用显式 Published allowlist，只允许经过公开审核的模型和应用出现在 WWW；内部候选、组织授权状态和 Preview 运营数据不能直接从业务数据集泄漏到官网。
+
+当前目录采用构建期静态数据：
 
 ```text
-index.html        Vite HTML 入口
-package.json      前端依赖与 npm 脚本
-vite.config.js    Vite 构建配置
-src/              Vue 页面源码
-public/assets/    首页图片资产
-docker/           镜像构建与 Nginx 配置
+src/view/model/data.js ─┐
+                       ├─> src/catalog/public.js ─> /models、/apps
+src/view/app/data.js ───┘
 ```
 
-`.tmp/` 是本地临时资料目录，不属于项目源码或发布资料，已通过 `.gitignore` 排除。
+后续接入公共只读目录 API 或 CMS 时，只替换 `src/catalog/public.js` 的数据适配层，页面组件不直接依赖 Control Service，也不读取组织权益。
 
-## 本地调试
+## 技术栈
 
-安装依赖：
+- Vue 3
+- Vite 6
+- 原生 CSS
+- Nginx 静态托管
+
+## 本地开发
 
 ```bash
 npm install
-```
-
-启动开发服务：
-
-```bash
 npm run dev
 ```
 
@@ -46,28 +50,20 @@ npm run dev
 VITE_HUB_URL=https://hub.verdantflarehub.com
 ```
 
-WWW 只承载公开模型/应用目录和详情；API Key、在线体验、组织权益及安装操作统一跳转 Hub。
-
-构建静态产物：
+构建和预览：
 
 ```bash
 npm run build
-```
-
-预览构建结果：
-
-```bash
 npm run preview
 ```
 
 ## 容器构建
 
-本地沿用 CI 同名环境变量，镜像仓库登录由本机 Docker 配置处理。
-
 ```bash
 docker build \
   -f docker/Dockerfile \
-  -t "${REGISTRY_ENDPOINT_ALIYUN}/wod/verdantflare:www-1.0.0" \
-   .
-docker push "${REGISTRY_ENDPOINT_ALIYUN}/wod/verdantflare:www-1.0.0"
+  -t "${REGISTRY_ENDPOINT_ALIYUN}/wod/verdantflare:www-1.1.0" \
+  .
 ```
+
+镜像只包含构建后的静态文件。Hub、Login、Control Service 和数据库均独立部署，不放入 WWW 容器。

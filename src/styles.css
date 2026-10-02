@@ -24,6 +24,12 @@ html {
   color: var(--paper);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   margin: 0;
   font-family: Inter, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
@@ -816,8 +822,7 @@ textarea {
 }
 
 .market-hero h1,
-.market-detail-hero h1,
-.order-hero h1 {
+.market-detail-hero h1 {
   margin: 0;
   font-size: clamp(44px, 6.2vw, 92px);
   line-height: 0.94;
@@ -825,8 +830,7 @@ textarea {
   letter-spacing: 0;
 }
 
-.market-hero p,
-.order-hero p {
+.market-hero p {
   max-width: 760px;
   margin: 26px 0 0;
   color: rgba(244, 241, 232, 0.76);
@@ -1249,8 +1253,7 @@ textarea {
 
 .detail-block,
 .detail-panel,
-.api-call-panel,
-.order-note {
+.api-call-panel {
   border: 1px solid rgba(244, 241, 232, 0.14);
   border-radius: 8px;
   background: rgba(244, 241, 232, 0.055);
@@ -1263,8 +1266,7 @@ textarea {
 .detail-block h2,
 .detail-panel h2,
 .api-call-head h2,
-.api-guide h2,
-.order-note h2 {
+.api-guide h2 {
   margin: 0;
   color: var(--paper);
   font-size: 22px;
@@ -1402,8 +1404,7 @@ textarea {
 
 .api-call-head p,
 .api-guide p,
-.api-step-content p,
-.order-note p {
+.api-step-content p {
   margin: 10px 0 0;
   color: rgba(244, 241, 232, 0.62);
   line-height: 1.72;
@@ -2171,96 +2172,6 @@ textarea {
 .test-log time {
   color: rgba(244, 241, 232, 0.4);
   font-variant-numeric: tabular-nums;
-}
-
-.order-hero {
-  padding-bottom: 74px;
-}
-
-.order-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1px;
-  border: 1px solid rgba(244, 241, 232, 0.14);
-  border-radius: 8px;
-  overflow: hidden;
-  background: rgba(244, 241, 232, 0.14);
-}
-
-.order-card {
-  min-height: 390px;
-  display: flex;
-  flex-direction: column;
-  padding: 30px;
-  background: #0d120e;
-}
-
-.order-card small {
-  color: var(--green);
-  font-size: 12px;
-  font-weight: 760;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.order-card h2 {
-  margin: 18px 0 12px;
-  color: var(--paper);
-  font-size: 28px;
-  font-weight: 580;
-}
-
-.order-card strong {
-  color: var(--paper);
-  font-size: 36px;
-  line-height: 1.1;
-  font-weight: 620;
-}
-
-.order-card p {
-  margin: 18px 0 24px;
-  color: rgba(244, 241, 232, 0.64);
-  line-height: 1.72;
-}
-
-.order-card ul {
-  display: grid;
-  gap: 12px;
-  margin: 0 0 30px;
-  padding: 0;
-  list-style: none;
-}
-
-.order-card li {
-  display: grid;
-  grid-template-columns: 16px 1fr;
-  gap: 10px;
-  color: rgba(244, 241, 232, 0.72);
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.order-card li::before {
-  content: "";
-  width: 7px;
-  height: 7px;
-  margin-top: 7px;
-  border-radius: 50%;
-  background: var(--green);
-}
-
-.order-card .button {
-  width: fit-content;
-  margin-top: auto;
-}
-
-.order-note {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 28px;
-  align-items: end;
-  margin-top: 24px;
-  padding: 28px;
 }
 
 .login-page {
@@ -3158,8 +3069,7 @@ textarea {
   .packages,
   .flow,
   .faq,
-  .model-results.grid,
-  .order-grid {
+  .model-results.grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -3168,7 +3078,6 @@ textarea {
   .model-results.list .model-card,
   .model-intro-grid,
   .api-test-grid,
-  .order-note,
   .login-shell,
   .app-topic-rail,
   .app-detail-layout {
@@ -3310,7 +3219,6 @@ textarea {
   .flow,
   .faq,
   .model-results.grid,
-  .order-grid,
   .spec-grid {
     grid-template-columns: 1fr;
   }

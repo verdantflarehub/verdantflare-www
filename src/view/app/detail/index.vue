@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from "vue";
-import { getAppById, getCategoryLabel, tAppMarket } from "../data";
+import { getAppById, getCategoryLabel, tAppMarket } from "../../../catalog/public";
 import { hubHref, toHubAppId } from "../../../config/external";
 
 const props = defineProps({
