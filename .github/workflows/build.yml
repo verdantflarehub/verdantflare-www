@@ -63,17 +63,19 @@ jobs:
           username: ${{ secrets.REGISTRY_USER_ALIYUN }}
           password: ${{ secrets.REGISTRY_PASSWORD_ALIYUN }}
 
+      - name: Refuse an existing image tag
+        run: '! docker buildx imagetools inspect "${{ steps.image.outputs.image_name }}:${{ env.VERSION }}" >/dev/null 2>&1'
+
       - name: Build image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./docker/Dockerfile
           platforms: linux/amd64
           push: true
           provenance: false
-          tags: |
-            ${{ steps.image.outputs.image_name }}:${{ env.VERSION }}
-            ${{ steps.image.outputs.image_name }}:${{ env.VERSION }}-${{ github.sha }}
+          sbom: false
+          tags: ${{ steps.image.outputs.image_name }}:${{ env.VERSION }}
           build-args: |
             AUTHOR=${{ github.repository_owner }}
             VERSION=${{ env.VERSION }}
