@@ -1,12 +1,12 @@
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import AppDetail from "./view/app/detail/index.vue";
-import AppHistory from "./view/app/history/index.vue";
 import AppList from "./view/app/list/index.vue";
 import ModelDetail from "./view/model/detail/index.vue";
 import ModelList from "./view/model/list/index.vue";
 import PublicContentView from "./view/content/PublicContentView.vue";
 import { hubHref, loginHref } from "./config/external";
+import { marketApps, models, loadPublicCatalog } from "./catalog/public";
 
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
@@ -22,6 +22,10 @@ const navItems = [
 const currentPath = ref(window.location.pathname);
 const currentHash = ref(window.location.hash);
 const locale = ref(localStorage.getItem("verdantflare_locale") || "zh");
+const modelRoute = (modelId) => models.some((model) => model.id === modelId)
+  ? { name: "model-detail", modelId } : { name: "model-list" };
+const appRoute = (appId) => marketApps.some((app) => app.id === appId)
+  ? { name: "app-detail", appId } : { name: "app-list" };
 
 const route = computed(() => {
   const path = currentPath.value.replace(/\/+$/, "") || "/";
@@ -41,7 +45,7 @@ const route = computed(() => {
 
   if (path.startsWith("/models/")) {
     const segments = path.split("/").filter(Boolean);
-    return { name: "model-detail", modelId: segments.at(-1) };
+    return modelRoute(segments.at(-1));
   }
 
   if (hash === "market/order") {
@@ -50,7 +54,7 @@ const route = computed(() => {
 
   if (hash.startsWith("market/detail/")) {
     const segments = hash.split("/").filter(Boolean);
-    return { name: "model-detail", modelId: segments.at(-1) };
+    return modelRoute(segments.at(-1));
   }
 
   if (hash === "app-market") {
@@ -64,19 +68,19 @@ const route = computed(() => {
   if (path.startsWith("/apps/")) {
     const segments = path.split("/").filter(Boolean);
     if (segments.at(-1) === "history" && segments.length >= 3) {
-      return { name: "app-history", appId: segments.at(-2) };
+      return appRoute(segments.at(-2));
     }
-    return { name: "app-detail", appId: segments.at(-1) };
+    return appRoute(segments.at(-1));
   }
 
   if (hash.startsWith("app-market/detail/")) {
     const segments = hash.split("/").filter(Boolean);
-    return { name: "app-detail", appId: segments.at(-1) };
+    return appRoute(segments.at(-1));
   }
 
   if (hash.startsWith("app-market/history/")) {
     const segments = hash.split("/").filter(Boolean);
-    return { name: "app-history", appId: segments.at(-1) };
+    return appRoute(segments.at(-1));
   }
 
   if (path === "/view/model/list") {
@@ -93,12 +97,12 @@ const route = computed(() => {
 
   if (path.startsWith("/app/detail") || path.startsWith("/view/app/detail")) {
     const segments = path.split("/").filter(Boolean);
-    return { name: "app-detail", appId: segments.at(-1) };
+    return appRoute(segments.at(-1));
   }
 
   if (path.startsWith("/app/history") || path.startsWith("/view/app/history")) {
     const segments = path.split("/").filter(Boolean);
-    return { name: "app-history", appId: segments.at(-1) };
+    return appRoute(segments.at(-1));
   }
 
   if (path === "/login") {
@@ -121,7 +125,7 @@ const route = computed(() => {
 
   if (path.startsWith("/view/model/detail")) {
     const segments = path.split("/").filter(Boolean);
-    return { name: "model-detail", modelId: segments.at(-1) };
+    return modelRoute(segments.at(-1));
   }
 
   return { name: "home" };
@@ -149,7 +153,7 @@ const copy = {
     modelKicker: "Model",
     modelTitle: "从公开目录发现模型，在 Hub 中完成授权与调用。",
     modelLead:
-      "官网展示已公开模型、能力、价格说明和 API 示例；组织可用范围、额度与调用记录统一由 Hub 管理。",
+      "官网只展示由 Hub 管理员公开的模型资料与报价；实际可用性和结算以模型网关为准。",
     modelCta: "进入模型市场",
     publicModelCta: "查看公开模型目录",
     appKicker: "Apps",
@@ -193,7 +197,7 @@ const copy = {
     modelKicker: "Model",
     modelTitle: "Discover public models, then manage access and calls in Hub.",
     modelLead:
-      "WWW presents published models, capabilities, pricing notes, and API examples. Hub manages organization access, quota, and call history.",
+      "WWW shows model information and quotes explicitly published from Hub. Gateway availability and billing are separate.",
     modelCta: "Enter Model Market",
     publicModelCta: "View Public Models",
     appKicker: "Apps",
@@ -305,6 +309,7 @@ const handleNavigation = () => {
 };
 
 onMounted(() => {
+  loadPublicCatalog();
   window.addEventListener("popstate", handleNavigation);
   window.addEventListener("hashchange", handleNavigation);
   scrollToHash();
@@ -366,15 +371,15 @@ const modelItems = [
   {
     title: { zh: "统一模型入口", en: "Unified Model Entry" },
     text: {
-      zh: "公开模型、价格说明和 API 示例集中展示，方便用户比较后进入 Hub 开通。",
-      en: "Published models, pricing notes, and API examples are collected here before activation in Hub.",
+      zh: "公开模型资料由 Hub 管理员维护；只有经过审核并发布的报价才会展示。",
+      en: "Hub administrators maintain the public model catalog; only explicitly published quotes appear here.",
     },
   },
   {
     title: { zh: "额度和 API 接入", en: "Credits and API Access" },
     text: {
-      zh: "围绕文本、推理、图片理解、视频生成等模型能力，提供积分额度、调用示例和交付说明。",
-      en: "Provide credits, request examples, and delivery notes for text, reasoning, vision, video generation, and related model capabilities.",
+      zh: "模型能力、公开报价与实际接入状态分开管理，未核验的信息不作为可调用承诺。",
+      en: "Model descriptions, public quotes, and actual gateway access are separate; unverified facts are not shown as availability claims.",
     },
   },
   {
@@ -390,22 +395,22 @@ const appItems = [
   {
     title: { zh: "本地 AI 与 Agent", en: "Local AI and Agents" },
     text: {
-      zh: "围绕 Ollama、OpenClaw、Open WebUI 等应用，提供本地模型、对话入口和智能体能力。",
-      en: "Provide local models, chat surfaces, and agent capabilities through apps such as Ollama, OpenClaw, and Open WebUI.",
+      zh: "公开目录可涵盖本地模型、对话入口和智能体应用；具体条目以已发布资料为准。",
+      en: "The public catalog can cover local models, chat surfaces, and agent apps; listed items depend on published records.",
     },
   },
   {
     title: { zh: "创作与工作流", en: "Creation and Workflows" },
     text: {
-      zh: "支持 ComfyUI、n8n 等创作和自动化应用，把模型能力接到真实生产流程。",
-      en: "Support creation and automation apps such as ComfyUI and n8n, connecting model capabilities to real workflows.",
+      zh: "创作与自动化工具按实际发布记录展示，不预设已安装或可运行。",
+      en: "Creative and automation tools appear only from published records, without implying they are installed or running.",
     },
   },
   {
     title: { zh: "版本和权限透明", en: "Transparent Versions and Permissions" },
     text: {
-      zh: "详情页展示版本历史、资源规格、权限说明和安装入口，降低试用和部署成本。",
-      en: "Detail pages expose version history, resource specs, permissions, and install actions to reduce deployment friction.",
+      zh: "详情页只展示当前公开版本和已录入资源资料；安装与运行状态由 Hub 核验。",
+      en: "Detail pages show the current published version and entered resource notes; Hub verifies access and runtime status.",
     },
   },
 ];
@@ -655,11 +660,6 @@ const faqs = [
   <AppList v-else-if="route.name === 'app-list'" :locale="locale" />
   <AppDetail
     v-else-if="route.name === 'app-detail'"
-    :app-id="route.appId"
-    :locale="locale"
-  />
-  <AppHistory
-    v-else-if="route.name === 'app-history'"
     :app-id="route.appId"
     :locale="locale"
   />

@@ -8,7 +8,7 @@ WWW 承载：
 
 - 首页品牌、视频能力和交付方式介绍。
 - `/models` 及 `/models/:modelId` 公开模型目录与详情。
-- `/apps` 及 `/apps/:appId` 公开应用目录、详情与版本记录。
+- `/apps` 及 `/apps/:appId` 公开应用目录、详情与当前版本。
 - `/solutions/*`、`/developers`、`/docs`、`/pricing` 和 `/contact`。
 - 跳转 Hub 在线体验、模型市场、应用市场、API Center 和登录入口的 CTA。
 
@@ -18,17 +18,15 @@ WWW 不承载 API Key、组织权益、余额、订单、任务记录、客户�
 
 ## 公开目录事实源
 
-公开页面统一从 `src/catalog/public.js` 读取目录。该入口使用显式 Published allowlist，只允许经过公开审核的模型和应用出现在 WWW；内部候选、组织授权状态和 Preview 运营数据不能直接从业务数据集泄漏到官网。
+公开页面统一从 `src/catalog/public.js` 读取 Control 的匿名只读 `/api/control/public/catalog`。新记录默认不公开；管理员显式公开的模型，以及已公开且位于 Preview/Stable 目录通道的应用才进入 WWW。接口只返回公开资料，不返回组织授权、内部验证、Key 或运行状态。页面不再打包静态价格和应用版本，接口失败时显示错误而不是旧样例。
 
-当前目录采用构建期静态数据：
+数据流：
 
 ```text
-src/view/model/data.js ─┐
-                       ├─> src/catalog/public.js ─> /models、/apps
-src/view/app/data.js ───┘
+Hub 管理端 → Control PostgreSQL → 匿名只读目录 API → WWW /models、/apps
 ```
 
-后续接入公共只读目录 API 或 CMS 时，只替换 `src/catalog/public.js` 的数据适配层，页面组件不直接依赖 Control Service，也不读取组织权益。
+公开模型报价仅供展示；实际模型可调用性、权限和结算由网关负责。公开应用版本仅为目录资料，不代表 Station 已安装。
 
 ## 技术栈
 
@@ -43,6 +41,8 @@ src/view/app/data.js ───┘
 npm install
 npm run dev
 ```
+
+本地需同时启动 Control Service；Vite 将 `/api/control/public/*` 代理到 `http://localhost:8080`。容器 Nginx 在阿里云集群内将该只读路径代理到 Control。
 
 跨站进入 Hub 的地址通过环境变量配置：
 
@@ -62,7 +62,7 @@ npm run preview
 ```bash
 docker build \
   -f docker/Dockerfile \
-  -t "${REGISTRY_ENDPOINT_ALIYUN}/wod/verdantflare:www-1.1.0" \
+  -t "${REGISTRY_ENDPOINT_ALIYUN}/wod/verdantflare:www-1.2.0" \
   .
 ```
 

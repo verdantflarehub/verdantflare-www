@@ -1,135 +1,30 @@
 <script setup>
 import { computed } from "vue";
 import { getAppById, getCategoryLabel, tAppMarket } from "../../../catalog/public";
-import { hubHref, toHubAppId } from "../../../config/external";
+import { hubHref } from "../../../config/external";
 
-const props = defineProps({
-  appId: {
-    type: String,
-    default: "ollama",
-  },
-  locale: {
-    type: String,
-    default: "zh",
-  },
-});
-
+const props = defineProps({ appId: String, locale: { type: String, default: "zh" } });
 const app = computed(() => getAppById(props.appId));
 const text = computed(() => (key) => tAppMarket(props.locale, key));
-const hubAppId = computed(() => toHubAppId(app.value.id));
-const hubAppHref = computed(() =>
-  hubHref(`/market/apps/${hubAppId.value}`, {
-    entry: "app-detail",
-    public_app_id: app.value.id,
-  })
-);
-const statItems = computed(() => [
-  { label: text.value("developer"), value: app.value.developer, icon: "group" },
-  { label: text.value("languageLabel"), value: app.value.language, unit: app.value.languageName },
-  { label: text.value("memory"), value: app.value.stats.memory, unit: app.value.stats.memory === "-" ? "-" : "minimum" },
-  { label: text.value("disk"), value: app.value.stats.disk, unit: app.value.stats.disk === "-" ? "-" : "storage" },
-  { label: text.value("cpu"), value: app.value.stats.cpu, unit: app.value.stats.cpu === "-" ? "-" : "recommended" },
-  { label: text.value("gpu"), value: app.value.stats.gpu, unit: app.value.stats.gpu === "-" ? "-" : "graphics" },
-]);
-
-const handleImageError = (event) => {
-  event.currentTarget.remove();
-};
 </script>
 
 <template>
-  <main class="market-page app-detail-page">
-    <section class="market-detail-hero app-detail-top">
-      <div class="market-wrap">
+  <main v-if="app" class="market-page app-detail-page">
+    <section class="market-detail-hero app-detail-top"><div class="market-wrap">
       <a class="app-back" href="/apps">{{ text("back") }}</a>
-      <div class="app-detail-identity">
-        <span class="app-detail-icon">
-          <i>{{ app.name.slice(0, 2) }}</i>
-          <img
-            v-if="app.icon"
-            :src="app.icon"
-            :alt="app.name"
-            decoding="async"
-            @error="handleImageError"
-          />
-        </span>
-        <div>
-          <h1>{{ app.name }}</h1>
-          <p>{{ app.summary }}</p>
-          <span>{{ app.developer }}</span>
-        </div>
+      <div class="app-detail-identity"><span class="app-detail-icon"><i>{{ app.name.slice(0, 2) }}</i><img v-if="app.icon" :src="app.icon" :alt="app.name" /></span><div><h1>{{ app.name }}</h1><p>{{ app.summary }}</p><span v-if="app.developer">{{ app.developer }}</span></div></div>
+    </div></section>
+    <section class="market-section app-detail-content"><div class="market-wrap">
+      <div class="app-stat-row" aria-label="应用资料">
+        <article v-if="app.version"><span>当前目录版本</span><strong>{{ app.version }}</strong></article>
+        <article v-if="app.stats.memory"><span>参考内存</span><strong>{{ app.stats.memory }}</strong></article>
+        <article v-if="app.stats.disk"><span>参考磁盘</span><strong>{{ app.stats.disk }}</strong></article>
+        <article v-if="app.stats.cpu"><span>参考 CPU</span><strong>{{ app.stats.cpu }}</strong></article>
+        <article v-if="app.stats.gpu"><span>参考 GPU</span><strong>{{ app.stats.gpu }}</strong></article>
       </div>
+      <div class="app-detail-layout"><div class="app-detail-primary"><article class="app-info-panel"><h2>{{ text("about") }}</h2><p>{{ app.description }}</p><div class="app-detail-tags"><span>{{ getCategoryLabel(app.category, locale) }}</span></div><p>此页仅为公开目录资料，不代表应用已在 Station 安装或可运行。</p></article></div>
+        <aside class="app-install-panel"><a class="app-get-link" :href="hubHref(`/market/apps/${app.id}`, { entry: 'app-detail' })">前往 Hub 查看组织权益</a><dl><div v-if="app.version"><dt>{{ text("chartVersion") }}</dt><dd>{{ app.version }}</dd></div></dl></aside>
       </div>
-    </section>
-
-    <section class="market-section app-detail-content">
-      <div class="market-wrap">
-        <div class="app-stat-row" aria-label="应用安装配置">
-          <article v-for="item in statItems" :key="item.label">
-            <span>{{ item.label }}</span>
-            <b v-if="item.icon" class="material-like">{{ item.icon }}</b>
-            <strong v-else>{{ item.value }}</strong>
-            <em>{{ item.unit || item.value }}</em>
-          </article>
-        </div>
-
-        <div class="app-detail-layout">
-          <div class="app-detail-primary">
-            <article class="app-info-panel">
-              <h2>{{ text("about") }}</h2>
-              <p>{{ app.description }}</p>
-              <div class="app-detail-tags">
-                <span>{{ getCategoryLabel(app.category, locale) }}</span>
-                <span>{{ text("compatible") }}</span>
-                <span>{{ app.source }}</span>
-              </div>
-            </article>
-
-            <article class="app-info-panel">
-              <h2>{{ text("screenshots") }}</h2>
-              <div class="app-screenshot-grid">
-                <figure v-for="image in app.screenshots" :key="image">
-                  <img
-                    :src="image"
-                    :alt="`${app.name} screenshot`"
-                    loading="lazy"
-                    @error="handleImageError"
-                  />
-                </figure>
-              </div>
-            </article>
-
-            <article class="app-info-panel">
-              <h2>{{ text("requiredPermissions") }}</h2>
-              <div class="app-permission-list">
-                <span v-for="permission in app.permissions" :key="permission">
-                  {{ permission }}
-                </span>
-              </div>
-            </article>
-          </div>
-
-          <aside class="app-install-panel">
-            <a class="app-get-link" :href="hubAppHref">{{ text("get") }}</a>
-            <dl>
-              <div>
-                <dt>{{ text("chartVersion") }}</dt>
-                <dd>{{ app.version }}</dd>
-              </div>
-              <div>
-                <dt>{{ text("versionHistory") }}</dt>
-                <dd>
-                  <a :href="`/apps/${app.id}/history`">{{ text("seeAllVersions") }}</a>
-                </dd>
-              </div>
-              <div>
-                <dt>{{ text("sourceCode") }}</dt>
-                <dd>{{ text("public") }}</dd>
-              </div>
-            </dl>
-          </aside>
-        </div>
-      </div>
-    </section>
+    </div></section>
   </main>
 </template>

@@ -1,82 +1,42 @@
-import {
-  getApiExamples,
-  modelCategories as allModelCategories,
-  models as allModels,
-  providers as allProviders,
-} from "../view/model/data";
-import {
-  appCategories as allAppCategories,
-  getCategoryLabel,
-  marketApps as allMarketApps,
-  tAppMarket,
-} from "../view/app/data";
+import { reactive } from "vue";
+import { appCategories as allAppCategories, getCategoryLabel, tAppMarket } from "../view/app/data";
 
-// WWW is a public surface. Only entries explicitly approved here may be rendered,
-// even when internal or preview records are added to the source datasets later.
-const publishedModelIds = new Set([
-  "deepseek-v4-pro",
-  "deepseek-v4-flash",
-  "glm-5-1",
-  "joyai-llm-flash",
-  "verdantflare-dance-2",
-  "glm-5-2",
-  "kimi-k2-6",
-  "kimi-k2-5",
-  "minimax-m2-7",
-  "glm-5",
-  "deepseek-v3-2",
-  "qwen3-6-27b",
-  "qwen3-6-35b-a3b",
-  "minimax-m2-5",
-  "kling-video-o1",
-  "kling-v2-master",
-]);
+// No bundled catalog fallback: a failed request must not turn sample pricing
+// or versions into apparent live business facts.
+export const models = reactive([]);
+export const marketApps = reactive([]);
+export const modelCategories = reactive([]);
+export const providers = reactive([]);
+export const appCategories = reactive([...allAppCategories]);
+export const catalogState = reactive({ loading: true, error: "" });
 
-const publishedAppIds = new Set([
-  "ollama",
-  "openwebui",
-  "openclaw",
-  "affine",
-  "comfyui",
-  "steamheadless",
-  "n8n",
-  "nocodb",
-  "bytebase",
-  "jellyfin",
-  "vaultwarden",
-  "coder",
-  "langbot",
-]);
+export const getModelById = (id) => models.find((item) => item.id === id);
+export const getAppById = (id) => marketApps.find((item) => item.id === id);
 
-export const models = Object.freeze(
-  allModels.filter((model) => publishedModelIds.has(model.id)),
-);
+export async function loadPublicCatalog() {
+  catalogState.loading = true;
+  catalogState.error = "";
+  try {
+    const response = await fetch("/api/control/public/catalog", { credentials: "omit" });
+    if (!response.ok) throw new Error(`目录接口返回 ${response.status}`);
+    const catalog = await response.json();
+    if (!Array.isArray(catalog.models) || !Array.isArray(catalog.apps)) throw new Error("目录响应格式不正确");
+    models.splice(0, models.length, ...catalog.models.map((model) => ({
+      ...model, categories: model.categories || [], inputPrice: model.inputPrice || "",
+      outputPrice: model.outputPrice || "", cachePrice: model.cachePrice || "", accent: "",
+    })));
+    marketApps.splice(0, marketApps.length, ...catalog.apps.map((app) => ({
+      ...app, developer: app.developer || "", description: app.description || app.summary || "",
+      icon: app.iconUrl || "", stats: { memory: app.memory || "", disk: app.disk || "", cpu: app.cpu || "", gpu: app.gpu || "" },
+    })));
+    modelCategories.splice(0, modelCategories.length, ...new Set(models.flatMap((model) => model.categories)));
+    providers.splice(0, providers.length, ...new Set(models.map((model) => model.provider)));
+  } catch (error) {
+    models.splice(0); marketApps.splice(0); modelCategories.splice(0); providers.splice(0);
+    catalogState.error = error instanceof Error ? error.message : "公开目录加载失败";
+  } finally {
+    catalogState.loading = false;
+  }
+}
 
-export const marketApps = Object.freeze(
-  allMarketApps.filter((app) => publishedAppIds.has(app.id)),
-);
-
-export const modelCategories = Object.freeze(
-  allModelCategories.filter((category) =>
-    models.some((model) => model.categories.includes(category)),
-  ),
-);
-
-export const providers = Object.freeze(
-  allProviders.filter((provider) => models.some((model) => model.provider === provider)),
-);
-
-export const appCategories = Object.freeze(
-  allAppCategories.filter(
-    (category) =>
-      category.id === "discover" || marketApps.some((app) => app.category === category.id),
-  ),
-);
-
-export const getModelById = (id) =>
-  models.find((model) => model.id === id) ?? models[0];
-
-export const getAppById = (id) =>
-  marketApps.find((app) => app.id === id) ?? marketApps[0];
-
-export { getApiExamples, getCategoryLabel, tAppMarket };
+export { getCategoryLabel, tAppMarket };

@@ -5,18 +5,6 @@ export const hubBaseUrl = trimTrailingSlash(
 );
 const loginUrl = import.meta.env.VITE_LOGIN_URL || "https://login.verdantflarehub.com/sign-in";
 
-const appIdAliases = {
-  comfyui: "comfyui-studio",
-  openwebui: "open-webui",
-};
-
-const modelIdAliases = {
-  "verdantflare-dance-2": "verdantflare-sd2",
-};
-
-export const toHubAppId = (appId) => appIdAliases[appId] || appId;
-export const toHubModelId = (modelId) => modelIdAliases[modelId] || modelId;
-
 export const hubHref = (path, params = {}) => {
   const url = new URL(path, `${hubBaseUrl}/`);
   Object.entries({ source: "www", ...params }).forEach(([key, value]) => {

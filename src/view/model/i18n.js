@@ -4,10 +4,10 @@ export const modelMarketCopy = {
     marketKicker: "verdantflare Model Market",
     marketTitle: "模型市场",
     marketLead:
-      "统一浏览青焰可调用模型、价格、能力和 API 接入方式。支持文本、推理、图片理解、视频生成和多模态工作流。",
+      "浏览经管理员公开的模型资料与报价；实际可调用性、组织权限及结算以模型网关为准。",
     recommended: "查看推荐模型",
     orbitLabel: "模型能力摘要",
-    orbitMeta: "公开价格说明 · API 统一接入 · Hub 管理额度",
+    orbitMeta: "公开目录资料 · 报价按实际录入展示",
     search: "搜索",
     searchPlaceholder: "搜索模型、供应商或能力",
     capability: "能力",
@@ -376,44 +376,6 @@ export const maxInputLabels = {
   图文: "Image/text",
 };
 
-export const modelNameLabels = {
-  "青焰Dance-2.0": "verdantflare Dance-2.0",
-};
-
-export const modelSummaryLabels = {
-  "deepseek-v4-pro":
-    "Million-token context with leading open-source Agent capability, world knowledge, and reasoning performance.",
-  "deepseek-v4-flash":
-    "Optimized for high-frequency calls while retaining long-context capability, suitable for assistants, batch summaries, and lightweight Agent workflows.",
-  "glm-5-1":
-    "Zhipu's flagship reasoning model with stronger coding capability for complex orchestration, engineering agents, and knowledge QA.",
-  "joyai-llm-flash":
-    "A low-latency verdantflare model for customer service, marketing scripts, lightweight workflows, and stable batch calls.",
-  "verdantflare-dance-2":
-    "A verdantflare video model for dance shorts and human motion generation, suited to presenter dances, virtual-human motion, and commercial creative previews.",
-  "glm-5-2":
-    "A flagship model for long-task workloads with practical million-token context and stable engineering use.",
-  "kimi-k2-6":
-    "An expert model for engineering coding and long-horizon autonomous tasks, including code review, document analysis, and agent work.",
-  "kimi-k2-5":
-    "A stable Kimi release for document reading, visual understanding, and general intelligence tasks.",
-  "minimax-m2-7":
-    "Builds complex Agent harnesses and excels at complex skills, tool search, and office productivity tasks.",
-  "glm-5":
-    "Focused on complex systems engineering and long-running agent tasks, with enterprise-oriented scale and stability.",
-  "deepseek-v3-2":
-    "Balances reasoning ability and output length for daily use, QA, and general Agent tasks.",
-  "qwen3-6-27b":
-    "A lightweight vision-language dense model with improved reasoning and agentic coding capabilities.",
-  "qwen3-6-35b-a3b":
-    "A hybrid-architecture model with linear attention, balancing response speed and reasoning performance.",
-  "minimax-m2-5":
-    "Trained for realistic complex environments, with stable performance in coding, tool use, and search tasks.",
-  "kling-video-o1":
-    "A multimodal video-language model supporting image, subject, multi-shot, and text-to-video generation.",
-  "kling-v2-master":
-    "Kling AI V2 flagship video generation for cinematic shorts, brand ads, and commercial videos.",
-};
 
 export const tMarket = (locale, key) =>
   (modelMarketCopy[locale] || modelMarketCopy.zh)[key];
@@ -428,10 +390,10 @@ export const tTag = (value, locale) =>
   locale === "en" ? tagLabels[value] || value : value;
 
 export const tModelName = (model, locale) =>
-  locale === "en" ? modelNameLabels[model.name] || model.name : model.name;
+  model.name;
 
 export const tModelSummary = (model, locale) =>
-  locale === "en" ? modelSummaryLabels[model.id] || model.summary : model.summary;
+  model.summary;
 
 export const tMaxValue = (value, locale) =>
   locale === "en" ? maxInputLabels[value] || value : value;

@@ -2,6 +2,7 @@
 import { computed, ref, watch } from "vue";
 import {
   appCategories,
+  catalogState,
   getCategoryLabel,
   marketApps,
   tAppMarket,
@@ -22,7 +23,7 @@ const visibleCount = ref(12);
 
 const text = computed(() => (key) => tAppMarket(props.locale, key));
 const filterCategories = computed(() =>
-  appCategories.filter((item) => item.id !== "discover")
+  appCategories.filter((item) => item.id !== "discover" && marketApps.some((app) => app.category === item.id))
 );
 
 const filteredApps = computed(() => {
@@ -68,7 +69,7 @@ watch([search, category], () => {
             {{ text("marketLead") }}
           </p>
           <div class="market-hero-actions">
-            <a class="button primary" href="/apps/ollama">
+            <a v-if="marketApps.length" class="button primary" :href="`/apps/${marketApps[0].id}`">
               {{ text("recommended") }}
             </a>
             <a class="button" :href="hubHref('/market', { entry: 'apps-hero' })">Hub Market</a>
@@ -138,6 +139,9 @@ watch([search, category], () => {
           </button>
         </div>
 
+        <p v-if="catalogState.loading">正在加载公开应用目录…</p>
+        <p v-else-if="catalogState.error" role="alert">公开目录暂不可用：{{ catalogState.error }}</p>
+        <p v-else-if="!marketApps.length">暂无已公开应用；请稍后查看。</p>
         <div :class="['app-results', 'model-results', viewMode]">
           <a
             v-for="app in visibleApps"
@@ -166,15 +170,14 @@ watch([search, category], () => {
             </div>
             <p>{{ app.summary }}</p>
             <div class="model-card-meta">
-              <span>
+              <span v-if="app.version">
                 <b>{{ text("versionHistory") }}</b>
                 <em>{{ app.version }}</em>
               </span>
-              <span>
+              <span v-if="app.stats.memory">
                 <b>{{ text("memory") }}</b>
                 <em>{{ app.stats.memory }}</em>
               </span>
-              <time>{{ app.language }}</time>
             </div>
           </a>
         </div>

@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-import { modelCategories, models, providers } from "../../../catalog/public";
+import { catalogState, modelCategories, models, providers } from "../../../catalog/public";
 import {
   tCategory,
   tMarket,
@@ -88,7 +88,7 @@ onUnmounted(() => {
             {{ text("marketLead") }}
           </p>
           <div class="market-hero-actions">
-            <a class="button primary" href="/models/deepseek-v4-pro">
+            <a v-if="models.length" class="button primary" :href="`/models/${models[0].id}`">
               {{ text("recommended") }}
             </a>
             <a class="button" :href="hubHref('/api/models', { entry: 'models-hero' })">{{ text("apiCall") }}</a>
@@ -163,6 +163,9 @@ onUnmounted(() => {
           </button>
         </div>
 
+        <p v-if="catalogState.loading">正在加载公开模型目录…</p>
+        <p v-else-if="catalogState.error" role="alert">公开目录暂不可用：{{ catalogState.error }}</p>
+        <p v-else-if="!models.length">暂无已公开模型；请稍后查看。</p>
         <div :class="['model-results', viewMode]">
           <a
             v-for="model in visibleModels"
@@ -185,15 +188,14 @@ onUnmounted(() => {
             </div>
             <p>{{ tModelSummary(model, locale) }}</p>
             <div class="model-card-meta">
-              <span>
+              <span v-if="model.inputPrice">
                 <b>{{ text("input") }}</b>
-                <em>{{ model.inputPrice }} {{ text("pointsPerMillion") }}</em>
+                <em>{{ model.inputPrice }} {{ model.priceUnit }}</em>
               </span>
-              <span>
+              <span v-if="model.outputPrice">
                 <b>{{ text("output") }}</b>
-                <em>{{ model.outputPrice }} {{ text("pointsPerMillion") }}</em>
+                <em>{{ model.outputPrice }} {{ model.priceUnit }}</em>
               </span>
-              <time>{{ model.date }}</time>
             </div>
           </a>
         </div>
