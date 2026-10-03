@@ -6,7 +6,7 @@ import AppList from "./view/app/list/index.vue";
 import ModelDetail from "./view/model/detail/index.vue";
 import ModelList from "./view/model/list/index.vue";
 import PublicContentView from "./view/content/PublicContentView.vue";
-import { hubHref } from "./config/external";
+import { hubHref, loginHref } from "./config/external";
 
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
@@ -300,7 +300,7 @@ const handleNavigation = () => {
   scrollToHash();
   scrollRouteToTop();
   if (route.value.name === "external-login") {
-    window.location.replace(hubHref("/", { entry: "legacy-login" }));
+    window.location.replace(loginHref("legacy-login"));
   }
 };
 
@@ -310,7 +310,7 @@ onMounted(() => {
   scrollToHash();
   scrollRouteToTop();
   if (route.value.name === "external-login") {
-    window.location.replace(hubHref("/", { entry: "legacy-login" }));
+    window.location.replace(loginHref("legacy-login"));
   }
 });
 
@@ -638,7 +638,7 @@ const faqs = [
         </a>
       </div>
       <div class="nav-actions">
-        <a class="nav-login" :href="hubHref('/', { entry: 'header-login' })">{{ text.login }}</a>
+        <a class="nav-login" :href="loginHref('header-login')">{{ text.login }}</a>
         <button class="nav-lang" type="button" @click="toggleLocale">
           {{ langLabel }}
         </button>
