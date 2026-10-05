@@ -62,7 +62,7 @@ npm run preview
 ```bash
 docker build \
   -f docker/Dockerfile \
-  -t "${REGISTRY_ENDPOINT_ALIYUN}/wod/verdantflare:www-1.2.0" \
+  -t "${REGISTRY_ENDPOINT_ALIYUN}/wod/verdantflare:www-1.2.1" \
   .
 ```
 

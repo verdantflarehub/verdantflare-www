@@ -22,6 +22,22 @@ const navItems = [
 const currentPath = ref(window.location.pathname);
 const currentHash = ref(window.location.hash);
 const locale = ref(localStorage.getItem("verdantflare_locale") || "zh");
+const sessionState = ref("unknown");
+let sessionRequest = 0;
+const refreshSession = async () => {
+  const request = ++sessionRequest;
+  try {
+    const response = await fetch("/api/auth/session", { credentials: "include", cache: "no-store" });
+    if (request === sessionRequest) {
+      sessionState.value = response.ok ? "authenticated" : response.status === 401 ? "anonymous" : "unknown";
+    }
+  } catch {
+    if (request === sessionRequest) sessionState.value = "unknown";
+  }
+};
+const refreshSessionWhenVisible = () => {
+  if (document.visibilityState === "visible") refreshSession();
+};
 const modelRoute = (modelId) => models.some((model) => model.id === modelId)
   ? { name: "model-detail", modelId } : { name: "model-list" };
 const appRoute = (appId) => marketApps.some((app) => app.id === appId)
@@ -144,6 +160,7 @@ const getLabel = (label) => label[locale.value] || label.zh;
 const copy = {
   zh: {
     login: "登录",
+    enterHub: "进入 Hub",
     heroTitle: "青焰",
     heroSubtitle: "青焰视频生成",
     heroCopy:
@@ -188,6 +205,7 @@ const copy = {
   },
   en: {
     login: "Login",
+    enterHub: "Open Hub",
     heroTitle: "VerdantFlare",
     heroSubtitle: "verdantflare Video Generation",
     heroCopy:
@@ -310,8 +328,11 @@ const handleNavigation = () => {
 
 onMounted(() => {
   loadPublicCatalog();
+  refreshSession();
   window.addEventListener("popstate", handleNavigation);
   window.addEventListener("hashchange", handleNavigation);
+  window.addEventListener("focus", refreshSession);
+  document.addEventListener("visibilitychange", refreshSessionWhenVisible);
   scrollToHash();
   scrollRouteToTop();
   if (route.value.name === "external-login") {
@@ -320,8 +341,11 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  sessionRequest += 1;
   window.removeEventListener("popstate", handleNavigation);
   window.removeEventListener("hashchange", handleNavigation);
+  window.removeEventListener("focus", refreshSession);
+  document.removeEventListener("visibilitychange", refreshSessionWhenVisible);
 });
 
 const heroMeta = [
@@ -643,7 +667,7 @@ const faqs = [
         </a>
       </div>
       <div class="nav-actions">
-        <a class="nav-login" :href="loginHref('header-login')">{{ text.login }}</a>
+        <a class="nav-login" :href="sessionState === 'anonymous' ? loginHref('header-login') : hubHref('/', { entry: 'header-login' })">{{ sessionState === 'anonymous' ? text.login : text.enterHub }}</a>
         <button class="nav-lang" type="button" @click="toggleLocale">
           {{ langLabel }}
         </button>

@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  VERSION: ${{ github.ref == 'refs/heads/dev' && 'www-1.2.0-dev.1' || 'www-1.2.0' }}
+  VERSION: ${{ github.ref == 'refs/heads/dev' && 'www-1.2.1-dev.1' || 'www-1.2.1' }}
 
 concurrency:
   group: verdantflare-www-release
