@@ -4,10 +4,10 @@ export const modelMarketCopy = {
     marketKicker: "verdantflare Model Market",
     marketTitle: "模型市场",
     marketLead:
-      "浏览经管理员公开的模型资料与报价；实际可调用性、组织权限及结算以模型网关为准。",
+      "比较模型能力与已发布报价，找到适合当前任务的选择。登录 Hub 查看组织授权；实际可调用性与结算以模型网关为准。",
     recommended: "查看推荐模型",
     orbitLabel: "模型能力摘要",
-    orbitMeta: "公开目录资料 · 报价按实际录入展示",
+    orbitMeta: "模型能力 · 已发布报价",
     search: "搜索",
     searchPlaceholder: "搜索模型、供应商或能力",
     capability: "能力",
@@ -56,7 +56,7 @@ export const modelMarketCopy = {
     guide: "调用指南",
     chooseKey: "选择 API-KEY",
     keyLead:
-      "API-KEY 是访问青焰 Hub 服务的重要凭证，长期有效。请妥善保管并定期更换密钥，避免公开共享。",
+      "API Key 是访问青焰服务的凭证，有效期以密钥设置为准。请妥善保管、定期轮换，不要公开分享。",
     myKey: "我的 API-KEY",
     name: "名称",
     createdAt: "创建时间",
@@ -157,10 +157,10 @@ export const modelMarketCopy = {
     marketKicker: "verdantflare Model Market",
     marketTitle: "Model Market",
     marketLead:
-      "Browse callable verdantflare models, pricing, capabilities, and API integration in one place. Supports text, reasoning, image understanding, video generation, and multimodal workflows.",
+      "Compare model capabilities and published pricing. Sign in to Hub to check your organization’s access; live availability and billing follow gateway records.",
     recommended: "View Recommended Model",
     orbitLabel: "Model capability summary",
-    orbitMeta: "Public pricing · Unified API · Quota managed in Hub",
+    orbitMeta: "Model capabilities · Published pricing",
     search: "Search",
     searchPlaceholder: "Search models, providers, or capabilities",
     capability: "Capability",
@@ -209,7 +209,7 @@ export const modelMarketCopy = {
     guide: "Call Guide",
     chooseKey: "Choose API Key",
     keyLead:
-      "An API key is the credential for VerdantFlare Hub services. Keep it private, rotate it regularly, and avoid public sharing.",
+      "An API key grants access to VerdantFlare services. Its expiry follows the key settings. Keep it private, rotate it regularly, and never share it publicly.",
     myKey: "My API Key",
     name: "Name",
     createdAt: "Created",

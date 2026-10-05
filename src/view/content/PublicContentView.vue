@@ -12,8 +12,8 @@ const submitted = ref(false);
 const pages = {
   "solution-video": {
     eyebrow: { zh: "视频生成解决方案", en: "Video generation" },
-    title: { zh: "从创意描述到可验证的视频结果", en: "From creative intent to a verifiable video result" },
-    lead: { zh: "组合模型、参考素材与异步任务，让广告、短片和预演进入可追踪的生产流程。", en: "Combine models, references, and asynchronous tasks for traceable ad, short-film, and previs workflows." },
+    title: { zh: "让脑海中的镜头，先一步出现。", en: "Bring the shot in your mind into view." },
+    lead: { zh: "从描述和参考素材开始，探索广告、短片与分镜预演的不同可能。提交后，在任务记录中跟踪进展。", en: "Start with a prompt and references. Explore ideas for ads, short films, and storyboards, then follow progress in your task history." },
     primary: { label: { zh: "在线体验", en: "Try online" }, href: hubHref("/experience", { entry: "solution-video" }) },
     secondary: { label: { zh: "查看视频模型", en: "Explore video models" }, href: "/models/verdantflare-dance-2" },
     image: "/assets/usecase-script-video.webp",
@@ -25,8 +25,8 @@ const pages = {
   },
   "solution-creator": {
     eyebrow: { zh: "创作者解决方案", en: "Creator solution" },
-    title: { zh: "把模型、应用和本地工作站连成一条创作路径", en: "Connect models, apps, and a local station into one creative path" },
-    lead: { zh: "公开市场负责发现能力，Hub 负责试用和授权，Studio 与 Station 负责正式项目和本地执行。", en: "Use the public market to discover, Hub to evaluate, and Studio with Station for project production." },
+    title: { zh: "从灵感出发，把创作连起来。", en: "From first spark to a creative workflow." },
+    lead: { zh: "发现适合的模型与应用，在 Hub 中确认授权、在线体验，再通过 Studio 在当前 Station 开展本地创作。", en: "Discover models and apps, check access and try them in Hub, then use Studio to create on your active Station." },
     primary: { label: { zh: "浏览应用", en: "Browse apps" }, href: "/apps" },
     secondary: { label: { zh: "进入 Hub", en: "Open Hub" }, href: hubHref("/", { entry: "solution-creator" }) },
     image: "/assets/usecase-ad-storyboard.webp",
@@ -38,13 +38,13 @@ const pages = {
   },
   "solution-enterprise": {
     eyebrow: { zh: "企业解决方案", en: "Enterprise solution" },
-    title: { zh: "让能力、身份和数据边界同时可管理", en: "Manage capability, identity, and data boundaries together" },
+    title: { zh: "让团队专注创作，让管理清晰有序。", en: "Room to create. Clarity to manage." },
     lead: { zh: "通过组织、角色、权益和区域约束管理模型与应用访问；正式项目资产继续留在 Studio 与客户数据边界内。", en: "Control access through organizations, roles, entitlements, and regions while formal project assets remain in Studio." },
     primary: { label: { zh: "联系企业顾问", en: "Contact enterprise" }, href: "/contact?intent=enterprise" },
     secondary: { label: { zh: "查看公开套餐", en: "View public plans" }, href: "/pricing" },
     image: "/assets/usecase-previz-room.webp",
     sections: [
-      { title: { zh: "统一身份", en: "Unified identity" }, text: { zh: "Login 提供统一认证，Center ID 将身份映射到组织、角色和权益版本。", en: "Login provides authentication while Center ID maps identity to organizations, roles, and entitlement versions." } },
+      { title: { zh: "统一身份", en: "One identity" }, text: { zh: "使用统一账号登录，按组织与角色管理访问。切换团队时，对应授权随之切换。", en: "Sign in with one account and manage access by organization and role. Access follows the team you select." } },
       { title: { zh: "显式权益", en: "Explicit entitlements" }, text: { zh: "应用、模型、API、体验额度和有效期均按组织计算，默认不因加入组织而自动开放。", en: "Apps, models, APIs, experience quota, and validity are explicitly granted per organization." } },
       { title: { zh: "数据分界", en: "Data boundaries" }, text: { zh: "Center 管理平台权益和用量，不直接读取客户项目目录、未上传素材和本地工作版本。", en: "Center manages platform entitlement and usage without directly reading customer project files or local working versions." } },
     ],
@@ -64,8 +64,8 @@ const pages = {
   },
   docs: {
     eyebrow: { zh: "公开文档", en: "Documentation" },
-    title: { zh: "快速理解 VerdantFlare 的产品边界", en: "Understand VerdantFlare product boundaries quickly" },
-    lead: { zh: "从公开市场、API 接入、Studio 与 Station 的职责开始，选择与你当前目标最相关的入口。", en: "Start with the public market, API access, Studio, and Station responsibilities, then choose the path that matches your goal." },
+    title: { zh: "找到入口，开始你的第一次创作。", en: "Find your way to your first creation." },
+    lead: { zh: "了解如何发现模型、接入 API，或通过 Studio 在当前 Station 使用应用。从你想完成的事情开始。", en: "Learn how to discover models, connect through the API, or use Studio apps on your active Station. Start with what you want to make." },
     primary: { label: { zh: "API 快速开始", en: "API quickstart" }, href: hubHref("/api/models", { entry: "docs" }) },
     secondary: { label: { zh: "浏览应用", en: "Browse apps" }, href: "/apps" },
     image: "/assets/usecase-previz-room.webp",
@@ -77,7 +77,7 @@ const pages = {
   },
   pricing: {
     eyebrow: { zh: "套餐与合作", en: "Plans and engagement" },
-    title: { zh: "先确认使用方式，再确定适合的套餐", en: "Choose a plan after confirming how you will use the platform" },
+    title: { zh: "为你的创作，找到合适的方案。", en: "Find the right plan for your work." },
     lead: { zh: "公开页面只说明套餐结构。模型范围、额度、并发、有效期和企业服务以 Hub 权益或双方确认的方案为准。", en: "This page explains plan structure; model scope, quota, concurrency, validity, and enterprise service follow Hub entitlements or the confirmed service plan." },
     primary: { label: { zh: "咨询方案", en: "Discuss a plan" }, href: "/contact?intent=pricing" },
     secondary: { label: { zh: "先在线体验", en: "Try first" }, href: hubHref("/experience", { entry: "pricing" }) },
@@ -90,8 +90,8 @@ const pages = {
   },
   contact: {
     eyebrow: { zh: "联系团队", en: "Contact" },
-    title: { zh: "告诉我们你想验证或接入什么", en: "Tell us what you want to evaluate or integrate" },
-    lead: { zh: "选择目标并留下必要信息。提交只创建咨询线索，不会自动创建 Center 组织或开通付费权益。", en: "Choose a goal and leave the necessary details. Submitting creates an inquiry, not a Center organization or paid entitlement." },
+    title: { zh: "聊聊你想做的事。", en: "Tell us what you want to make." },
+    lead: { zh: "无论是验证一个想法，还是为团队接入模型，都可以通过邮件联系我们。下方表单仅供本地预览，尚未接入发送服务。", en: "Whether you’re testing an idea or bringing models to your team, get in touch by email. The form below is a local preview only and does not send an inquiry." },
     image: "/assets/usecase-ad-storyboard.webp",
     sections: [],
   },
@@ -138,6 +138,7 @@ const submit = () => {
           <h2>{{ locale === 'en' ? 'Choose the shortest path' : '选择最短路径' }}</h2>
           <p>{{ locale === 'en' ? 'For a quick capability check, open Experience. For API integration or enterprise requirements, send an inquiry.' : '快速验证能力可直接进入体验中心；API 接入或企业需求可以提交咨询。' }}</p>
           <div class="contact-direct-links">
+            <a href="mailto:hello@verdantflarehub.com">hello@verdantflarehub.com</a>
             <a :href="hubHref('/experience', { entry: 'contact' })">{{ locale === 'en' ? 'Open Experience' : '进入体验中心' }}</a>
             <a :href="hubHref('/api/models', { entry: 'contact' })">{{ locale === 'en' ? 'Open API Center' : '进入 API Center' }}</a>
           </div>
@@ -148,11 +149,11 @@ const submit = () => {
           <label><span>{{ locale === 'en' ? 'Contact' : '联系方式' }}</span><input type="email" required placeholder="name@company.com" /></label>
           <label><span>{{ locale === 'en' ? 'What do you want to achieve?' : '希望解决的问题' }}</span><textarea rows="5" required /></label>
           <label class="contact-consent"><input type="checkbox" required /><span>{{ locale === 'en' ? 'I agree to be contacted about this inquiry.' : '我同意团队就本次咨询与我联系。' }}</span></label>
-          <button class="button primary" type="submit">{{ locale === 'en' ? 'Submit inquiry' : '提交咨询' }}</button>
+          <button class="button primary" type="submit">{{ locale === 'en' ? 'Preview only · not sent' : '预览填写结果 · 不会发送' }}</button>
         </form>
         <div v-else class="contact-success">
-          <strong>{{ locale === 'en' ? 'Inquiry saved in this prototype' : '咨询已在当前原型中记录' }}</strong>
-          <p>{{ locale === 'en' ? 'Backend submission will be connected after the page and field set are approved.' : '页面和字段确认后再接入后端提交，本次不会发送真实数据。' }}</p>
+          <strong>{{ locale === 'en' ? 'Preview complete. Nothing was sent.' : '预览完成，信息未发送。' }}</strong>
+          <p>{{ locale === 'en' ? 'This form is not connected to a sending service and does not save your inquiry. Please email hello@verdantflarehub.com to reach the team.' : '此表单尚未接入发送服务，也不会保存咨询。请发送邮件至 hello@verdantflarehub.com 联系团队。' }}</p>
           <button class="button" @click="submitted = false">{{ locale === 'en' ? 'Submit another' : '重新填写' }}</button>
         </div>
       </div>
@@ -161,8 +162,8 @@ const submit = () => {
     <section v-else class="public-journey">
       <div class="public-wrap">
         <div>
-          <h2>{{ locale === 'en' ? 'Continue with your organization context' : '带着组织上下文继续' }}</h2>
-          <p>{{ locale === 'en' ? 'Sign in to see the models, apps, quota, and operations available to your organization.' : '登录后查看当前组织真正可用的模型、应用、额度和操作。' }}</p>
+          <h2>{{ locale === 'en' ? 'Make your next move in Hub.' : '下一步，在 Hub 中开始。' }}</h2>
+          <p>{{ locale === 'en' ? 'Sign in to see your organization’s models, apps, and credits.' : '登录后查看当前组织可用的模型、应用与额度。' }}</p>
         </div>
         <a class="button primary" :href="hubHref('/', { entry: page })">{{ locale === 'en' ? 'Open Hub' : '进入 Hub' }}</a>
       </div>

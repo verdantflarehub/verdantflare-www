@@ -1,5 +1,5 @@
 <script setup>
-import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import AppDetail from "./view/app/detail/index.vue";
 import AppList from "./view/app/list/index.vue";
 import ModelDetail from "./view/model/detail/index.vue";
@@ -22,6 +22,7 @@ const navItems = [
 const currentPath = ref(window.location.pathname);
 const currentHash = ref(window.location.hash);
 const locale = ref(localStorage.getItem("verdantflare_locale") || "zh");
+watch(locale, (value) => { document.documentElement.lang = value === "en" ? "en" : "zh-CN"; }, { immediate: true });
 const sessionState = ref("unknown");
 let sessionRequest = 0;
 const refreshSession = async () => {
@@ -161,92 +162,96 @@ const copy = {
   zh: {
     login: "登录",
     enterHub: "进入 Hub",
-    heroTitle: "青焰",
-    heroSubtitle: "青焰视频生成",
+    brandName: "青焰",
+    heroTitle: "让想法，",
+    heroSubtitle: "有了画面。",
     heroCopy:
-      "面向短视频创作者、企业内容团队和开发者，提供视频生成模型、公开能力目录、在线体验和合作入口。官网负责介绍与发现，实际开通和使用统一进入 Hub。",
+      "从一句描述、一张参考图，到下一段视频。探索青焰的模型与创作应用，在 Hub 中体验，",
+    heroCopyEnd: "让灵感走向作品。",
     heroPriceCta: "咨询青焰套餐",
     heroFlowCta: "了解交付流程",
     modelKicker: "Model",
-    modelTitle: "从公开目录发现模型，在 Hub 中完成授权与调用。",
+    modelTitle: "找到适合这一刻的模型。",
     modelLead:
-      "官网只展示由 Hub 管理员公开的模型资料与报价；实际可用性和结算以模型网关为准。",
+      "了解模型能做什么、如何输入、怎样计费。登录 Hub，查看组织授权与可调用状态，再选择适合你的接入方式。",
     modelCta: "进入模型市场",
     publicModelCta: "查看公开模型目录",
     appKicker: "Apps",
-    appTitle: "应用市场负责承接工具、工作流和应用安装入口。",
+    appTitle: "好工具，让创作更顺手。",
     appLead:
-      "应用区按照模型区的方式展示核心应用能力，用户先在首页了解应用类型，再进入应用市场查看应用列表、详情、版本和权限说明。",
+      "发现创作工具与工作流，了解版本、权限和运行条件。需要本地执行的应用，通过 Studio 安装到当前 Station。",
     appCta: "进入应用市场",
     publicAppCta: "查看公开应用目录",
     videoKicker: "Video Generation",
-    videoTitle: "从脚本、分镜和商品卖点生成可测试的视频素材。",
+    videoTitle: "先看见，再让创意向前。",
     videoLead:
-      "视频生成是首页的核心能力展示。样片区优先展示短视频、广告、电商和分镜预演四类高频场景。",
+      "验证一段脚本，尝试一种镜头语言，或为商品寻找新的表达。从短视频到分镜预演，找到你的创作起点。",
     videoCta: "体验视频生成",
     packagesKicker: "Packages",
-    packagesTitle: "先用咨询型套餐上线，等交付稳定后再公开价格。",
+    packagesTitle: "从你的创作需求出发。",
     packagesLead:
-      "第一版不需要复杂价格表。把适用人群、额度范围和交付规则讲清楚，比展示一堆数字更可信。",
+      "个人探索、团队协作，或持续的 API 接入。告诉我们你的使用场景，一起确认模型范围、额度和交付方案。",
     workflowKicker: "Workflow",
-    workflowTitle: "交付流程要比视觉更清楚。",
+    workflowTitle: "每一步，都心中有数。",
     workflowLead:
-      "早期项目最重要的是降低沟通成本。用户开通前就应该知道额度、有效期、交付方式和支持边界。",
+      "从需求沟通到开始使用，提前确认额度、有效期与支持范围。清楚地开始，安心地创作。",
     rulesKicker: "Rules",
-    rulesTitle: "开通前说清楚，比上线后补充更重要。",
+    rulesTitle: "开始之前，了解你的权益。",
     rulesLead:
       "公开页面只说明套餐结构，包括额度范围、有效期、交付方式和支持边界；实际权益以 Hub 配置或双方确认的方案为准。",
     priceKicker: "Price",
-    priceTitle: "合作先确认模型、额度和交付方式。",
+    priceTitle: "聊聊你的下一件作品。",
     faqKicker: "FAQ",
     faqTitle: "常见问题",
-    footerBrand: "青焰 · VerdantFlare WWW",
-    footerLinks: "服务规则 / 隐私政策 / 售后说明 / 备案信息占位",
+    footerBrand: "青焰 · VerdantFlare",
+    footerLinks: "模型 · 应用 · 创作",
   },
   en: {
     login: "Login",
     enterHub: "Open Hub",
-    heroTitle: "VerdantFlare",
-    heroSubtitle: "verdantflare Video Generation",
+    brandName: "VerdantFlare",
+    heroTitle: "Your idea.",
+    heroSubtitle: "In motion.",
     heroCopy:
-      "Built for short-form creators, content teams, and developers. Discover public models and apps here, then use Hub for access, quota, and operations.",
+      "Start with a few words or a reference image. Explore models and creative apps, try them in Hub, and take your next video ",
+    heroCopyEnd: "from idea to screen.",
     heroPriceCta: "Consult Packages",
     heroFlowCta: "View Workflow",
     modelKicker: "Model",
-    modelTitle: "Discover public models, then manage access and calls in Hub.",
+    modelTitle: "The right model for your next idea.",
     modelLead:
-      "WWW shows model information and quotes explicitly published from Hub. Gateway availability and billing are separate.",
+      "Compare capabilities, inputs, and pricing. Sign in to Hub to check your organization’s access and live availability before integrating.",
     modelCta: "Enter Model Market",
     publicModelCta: "View Public Models",
     appKicker: "Apps",
-    appTitle: "The app market hosts tools, workflows, and installable app entries.",
+    appTitle: "Good tools. More room to create.",
     appLead:
-      "The app section mirrors the model section: introduce app capabilities on the home page, then guide users into the app market for lists, details, versions, and permissions.",
+      "Discover creative tools and workflows. Review versions, permissions, and requirements, then use Studio to install local apps on your active Station.",
     appCta: "Enter App Market",
     publicAppCta: "View Public Apps",
     videoKicker: "Video Generation",
-    videoTitle: "Generate testable video assets from scripts, storyboards, and product ideas.",
+    videoTitle: "See it. Then take it further.",
     videoLead:
-      "Video generation is the core capability on this page, with examples for short videos, ads, ecommerce, and storyboard previews.",
+      "Test a script, explore a camera move, or find a fresh angle for your product. From short videos to storyboard previews, start with what inspires you.",
     videoCta: "Try Video Generation",
     packagesKicker: "Packages",
-    packagesTitle: "Start with consultative packages, then publish prices after delivery stabilizes.",
+    packagesTitle: "A plan that starts with your work.",
     packagesLead:
-      "The first version does not need a complex price table. Clear audience, credit range, and delivery rules are more credible than a pile of numbers.",
+      "Explore on your own, create with a team, or build with the API. Tell us what you need, and we’ll help define the models, credits, and delivery plan.",
     workflowKicker: "Workflow",
-    workflowTitle: "The delivery workflow must be clearer than the visuals.",
+    workflowTitle: "Know what comes next.",
     workflowLead:
-      "Early-stage projects need lower communication cost. Users should know the credits, validity, delivery method, and support boundaries before activation.",
+      "From your first conversation to your first session, agree on credits, validity, and support before getting started.",
     rulesKicker: "Rules",
-    rulesTitle: "Clarify access before activation.",
+    rulesTitle: "Your access, clearly explained.",
     rulesLead:
       "Public pages explain the plan structure. Actual access follows the entitlement configured in Hub or the service plan confirmed with the customer.",
     priceKicker: "Price",
-    priceTitle: "Confirm models, credits, and delivery before cooperation.",
+    priceTitle: "Tell us about your next project.",
     faqKicker: "FAQ",
     faqTitle: "Frequently Asked Questions",
-    footerBrand: "VerdantFlare WWW · www.verdantflarehub.com",
-    footerLinks: "Service Rules / Privacy Policy / Support Terms / ICP Placeholder",
+    footerBrand: "VerdantFlare",
+    footerLinks: "Models · Apps · Creation",
   },
 };
 
@@ -395,15 +400,15 @@ const modelItems = [
   {
     title: { zh: "统一模型入口", en: "Unified Model Entry" },
     text: {
-      zh: "公开模型资料由 Hub 管理员维护；只有经过审核并发布的报价才会展示。",
-      en: "Hub administrators maintain the public model catalog; only explicitly published quotes appear here.",
+      zh: "在一个目录中比较模型能力、输入要求与已发布报价，找到适合当前任务的选择。",
+      en: "Compare capabilities, input requirements, and published pricing in one catalog.",
     },
   },
   {
     title: { zh: "额度和 API 接入", en: "Credits and API Access" },
     text: {
-      zh: "模型能力、公开报价与实际接入状态分开管理，未核验的信息不作为可调用承诺。",
-      en: "Model descriptions, public quotes, and actual gateway access are separate; unverified facts are not shown as availability claims.",
+      zh: "登录后查看组织可用的模型与额度，通过 API 接入自己的工作流。实际可用性与结算以网关记录为准。",
+      en: "Check your organization’s models and credits, then connect through the API. Live availability and billing follow gateway records.",
     },
   },
   {
@@ -426,15 +431,15 @@ const appItems = [
   {
     title: { zh: "创作与工作流", en: "Creation and Workflows" },
     text: {
-      zh: "创作与自动化工具按实际发布记录展示，不预设已安装或可运行。",
-      en: "Creative and automation tools appear only from published records, without implying they are installed or running.",
+      zh: "浏览已发布的创作与自动化工具，选择适合自己的工作流；安装前先核对运行条件。",
+      en: "Explore published creative and automation tools, and check their requirements before installing.",
     },
   },
   {
     title: { zh: "版本和权限透明", en: "Transparent Versions and Permissions" },
     text: {
-      zh: "详情页只展示当前公开版本和已录入资源资料；安装与运行状态由 Hub 核验。",
-      en: "Detail pages show the current published version and entered resource notes; Hub verifies access and runtime status.",
+      zh: "先了解公开版本与资源要求，在 Hub 查看授权，再由 Studio 管理当前 Station 的安装与运行。",
+      en: "Review versions and resource requirements, check access in Hub, and manage installation and runtime on your active Station through Studio.",
     },
   },
 ];
@@ -617,17 +622,17 @@ const faqs = [
     },
   },
   {
-    question: { zh: "是否可以直接写价格？", en: "Can fixed prices be listed directly?" },
+    question: { zh: "如何了解价格和套餐？", en: "How do I find pricing and plans?" },
     answer: {
-      zh: "如果套餐和库存稳定，可以写固定价格；如果还在早期，建议先用咨询套餐和获取报价。",
-      en: "If packages and availability are stable, fixed prices can be listed. In the early stage, consultation packages and quotes are safer.",
+      zh: "模型目录展示已发布的报价说明。团队或定制需求可联系我们，开通前会确认模型范围、额度、有效期和交付方式。",
+      en: "The model catalog includes published pricing notes. Contact us for team or custom plans; model scope, credits, validity, and delivery are confirmed before activation.",
     },
   },
   {
     question: { zh: "青焰额度是否永久有效？", en: "Are verdantflare credits valid forever?" },
     answer: {
-      zh: "不建议承诺永久有效。有效期、限制和支持规则以 Hub 权益或双方确认的方案为准。",
-      en: "Permanent validity should not be promised. Validity, limits, and support follow Hub entitlements or the confirmed plan.",
+      zh: "额度不默认永久有效。请查看 Hub 中的有效期和使用限制，或以双方确认的服务方案为准。",
+      en: "Credits do not have unlimited validity by default. Check the expiry and limits in Hub or your confirmed service plan.",
     },
   },
   {
@@ -652,7 +657,7 @@ const faqs = [
     <nav class="nav" aria-label="主导航">
       <a class="brand" href="/#home" aria-label="VerdantFlare 官网首页">
         <img class="brand-mark" src="/brand/verdantflare-logo.png" alt="" />
-        <span>{{ text.heroTitle }}</span>
+        <span>{{ text.brandName }}</span>
       </a>
       <div class="nav-links" aria-label="页面导航">
         <a
@@ -700,10 +705,10 @@ const faqs = [
     >
       <div class="hero-inner">
         <div>
-          <p class="eyebrow">www.verdantflarehub.com</p>
-          <h1 id="hero-title">{{ text.heroTitle }} <span>{{ text.heroSubtitle }}</span></h1>
+          <p class="eyebrow">{{ isEnglish ? 'VerdantFlare · Creative intelligence' : '青焰 · 让创作发生' }}</p>
+          <h1 id="hero-title"><span class="headline-phrase">{{ text.heroTitle }}</span><span class="headline-phrase">{{ text.heroSubtitle }}</span></h1>
           <p class="hero-copy">
-            {{ text.heroCopy }}
+            {{ text.heroCopy }}<span class="keep-phrase">{{ text.heroCopyEnd }}</span>
           </p>
           <div class="hero-actions">
             <a class="button primary" href="#price">{{ text.heroPriceCta }}</a>
