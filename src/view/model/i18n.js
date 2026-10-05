@@ -1,6 +1,23 @@
+import { localizeCatalog } from "../../catalog/localize";
+
 export const modelMarketCopy = {
   zh: {
     backToMarket: "返回模型市场",
+    detailAccess: "前往 Hub 查看接入状态",
+    publicQuote: "公开报价",
+    quoteDisclaimer: "以下是 Hub 管理的公开目录报价；实际可调用性和结算以模型网关及合同为准。",
+    pricePending: "价格待公布",
+    pricePendingDetail: "当前公开目录没有经过审核的报价。",
+    modelData: "模型资料",
+    context: "上下文",
+    maxInputDetail: "最大输入",
+    maxOutputDetail: "最大输出",
+    aboutModel: "关于模型",
+    accessDisclaimer: "此页是公开资料，不表示你的组织已经获得调用权限。",
+    originalChinese: "以下资料保留原始中文；英文译文尚未审核。",
+    catalogLoading: "正在加载公开模型目录…",
+    catalogError: "公开目录暂不可用：",
+    catalogEmpty: "暂无已公开模型；请稍后查看。",
     marketKicker: "verdantflare Model Market",
     marketTitle: "模型市场",
     marketLead:
@@ -22,7 +39,7 @@ export const modelMarketCopy = {
     allProviders: "全部供应商",
     input: "输入",
     output: "输出",
-    pointsPerMillion: "积分/百万tokens",
+    pointsPerMillion: "积分/百万 tokens",
     loadMore: "加载更多模型",
     allShown: "已展示全部",
     modelsUnit: "个模型",
@@ -31,7 +48,7 @@ export const modelMarketCopy = {
     apiTest: "调用测试",
     modelPrice: "模型价格",
     billingOption: "计费选项",
-    yuanPerMillion: "¥/百万tokens",
+    yuanPerMillion: "¥/百万 tokens",
     inputToken: "输入 token",
     outputToken: "输出 token",
     cacheHit: "缓存命中",
@@ -52,7 +69,7 @@ export const modelMarketCopy = {
       "可在多种 Agent 产品中调用，也可以使用兼容 OpenAI 的 Chat Completions 接口接入。",
     videoCallTitle: "方式一：提交视频生成任务",
     videoCallLead:
-      "青焰Dance-2.0 使用异步视频接口。创建任务后，请使用返回的任务 ID 查询进度，并在完成后读取视频地址。",
+      "青焰 Dance 2.0 使用异步视频接口。创建任务后，请使用返回的任务 ID 查询进度，并在完成后读取视频地址。",
     guide: "调用指南",
     chooseKey: "选择 API-KEY",
     keyLead:
@@ -128,16 +145,16 @@ export const modelMarketCopy = {
     devGuideTitle: "方式二：在开发工具中接入使用",
     devGuideLead: "按照官方文档完成对接配置，或把上方示例复制到现有服务中调整。",
     docs: "查看官方文档",
-    createKeyTitle: "创建API-KEY",
+    createKeyTitle: "创建 API Key",
     close: "关闭",
     createTip: "ⓘ 创建提示",
     createTipItems: [
-      "请勿泄露API-KEY，服务基于API-KEY计费，计费规则详见资源详情；",
-      "如有特殊需求（临时使用、定期重置等），可创建多个API-KEY分别管理；",
-      "如API-KEY泄露，请重置API-KEY或删除服务。",
+      "请勿泄露 API Key，服务基于 API Key 计费，计费规则详见资源详情；",
+      "如有特殊需求（临时使用、定期重置等），可创建多个 API Key 分别管理；",
+      "如 API Key 泄露，请重置 API Key 或删除服务。",
     ],
-    keyName: "API-KEY名称",
-    keyNamePlaceholder: "填写一个简单清晰的名称，如：我的Agent工具",
+    keyName: "API Key 名称",
+    keyNamePlaceholder: "填写一个简单清晰的名称，如：我的 Agent 工具",
     expireTime: "过期时间",
     neverExpires: "永不过期",
     permanent: "永久",
@@ -154,6 +171,21 @@ export const modelMarketCopy = {
   },
   en: {
     backToMarket: "Back to Model Market",
+    detailAccess: "Check access in Hub",
+    publicQuote: "Published pricing",
+    quoteDisclaimer: "These are published catalog rates managed in Hub. Live access and settlement follow the model gateway and your agreement.",
+    pricePending: "Pricing not published",
+    pricePendingDetail: "No reviewed public rate is available for this model yet.",
+    modelData: "Model specifications",
+    context: "Context",
+    maxInputDetail: "Maximum input",
+    maxOutputDetail: "Maximum output",
+    aboutModel: "About this model",
+    accessDisclaimer: "This public listing does not mean your organization has access to the model.",
+    originalChinese: "The following catalog details remain in their original Chinese; an English translation has not been reviewed.",
+    catalogLoading: "Loading the public model catalog…",
+    catalogError: "The public catalog is temporarily unavailable. Please try again later.",
+    catalogEmpty: "No public models are available yet. Please check back later.",
     marketKicker: "verdantflare Model Market",
     marketTitle: "Model Market",
     marketLead:
@@ -312,6 +344,9 @@ export const categoryLabels = {
   文本生成: "Text Generation",
   推理模型: "Reasoning",
   图片理解: "Image Understanding",
+  图像理解: "Image Understanding",
+  图像生成: "Image Generation",
+  推理: "Reasoning",
   视频生成: "Video Generation",
   语音合成: "Speech Synthesis",
   全模态: "Omnimodal",
@@ -390,10 +425,10 @@ export const tTag = (value, locale) =>
   locale === "en" ? tagLabels[value] || value : value;
 
 export const tModelName = (model, locale) =>
-  model.name;
+  localizeCatalog("modelName", model.name, locale);
 
 export const tModelSummary = (model, locale) =>
-  model.summary;
+  localizeCatalog("modelSummary", model.summary, locale);
 
 export const tMaxValue = (value, locale) =>
   locale === "en" ? maxInputLabels[value] || value : value;

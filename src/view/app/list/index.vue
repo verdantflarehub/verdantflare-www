@@ -8,6 +8,7 @@ import {
   tAppMarket,
 } from "../../../catalog/public";
 import { hubHref } from "../../../config/external";
+import { isOriginalChinese, localizeCatalog } from "../../../catalog/localize";
 
 const props = defineProps({
   locale: {
@@ -34,6 +35,7 @@ const filteredApps = computed(() => {
       !keyword ||
       app.name.toLowerCase().includes(keyword) ||
       app.summary.toLowerCase().includes(keyword) ||
+      localizeCatalog("appSummary", app.summary, props.locale).toLowerCase().includes(keyword) ||
       app.developer.toLowerCase().includes(keyword) ||
       getCategoryLabel(app.category, props.locale).toLowerCase().includes(keyword);
     const matchesCategory = category.value === "all" || app.category === category.value;
@@ -139,9 +141,9 @@ watch([search, category], () => {
           </button>
         </div>
 
-        <p v-if="catalogState.loading">正在加载公开应用目录…</p>
-        <p v-else-if="catalogState.error" role="alert">公开目录暂不可用：{{ catalogState.error }}</p>
-        <p v-else-if="!marketApps.length">暂无已公开应用；请稍后查看。</p>
+        <p v-if="catalogState.loading">{{ text("catalogLoading") }}</p>
+        <p v-else-if="catalogState.error" role="alert">{{ text("catalogError") }}{{ locale === "zh" ? catalogState.error : "" }}</p>
+        <p v-else-if="!marketApps.length">{{ text("catalogEmpty") }}</p>
         <div :class="['app-results', 'model-results', viewMode]">
           <a
             v-for="app in visibleApps"
@@ -168,7 +170,7 @@ watch([search, category], () => {
                 </div>
               </div>
             </div>
-            <p>{{ app.summary }}</p>
+            <p :lang="isOriginalChinese(localizeCatalog('appSummary', app.summary, locale), locale) ? 'zh-CN' : undefined"><small v-if="isOriginalChinese(localizeCatalog('appSummary', app.summary, locale), locale)" class="catalog-source-note">{{ text("originalChinese") }}</small>{{ localizeCatalog("appSummary", app.summary, locale) }}</p>
             <div class="model-card-meta">
               <span v-if="app.version">
                 <b>{{ text("versionHistory") }}</b>

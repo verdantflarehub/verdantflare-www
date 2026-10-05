@@ -22,7 +22,12 @@ const navItems = [
 const currentPath = ref(window.location.pathname);
 const currentHash = ref(window.location.hash);
 const locale = ref(localStorage.getItem("verdantflare_locale") || "zh");
-watch(locale, (value) => { document.documentElement.lang = value === "en" ? "en" : "zh-CN"; }, { immediate: true });
+watch(locale, (value) => {
+  document.documentElement.lang = value === "en" ? "en" : "zh-CN";
+  document.title = value === "en"
+    ? "VerdantFlare | Models, Apps & Video Creation"
+    : "VerdantFlare | 模型、应用与视频生成解决方案";
+}, { immediate: true });
 const sessionState = ref("unknown");
 let sessionRequest = 0;
 const refreshSession = async () => {

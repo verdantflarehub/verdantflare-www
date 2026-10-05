@@ -44,6 +44,17 @@ export const appMarketCopy = {
     latestApps: "最新应用",
     seeAll: "查看全部",
     back: "返回应用市场",
+    catalogVersion: "当前目录版本",
+    referenceMemory: "参考内存",
+    referenceDisk: "参考磁盘",
+    referenceCpu: "参考 CPU",
+    referenceGpu: "参考 GPU",
+    publicListingDisclaimer: "此页仅为公开目录资料，不代表应用已在 Station 安装或可运行。",
+    accessInHub: "前往 Hub 查看组织权益",
+    originalChinese: "以下资料保留原始中文；英文译文尚未审核。",
+    catalogLoading: "正在加载公开应用目录…",
+    catalogError: "公开目录暂不可用：",
+    catalogEmpty: "暂无已公开应用；请稍后查看。",
     developer: "开发者",
     languageLabel: "语言",
     memory: "所需内存",
@@ -97,6 +108,17 @@ export const appMarketCopy = {
     latestApps: "Latest apps on verdantflare",
     seeAll: "See all",
     back: "Back to Market",
+    catalogVersion: "Current catalog version",
+    referenceMemory: "Reference memory",
+    referenceDisk: "Reference disk",
+    referenceCpu: "Reference CPU",
+    referenceGpu: "Reference GPU",
+    publicListingDisclaimer: "This public listing does not mean the app is installed or ready to run on your Station.",
+    accessInHub: "Check organization access in Hub",
+    originalChinese: "The following catalog details remain in their original Chinese; an English translation has not been reviewed.",
+    catalogLoading: "Loading the public app catalog…",
+    catalogError: "The public catalog is temporarily unavailable. Please try again later.",
+    catalogEmpty: "No public apps are available yet. Please check back later.",
     developer: "Developer",
     languageLabel: "Language",
     memory: "Required memory",
@@ -125,6 +147,7 @@ export const appMarketCopy = {
 export const getCategoryLabel = (categoryId, locale = "zh") =>
   appCategories.find((item) => item.id === categoryId)?.label?.[locale] ||
   appCategories.find((item) => item.id === categoryId)?.label?.zh ||
+  (locale === "en" && categoryId === "音乐创作" ? "Music creation" : "") ||
   categoryId;
 
 export const tAppMarket = (locale, key) =>

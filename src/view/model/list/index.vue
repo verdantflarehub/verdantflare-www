@@ -9,6 +9,7 @@ import {
   tProvider,
 } from "../i18n";
 import { hubHref } from "../../../config/external";
+import { isOriginalChinese, localizeCatalog } from "../../../catalog/localize";
 
 const props = defineProps({
   locale: {
@@ -32,8 +33,10 @@ const filteredModels = computed(() => {
     const matchesKeyword =
       !keyword ||
       model.name.toLowerCase().includes(keyword) ||
+      tModelName(model, props.locale).toLowerCase().includes(keyword) ||
       model.provider.toLowerCase().includes(keyword) ||
-      model.summary.toLowerCase().includes(keyword);
+      model.summary.toLowerCase().includes(keyword) ||
+      tModelSummary(model, props.locale).toLowerCase().includes(keyword);
     const matchesCategory =
       category.value === "全部能力" || model.categories.includes(category.value);
     const matchesProvider =
@@ -163,9 +166,9 @@ onUnmounted(() => {
           </button>
         </div>
 
-        <p v-if="catalogState.loading">正在加载公开模型目录…</p>
-        <p v-else-if="catalogState.error" role="alert">公开目录暂不可用：{{ catalogState.error }}</p>
-        <p v-else-if="!models.length">暂无已公开模型；请稍后查看。</p>
+        <p v-if="catalogState.loading">{{ text("catalogLoading") }}</p>
+        <p v-else-if="catalogState.error" role="alert">{{ text("catalogError") }}{{ locale === "zh" ? catalogState.error : "" }}</p>
+        <p v-else-if="!models.length">{{ text("catalogEmpty") }}</p>
         <div :class="['model-results', viewMode]">
           <a
             v-for="model in visibleModels"
@@ -186,15 +189,15 @@ onUnmounted(() => {
                 </div>
               </div>
             </div>
-            <p>{{ tModelSummary(model, locale) }}</p>
+            <p :lang="isOriginalChinese(tModelSummary(model, locale), locale) ? 'zh-CN' : undefined"><small v-if="isOriginalChinese(tModelSummary(model, locale), locale)" class="catalog-source-note">{{ text("originalChinese") }}</small>{{ tModelSummary(model, locale) }}</p>
             <div class="model-card-meta">
               <span v-if="model.inputPrice">
                 <b>{{ text("input") }}</b>
-                <em>{{ model.inputPrice }} {{ model.priceUnit }}</em>
+                <em>{{ localizeCatalog("modelPrice", model.inputPrice, locale) }} {{ localizeCatalog("modelPriceUnit", model.priceUnit, locale) }}</em>
               </span>
               <span v-if="model.outputPrice">
                 <b>{{ text("output") }}</b>
-                <em>{{ model.outputPrice }} {{ model.priceUnit }}</em>
+                <em>{{ localizeCatalog("modelPrice", model.outputPrice, locale) }} {{ localizeCatalog("modelPriceUnit", model.priceUnit, locale) }}</em>
               </span>
             </div>
           </a>

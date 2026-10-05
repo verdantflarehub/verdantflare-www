@@ -30,9 +30,14 @@ p, .public-lead { text-wrap: pretty; line-break: strict; }
 :lang(en) :is(.hero-copy, .section-lead, .public-lead) { max-width: 56ch; line-height: 1.7; }
 code, pre, kbd, samp { letter-spacing: normal; font-variant-ligatures: none; }
 @media (max-width: 640px) {
+  .nav-links { gap: 10px; font-size: 13px; scroll-snap-type: x proximity; }
+  .nav-links a { flex: 0 0 auto; scroll-snap-align: start; }
   .hero h1 { font-size: clamp(40px, 10.6vw, 62px); }
   .hero-copy { max-width: 28em; }
   .section-title { font-size: clamp(28px, 7.8vw, 38px); }
   .public-hero h1 { font-size: clamp(30px, 8.3vw, 40px); }
   .section-lead, .public-lead { font-size: 16px; }
+}
+@media (max-width: 360px) {
+  .nav-links { gap: 5px; font-size: 12px; }
 }
