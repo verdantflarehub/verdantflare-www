@@ -651,7 +651,7 @@ const faqs = [
   <header class="site-header">
     <nav class="nav" aria-label="主导航">
       <a class="brand" href="/#home" aria-label="VerdantFlare 官网首页">
-        <i class="brand-mark" aria-hidden="true"></i>
+        <img class="brand-mark" src="/brand/verdantflare-logo.png" alt="" />
         <span>{{ text.heroTitle }}</span>
       </a>
       <div class="nav-links" aria-label="页面导航">

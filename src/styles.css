@@ -89,13 +89,8 @@ textarea {
 .brand-mark {
   width: 32px;
   height: 32px;
-  border: 1px solid rgba(76, 227, 154, 0.44);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 54% 22%, #f4f1e8 0 4px, transparent 5px),
-    radial-gradient(circle at 50% 72%, rgba(76, 227, 154, 0.9), transparent 12px),
-    linear-gradient(135deg, rgba(76, 227, 154, 0.18), rgba(216, 154, 69, 0.1));
-  box-shadow: 0 0 34px rgba(76, 227, 154, 0.18);
+  flex: 0 0 auto;
+  object-fit: contain;
 }
 
 .brand span {
