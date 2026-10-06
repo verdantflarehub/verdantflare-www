@@ -13,6 +13,7 @@ const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
 const navItems = [
   { href: "/#home", section: "home", label: { zh: "首页", en: "Home" } },
+  { href: "/#model", section: "model", label: { zh: "模型", en: "Models" } },
   { href: "/#apps", section: "apps", label: { zh: "应用", en: "Apps" } },
   { href: "/#solutions", section: "solutions", label: { zh: "方案", en: "Solutions" } },
   { href: "/#price", section: "price", label: { zh: "套餐", en: "Plans" } },
@@ -176,6 +177,11 @@ const copy = {
     heroCopyEnd: "让灵感走向作品。",
     heroPriceCta: "咨询青焰套餐",
     heroFlowCta: "查看方案",
+    modelKicker: "Models",
+    modelTitle: "先认识模型，再决定如何使用。",
+    modelLead: "从已公开的模型资料了解能力与适用场景。这里只提供只读信息；登录 Hub 后再确认组织授权、在线体验和 API 接入。",
+    modelCta: "进入 Hub 模型市场",
+    publicModelCta: "查看完整公开目录",
     appKicker: "Apps",
     appTitle: "好工具，让创作更顺手。",
     appLead:
@@ -190,9 +196,9 @@ const copy = {
     packagesTitle: "按使用阶段，选择合作方式。",
     packagesLead: "两个使用层级，从能力验证到团队接入。这里只说明服务形态；实际模型、额度、有效期和价格以 Hub 权益或双方确认的方案为准。",
     developerKicker: "Developers",
-    developerTitle: "模型资料在这里，真实调用在 Hub。",
-    developerLead: "公开目录只用于了解已发布模型的能力与输入条件，不提供调用、试用或组织价格。登录 Hub 后再查看授权、创建 API Key 并跟踪用量。",
-    developerCta: "进入 Hub 模型目录",
+    developerTitle: "从了解能力，到第一次调用。",
+    developerLead: "在 Hub 查看组织可用模型与额度，创建 API Key，按接入说明调用，并跟踪任务与用量。真实授权和结算始终以业务系统为准。",
+    developerCta: "进入 API Center",
     developerDocsCta: "查看接入说明",
     publicModelsTitle: "已公开的模型",
     publicModelsHint: "只读资料 · 来自公开目录",
@@ -213,6 +219,11 @@ const copy = {
     heroCopyEnd: "from idea to screen.",
     heroPriceCta: "Consult Packages",
     heroFlowCta: "Explore Solutions",
+    modelKicker: "Models",
+    modelTitle: "Know the model before you use it.",
+    modelLead: "Explore published capabilities and use cases here. This is read-only information; sign in to Hub to check organization access, online experience, and API integration.",
+    modelCta: "Open Hub Model Market",
+    publicModelCta: "View Full Public Catalog",
     appKicker: "Apps",
     appTitle: "Good tools. More room to create.",
     appLead:
@@ -227,9 +238,9 @@ const copy = {
     packagesTitle: "Choose how you work with us.",
     packagesLead: "Two levels, from validating a capability to team integration. This page explains service shapes only; models, credits, validity, and pricing follow Hub entitlements or your confirmed agreement.",
     developerKicker: "Developers",
-    developerTitle: "Discover here. Integrate in Hub.",
-    developerLead: "The public catalog is read-only reference material, not a place to call models, try them, or check organization pricing. Sign in to Hub for access, API keys, and usage.",
-    developerCta: "Open Hub Model Catalog",
+    developerTitle: "From discovery to your first call.",
+    developerLead: "In Hub, check available models and credits, create an API key, follow the integration guide, and track tasks and usage. Business access and billing remain authoritative there.",
+    developerCta: "Open API Center",
     developerDocsCta: "Read Integration Guide",
     publicModelsTitle: "Published models",
     publicModelsHint: "Read-only · public catalog",
@@ -246,8 +257,8 @@ const publicModelPreview = computed(() => models.slice(0, 4));
 
 const scrollToHash = () => {
   const hash = window.location.hash.replace(/^#/, "");
-  const targetId = { model: "developers", video: "solutions", scenes: "solutions", flow: "price", faq: "developers" }[hash] || hash;
-  if (!["home", "apps", "solutions", "price", "developers"].includes(targetId)) return;
+  const targetId = { video: "solutions", scenes: "solutions", flow: "price", faq: "developers" }[hash] || hash;
+  if (!["home", "model", "apps", "solutions", "price", "developers"].includes(targetId)) return;
 
   nextTick(() => {
     const target = document.getElementById(targetId);
@@ -323,7 +334,7 @@ const updateActiveSection = () => {
     scrollFrame = 0;
     const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 72;
     const threshold = headerHeight + 48;
-    for (const id of ["developers", "price", "solutions", "apps", "home"]) {
+    for (const id of ["developers", "price", "solutions", "apps", "model", "home"]) {
       if (document.getElementById(id)?.getBoundingClientRect().top <= threshold) {
         activeSection.value = id;
         break;
@@ -604,6 +615,37 @@ const coreCapabilities = [
       </div>
     </section>
 
+    <section id="model" class="section dark model-section" aria-labelledby="model-title">
+      <div class="wrap">
+        <p class="section-kicker">{{ text.modelKicker }}</p>
+        <h2 id="model-title" class="section-title">{{ text.modelTitle }}</h2>
+        <p class="section-lead">{{ text.modelLead }}</p>
+        <div class="section-actions">
+          <a class="button primary" :href="hubHref('/api/models', { entry: 'home-model' })">{{ text.modelCta }}</a>
+          <a class="button" href="/models">{{ text.publicModelCta }}</a>
+        </div>
+        <div class="public-model-preview">
+          <div class="public-model-preview-header">
+            <h3>{{ text.publicModelsTitle }}</h3>
+            <span>{{ text.publicModelsHint }}</span>
+          </div>
+          <p v-if="catalogState.loading" class="catalog-status">{{ text.catalogLoading }}</p>
+          <p v-else-if="catalogState.error" class="catalog-status" role="status">{{ text.catalogError }}</p>
+          <p v-else-if="!publicModelPreview.length" class="catalog-status">{{ text.catalogEmpty }}</p>
+          <div v-else class="public-model-rows">
+            <div v-for="model in publicModelPreview" :key="model.id" class="public-model-row">
+              <div>
+                <strong>{{ tModelName(model, locale) }}</strong>
+                <span>{{ tProvider(model.provider, locale) }}</span>
+              </div>
+              <p>{{ tModelSummary(model, locale) }}</p>
+            </div>
+          </div>
+          <p v-if="models.length > publicModelPreview.length" class="public-model-more">{{ isEnglish ? `Showing ${publicModelPreview.length} of ${models.length} published models. All access and calls remain in Hub.` : `展示 ${publicModelPreview.length} / ${models.length} 个已公开模型；实际授权与调用均在 Hub。` }}</p>
+        </div>
+      </div>
+    </section>
+
     <section id="apps" class="section dark">
       <div class="wrap">
         <p class="section-kicker">{{ text.appKicker }}</p>
@@ -716,25 +758,6 @@ const coreCapabilities = [
         <div class="section-actions">
           <a class="button primary" :href="hubHref('/api/models', { entry: 'home-developers' })">{{ text.developerCta }}</a>
           <a class="button" href="/docs">{{ text.developerDocsCta }}</a>
-        </div>
-        <div class="public-model-preview">
-          <div class="public-model-preview-header">
-            <h3>{{ text.publicModelsTitle }}</h3>
-            <span>{{ text.publicModelsHint }}</span>
-          </div>
-          <p v-if="catalogState.loading" class="catalog-status">{{ text.catalogLoading }}</p>
-          <p v-else-if="catalogState.error" class="catalog-status" role="status">{{ text.catalogError }}</p>
-          <p v-else-if="!publicModelPreview.length" class="catalog-status">{{ text.catalogEmpty }}</p>
-          <div v-else class="public-model-rows">
-            <div v-for="model in publicModelPreview" :key="model.id" class="public-model-row">
-              <div>
-                <strong>{{ tModelName(model, locale) }}</strong>
-                <span>{{ tProvider(model.provider, locale) }}</span>
-              </div>
-              <p>{{ tModelSummary(model, locale) }}</p>
-            </div>
-          </div>
-          <p v-if="models.length > publicModelPreview.length" class="public-model-more">{{ isEnglish ? `Showing ${publicModelPreview.length} of ${models.length} published models. All access and calls remain in Hub.` : `展示 ${publicModelPreview.length} / ${models.length} 个已公开模型；实际授权与调用均在 Hub。` }}</p>
         </div>
       </div>
     </section>
