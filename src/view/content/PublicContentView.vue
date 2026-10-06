@@ -40,7 +40,7 @@ const pages = {
     eyebrow: { zh: "企业解决方案", en: "Enterprise solution" },
     title: { zh: "让团队专注创作，让管理清晰有序。", en: "Room to create. Clarity to manage." },
     lead: { zh: "通过组织、角色、权益和区域约束管理模型与应用访问；正式项目资产继续留在 Studio 与客户数据边界内。", en: "Control access through organizations, roles, entitlements, and regions while formal project assets remain in Studio." },
-    primary: { label: { zh: "联系企业顾问", en: "Contact enterprise" }, href: "/contact?intent=enterprise" },
+    primary: { label: { zh: "联系企业顾问", en: "Contact enterprise" }, href: "mailto:hello@verdantflarehub.com?subject=VerdantFlare%20Enterprise" },
     secondary: { label: { zh: "查看公开套餐", en: "View public plans" }, href: "/pricing" },
     image: "/assets/usecase-previz-room.webp",
     sections: [
@@ -78,14 +78,13 @@ const pages = {
   pricing: {
     eyebrow: { zh: "套餐与合作", en: "Plans and engagement" },
     title: { zh: "为你的创作，找到合适的方案。", en: "Find the right plan for your work." },
-    lead: { zh: "公开页面只说明套餐结构。模型范围、额度、并发、有效期和企业服务以 Hub 权益或双方确认的方案为准。", en: "This page explains plan structure; model scope, quota, concurrency, validity, and enterprise service follow Hub entitlements or the confirmed service plan." },
-    primary: { label: { zh: "咨询方案", en: "Discuss a plan" }, href: "/contact?intent=pricing" },
+    lead: { zh: "从创作与体验到团队与企业接入，先选择使用阶段。模型范围、额度、并发、有效期和价格以 Hub 权益或双方确认的方案为准。", en: "Start with your stage, from creation and exploration to team integration. Model scope, credits, concurrency, validity, and pricing follow Hub entitlements or your confirmed agreement." },
+    primary: { label: { zh: "咨询方案", en: "Discuss a plan" }, href: "mailto:hello@verdantflarehub.com?subject=VerdantFlare%20Plans" },
     secondary: { label: { zh: "先在线体验", en: "Try first" }, href: hubHref("/experience", { entry: "pricing" }) },
     image: "/assets/hero-glass-ad.webp",
     sections: [
-      { title: { zh: "体验", en: "Experience" }, text: { zh: "适合快速验证一个模型或应用；临时数据自动清理，额度和并发受限。", en: "For quickly validating a model or app with limited quota, concurrency, and automatic cleanup." } },
-      { title: { zh: "团队", en: "Team" }, text: { zh: "适合持续使用 API、Studio 与本地 Station 的创作团队，按成员和能力授权。", en: "For teams using APIs, Studio, and local Stations with member- and capability-based access." } },
-      { title: { zh: "企业", en: "Enterprise" }, text: { zh: "适合需要企业身份、区域限制、专项额度、服务等级和交付支持的组织。", en: "For organizations needing enterprise identity, regional controls, dedicated quota, SLAs, and delivery support." } },
+      { title: { zh: "创作与体验", en: "Create & Explore" }, text: { zh: "浏览已公开能力，并在获得组织授权后使用已开放的在线体验；额度与用量在 Hub 查看。", en: "Discover published capabilities and try enabled experiences after organization access is granted; see credits and usage in Hub." } },
+      { title: { zh: "团队与企业接入", en: "Team & Enterprise" }, text: { zh: "围绕持续 API 调用、成员协作和正式项目交付，单独确认模型、额度与服务范围。", en: "For ongoing API use, team collaboration, and formal project delivery, confirm models, credits, and service scope separately." } },
     ],
   },
   contact: {

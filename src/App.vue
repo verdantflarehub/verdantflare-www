@@ -6,18 +6,19 @@ import ModelDetail from "./view/model/detail/index.vue";
 import ModelList from "./view/model/list/index.vue";
 import PublicContentView from "./view/content/PublicContentView.vue";
 import { hubHref, loginHref } from "./config/external";
-import { marketApps, models, loadPublicCatalog } from "./catalog/public";
+import { catalogState, marketApps, models, loadPublicCatalog } from "./catalog/public";
+import { tModelName, tModelSummary, tProvider } from "./view/model/i18n";
 
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
 const navItems = [
-  { href: "/", label: { zh: "首页", en: "Home" } },
-  { href: "/#model", section: "model", label: { zh: "模型", en: "Models" } },
+  { href: "/#home", section: "home", label: { zh: "首页", en: "Home" } },
   { href: "/#apps", section: "apps", label: { zh: "应用", en: "Apps" } },
-  { href: "/solutions/creator", label: { zh: "解决方案", en: "Solutions" } },
-  { href: "/developers", label: { zh: "开发者", en: "Developers" } },
-  { href: "/pricing", label: { zh: "套餐", en: "Pricing" } },
+  { href: "/#solutions", section: "solutions", label: { zh: "方案", en: "Solutions" } },
+  { href: "/#price", section: "price", label: { zh: "套餐", en: "Plans" } },
+  { href: "/#developers", section: "developers", label: { zh: "开发者", en: "Developers" } },
 ];
+const activeSection = ref("home");
 
 const currentPath = ref(window.location.pathname);
 const currentHash = ref(window.location.hash);
@@ -174,40 +175,30 @@ const copy = {
       "从一句描述、一张参考图，到下一段视频。探索青焰的模型与创作应用，在 Hub 中体验，",
     heroCopyEnd: "让灵感走向作品。",
     heroPriceCta: "咨询青焰套餐",
-    heroFlowCta: "了解交付流程",
-    modelKicker: "Model",
-    modelTitle: "找到适合这一刻的模型。",
-    modelLead:
-      "了解模型能做什么、如何输入、怎样计费。登录 Hub，查看组织授权与可调用状态，再选择适合你的接入方式。",
-    modelCta: "进入模型市场",
-    publicModelCta: "查看公开模型目录",
+    heroFlowCta: "查看方案",
     appKicker: "Apps",
     appTitle: "好工具，让创作更顺手。",
     appLead:
       "发现创作工具与工作流，了解版本、权限和运行条件。需要本地执行的应用，通过 Studio 安装到当前 Station。",
     appCta: "进入应用市场",
     publicAppCta: "查看公开应用目录",
-    videoKicker: "Video Generation",
-    videoTitle: "先看见，再让创意向前。",
-    videoLead:
-      "验证一段脚本，尝试一种镜头语言，或为商品寻找新的表达。从短视频到分镜预演，找到你的创作起点。",
-    videoCta: "体验视频生成",
-    packagesKicker: "Packages",
-    packagesTitle: "从你的创作需求出发。",
-    packagesLead:
-      "个人探索、团队协作，或持续的 API 接入。告诉我们你的使用场景，一起确认模型范围、额度和交付方案。",
-    workflowKicker: "Workflow",
-    workflowTitle: "每一步，都心中有数。",
-    workflowLead:
-      "从需求沟通到开始使用，提前确认额度、有效期与支持范围。清楚地开始，安心地创作。",
-    rulesKicker: "Rules",
-    rulesTitle: "开始之前，了解你的权益。",
-    rulesLead:
-      "公开页面只说明套餐结构，包括额度范围、有效期、交付方式和支持边界；实际权益以 Hub 配置或双方确认的方案为准。",
-    priceKicker: "Price",
-    priceTitle: "聊聊你的下一件作品。",
-    faqKicker: "FAQ",
-    faqTitle: "常见问题",
+    solutionKicker: "Solutions",
+    solutionTitle: "从发现能力，到完成作品。",
+    solutionLead: "青焰把模型、应用与创作环境连接起来。先找到适合的能力，在支持的入口验证，再把确认的工作流带入正式创作。",
+    solutionCta: "查看应用与场景",
+    packagesKicker: "Plans",
+    packagesTitle: "按使用阶段，选择合作方式。",
+    packagesLead: "两个使用层级，从能力验证到团队接入。这里只说明服务形态；实际模型、额度、有效期和价格以 Hub 权益或双方确认的方案为准。",
+    developerKicker: "Developers",
+    developerTitle: "模型资料在这里，真实调用在 Hub。",
+    developerLead: "公开目录只用于了解已发布模型的能力与输入条件，不提供调用、试用或组织价格。登录 Hub 后再查看授权、创建 API Key 并跟踪用量。",
+    developerCta: "进入 Hub 模型目录",
+    developerDocsCta: "查看接入说明",
+    publicModelsTitle: "已公开的模型",
+    publicModelsHint: "只读资料 · 来自公开目录",
+    catalogLoading: "正在读取公开目录…",
+    catalogEmpty: "暂无公开模型，具体可用能力请以 Hub 为准。",
+    catalogError: "公开目录暂时无法读取，请稍后再试。",
     footerBrand: "青焰 · VerdantFlare",
     footerLinks: "模型 · 应用 · 创作",
   },
@@ -221,61 +212,50 @@ const copy = {
       "Start with a few words or a reference image. Explore models and creative apps, try them in Hub, and take your next video ",
     heroCopyEnd: "from idea to screen.",
     heroPriceCta: "Consult Packages",
-    heroFlowCta: "View Workflow",
-    modelKicker: "Model",
-    modelTitle: "The right model for your next idea.",
-    modelLead:
-      "Compare capabilities, inputs, and pricing. Sign in to Hub to check your organization’s access and live availability before integrating.",
-    modelCta: "Enter Model Market",
-    publicModelCta: "View Public Models",
+    heroFlowCta: "Explore Solutions",
     appKicker: "Apps",
     appTitle: "Good tools. More room to create.",
     appLead:
       "Discover creative tools and workflows. Review versions, permissions, and requirements, then use Studio to install local apps on your active Station.",
     appCta: "Enter App Market",
     publicAppCta: "View Public Apps",
-    videoKicker: "Video Generation",
-    videoTitle: "See it. Then take it further.",
-    videoLead:
-      "Test a script, explore a camera move, or find a fresh angle for your product. From short videos to storyboard previews, start with what inspires you.",
-    videoCta: "Try Video Generation",
-    packagesKicker: "Packages",
-    packagesTitle: "A plan that starts with your work.",
-    packagesLead:
-      "Explore on your own, create with a team, or build with the API. Tell us what you need, and we’ll help define the models, credits, and delivery plan.",
-    workflowKicker: "Workflow",
-    workflowTitle: "Know what comes next.",
-    workflowLead:
-      "From your first conversation to your first session, agree on credits, validity, and support before getting started.",
-    rulesKicker: "Rules",
-    rulesTitle: "Your access, clearly explained.",
-    rulesLead:
-      "Public pages explain the plan structure. Actual access follows the entitlement configured in Hub or the service plan confirmed with the customer.",
-    priceKicker: "Price",
-    priceTitle: "Tell us about your next project.",
-    faqKicker: "FAQ",
-    faqTitle: "Frequently Asked Questions",
+    solutionKicker: "Solutions",
+    solutionTitle: "From capability to finished work.",
+    solutionLead: "VerdantFlare connects models, apps, and creative environments. Find the right capability, validate it where supported, then take a proven workflow into production.",
+    solutionCta: "Explore Apps and Scenarios",
+    packagesKicker: "Plans",
+    packagesTitle: "Choose how you work with us.",
+    packagesLead: "Two levels, from validating a capability to team integration. This page explains service shapes only; models, credits, validity, and pricing follow Hub entitlements or your confirmed agreement.",
+    developerKicker: "Developers",
+    developerTitle: "Discover here. Integrate in Hub.",
+    developerLead: "The public catalog is read-only reference material, not a place to call models, try them, or check organization pricing. Sign in to Hub for access, API keys, and usage.",
+    developerCta: "Open Hub Model Catalog",
+    developerDocsCta: "Read Integration Guide",
+    publicModelsTitle: "Published models",
+    publicModelsHint: "Read-only · public catalog",
+    catalogLoading: "Loading the public catalog…",
+    catalogEmpty: "No public models yet. Check Hub for available capabilities.",
+    catalogError: "The public catalog is temporarily unavailable. Please try again later.",
     footerBrand: "VerdantFlare",
     footerLinks: "Models · Apps · Creation",
   },
 };
 
 const text = computed(() => copy[locale.value] || copy.zh);
+const publicModelPreview = computed(() => models.slice(0, 4));
 
 const scrollToHash = () => {
   const hash = window.location.hash.replace(/^#/, "");
-  if (
-    !["home", "model", "apps", "video", "scenes", "flow", "price", "faq"].includes(hash)
-  ) {
-    return;
-  }
+  const targetId = { model: "developers", video: "solutions", scenes: "solutions", flow: "price", faq: "developers" }[hash] || hash;
+  if (!["home", "apps", "solutions", "price", "developers"].includes(targetId)) return;
 
   nextTick(() => {
-    const target = document.getElementById(hash);
+    const target = document.getElementById(targetId);
     const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches
       ? "auto"
       : "smooth";
     target?.scrollIntoView({ behavior, block: "start" });
+    activeSection.value = targetId;
   });
 };
 
@@ -336,15 +316,34 @@ const handleNavigation = () => {
   }
 };
 
+let scrollFrame = 0;
+const updateActiveSection = () => {
+  if (route.value.name !== "home" || scrollFrame) return;
+  scrollFrame = window.requestAnimationFrame(() => {
+    scrollFrame = 0;
+    const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 72;
+    const threshold = headerHeight + 48;
+    for (const id of ["developers", "price", "solutions", "apps", "home"]) {
+      if (document.getElementById(id)?.getBoundingClientRect().top <= threshold) {
+        activeSection.value = id;
+        break;
+      }
+    }
+  });
+};
+
 onMounted(() => {
   loadPublicCatalog();
   refreshSession();
   window.addEventListener("popstate", handleNavigation);
   window.addEventListener("hashchange", handleNavigation);
   window.addEventListener("focus", refreshSession);
+  window.addEventListener("scroll", updateActiveSection, { passive: true });
+  window.addEventListener("resize", updateActiveSection);
   document.addEventListener("visibilitychange", refreshSessionWhenVisible);
   scrollToHash();
   scrollRouteToTop();
+  updateActiveSection();
   if (route.value.name === "external-login") {
     window.location.replace(loginHref("legacy-login"));
   }
@@ -355,7 +354,10 @@ onUnmounted(() => {
   window.removeEventListener("popstate", handleNavigation);
   window.removeEventListener("hashchange", handleNavigation);
   window.removeEventListener("focus", refreshSession);
+  window.removeEventListener("scroll", updateActiveSection);
+  window.removeEventListener("resize", updateActiveSection);
   document.removeEventListener("visibilitychange", refreshSessionWhenVisible);
+  window.cancelAnimationFrame(scrollFrame);
 });
 
 const heroMeta = [
@@ -397,30 +399,6 @@ const storyLines = [
     text: {
       zh: "青焰模型服务咨询，额度和交付方式在开通前确认。",
       en: "Consult VerdantFlare model services; confirm credits and delivery before activation.",
-    },
-  },
-];
-
-const modelItems = [
-  {
-    title: { zh: "统一模型入口", en: "Unified Model Entry" },
-    text: {
-      zh: "在一个目录中比较模型能力、输入要求与已发布报价，找到适合当前任务的选择。",
-      en: "Compare capabilities, input requirements, and published pricing in one catalog.",
-    },
-  },
-  {
-    title: { zh: "额度和 API 接入", en: "Credits and API Access" },
-    text: {
-      zh: "登录后查看组织可用的模型与额度，通过 API 接入自己的工作流。实际可用性与结算以网关记录为准。",
-      en: "Check your organization’s models and credits, then connect through the API. Live availability and billing follow gateway records.",
-    },
-  },
-  {
-    title: { zh: "合作支持", en: "Partnership Support" },
-    text: {
-      zh: "面向团队采购、长期额度和生产环境接入，提前确认模型范围、交付周期和售后边界。",
-      en: "For team requirements, long-term credits, and production access, confirm model scope, delivery schedule, and support boundaries first.",
     },
   },
 ];
@@ -494,167 +472,55 @@ const scenes = [
 
 const packages = [
   {
-    label: "Starter",
-    title: { zh: "创作者试用", en: "Creator Trial" },
+    label: "01 / Create",
+    title: { zh: "创作与体验", en: "Create & Explore" },
     text: {
-      zh: "适合个人测试和小批量生成，重点是快速跑通第一批素材。",
-      en: "For individual testing and small batches, focused on getting the first assets running quickly.",
+      zh: "适合先了解模型和应用、验证具体创作任务的个人与小团队。",
+      en: "For individuals and small teams exploring models and apps around a concrete creative task.",
     },
     features: [
-      { zh: "小额额度咨询", en: "Small credit consultation" },
-      { zh: "开通前确认有效期", en: "Confirm validity before activation" },
-      { zh: "基础使用说明", en: "Basic usage notes" },
+      { zh: "浏览公开能力，按组织权益进入在线体验", en: "Discover public capabilities; try online where your organization has access" },
+      { zh: "从应用市场找到创作工作流", en: "Find a creative workflow in the app market" },
+      { zh: "在 Hub 查看实际额度与使用记录", en: "Check real credits and usage in Hub" },
     ],
-    cta: { zh: "咨询", en: "Consult" },
+    cta: { zh: "进入 Hub 了解", en: "Explore in Hub" },
+    href: hubHref("/", { entry: "home-plan-create" }),
   },
   {
-    label: "Team",
-    title: { zh: "内容团队", en: "Content Team" },
+    label: "02 / Scale",
+    title: { zh: "团队与企业接入", en: "Team & Enterprise" },
     text: {
-      zh: "适合短视频账号、广告素材和批量试错，先确认库存和交付周期。",
-      en: "For short-video accounts, ad assets, and batch testing. Confirm availability and delivery timing first.",
+      zh: "适合需要持续调用、成员协作和正式项目交付的组织。",
+      en: "For organizations that need ongoing API use, collaboration, and formal project delivery.",
     },
     features: [
-      { zh: "中等额度需求", en: "Medium credit needs" },
-      { zh: "批量需求确认", en: "Batch requirement confirmation" },
-      { zh: "交付记录说明", en: "Delivery record notes" },
+      { zh: "按组织管理成员、角色与能力授权", en: "Manage members, roles, and access by organization" },
+      { zh: "结合 API、Studio 与 Station 执行生产流程", en: "Bring API, Studio, and Station into production workflows" },
+      { zh: "单独确认模型范围、额度和服务边界", en: "Confirm model scope, credits, and service boundaries" },
     ],
-    cta: { zh: "获取报价", en: "Get Quote" },
-  },
-  {
-    label: "Custom",
-    title: { zh: "定制需求", en: "Custom Needs" },
-    text: {
-      zh: "适合长期使用、大额额度或特殊交付方式，单独约定售后规则。",
-      en: "For long-term use, larger credit needs, or special delivery methods with agreed support terms.",
-    },
-    features: [
-      { zh: "先确认库存", en: "Confirm availability first" },
-      { zh: "约定交付方式", en: "Agree on delivery method" },
-      { zh: "明确售后边界", en: "Define support boundaries" },
-    ],
-    cta: { zh: "联系客服", en: "Contact Support" },
+    cta: { zh: "联系团队", en: "Contact the Team" },
+    href: "mailto:hello@verdantflarehub.com?subject=VerdantFlare%20Team%20Plan",
   },
 ];
 
-const flowSteps = [
+const coreCapabilities = [
   {
-    step: "01",
-    title: { zh: "提交需求", en: "Submit Needs" },
-    text: {
-      zh: "说明使用量、用途、交付时间和是否批量采购。",
-      en: "Describe usage volume, purpose, delivery time, and whether batch access is required.",
-    },
+    number: "01",
+    title: { zh: "模型与 API", en: "Models & API" },
+    text: { zh: "从公开资料了解模型能力；在 Hub 核对组织授权、额度，并通过 API 接入自己的工作流。", en: "Explore model capabilities publicly, then check organization access and credits in Hub before integrating via API." },
   },
   {
-    step: "02",
-    title: { zh: "人工确认", en: "Manual Confirmation" },
-    text: {
-      zh: "确认额度、有效期、交付方式和售后边界。",
-      en: "Confirm credits, validity, delivery method, and support boundaries.",
-    },
+    number: "02",
+    title: { zh: "应用与工作流", en: "Apps & workflows" },
+    text: { zh: "发现已发布应用和创作流程；只有获得组织权益后，才能在对应运行环境中使用。", en: "Discover published apps and creative workflows; use them in the right runtime after access is granted." },
   },
   {
-    step: "03",
-    title: { zh: "确认方案", en: "Confirm Plan" },
-    text: {
-      zh: "确认适用套餐、权益范围和后续开通方式。",
-      en: "Confirm the plan, entitlement scope, and activation path.",
-    },
-  },
-  {
-    step: "04",
-    title: { zh: "交付使用", en: "Delivery" },
-    text: {
-      zh: "提供调用凭证、账号/额度说明或对应使用方式。",
-      en: "Receive API credentials, account or credit notes, or the agreed usage method.",
-    },
-  },
-  {
-    step: "05",
-    title: { zh: "售后协助", en: "Support" },
-    text: {
-      zh: "遇到不可用或交付异常，按已确认的服务方案处理。",
-      en: "Handle availability or delivery issues according to the confirmed service plan.",
-    },
+    number: "03",
+    title: { zh: "Studio 与 Station", en: "Studio & Station" },
+    text: { zh: "在 Studio 管理正式项目，由当前 Station 安装、运行已授权应用，保持项目资产与平台权益的边界。", en: "Manage formal projects in Studio and run entitled apps on the active Station, keeping project assets and platform access separate." },
   },
 ];
 
-const rules = [
-  {
-    label: { zh: "套餐内容", en: "Package Content" },
-    text: {
-      zh: "公开页面只作说明，实际权益以 Hub 配置或双方确认的服务方案为准。",
-      en: "Public content is informational; actual access follows Hub entitlements or the confirmed service plan.",
-    },
-  },
-  {
-    label: { zh: "有效期", en: "Validity" },
-    text: {
-      zh: "不同额度和交付方式可能有不同有效期，需要提前说明。",
-      en: "Different credits and delivery methods may have different validity periods and should be stated in advance.",
-    },
-  },
-  {
-    label: { zh: "大额采购", en: "Large Purchase" },
-    text: {
-      zh: "大额需求先确认容量、交付周期和稳定性，再制定开通方案。",
-      en: "For large requirements, confirm capacity, delivery timing, and stability before activation.",
-    },
-  },
-  {
-    label: { zh: "合规用途", en: "Compliant Use" },
-    text: {
-      zh: "不支持违法、侵权或违反平台规则的用途。",
-      en: "Illegal, infringing, or platform-violating use cases are not supported.",
-    },
-  },
-];
-
-const faqs = [
-  {
-    question: { zh: "青焰现在主要提供什么？", en: "What does VerdantFlare provide now?" },
-    answer: {
-      zh: "官网提供公开模型、应用和解决方案说明；登录 Hub 后可查看组织权益、在线体验、API 接入和用量。",
-      en: "WWW presents public models, apps, and solutions. After signing in, Hub provides organization access, online experience, API integration, and usage.",
-    },
-  },
-  {
-    question: { zh: "确认需求后多久可以开通？", en: "How soon can access be activated?" },
-    answer: {
-      zh: "以需求确认结果为准。不同套餐、容量和交付方式会影响开通时间。",
-      en: "Activation time follows the confirmed requirements and depends on plan, capacity, and delivery method.",
-    },
-  },
-  {
-    question: { zh: "如何了解价格和套餐？", en: "How do I find pricing and plans?" },
-    answer: {
-      zh: "模型目录展示已发布的报价说明。团队或定制需求可联系我们，开通前会确认模型范围、额度、有效期和交付方式。",
-      en: "The model catalog includes published pricing notes. Contact us for team or custom plans; model scope, credits, validity, and delivery are confirmed before activation.",
-    },
-  },
-  {
-    question: { zh: "青焰额度是否永久有效？", en: "Are verdantflare credits valid forever?" },
-    answer: {
-      zh: "额度不默认永久有效。请查看 Hub 中的有效期和使用限制，或以双方确认的服务方案为准。",
-      en: "Credits do not have unlimited validity by default. Check the expiry and limits in Hub or your confirmed service plan.",
-    },
-  },
-  {
-    question: { zh: "青焰模型是什么？", en: "What is the verdantflare model?" },
-    answer: {
-      zh: "青焰模型是面向视频生成的智能体模型服务，统一调度文本理解、分镜生成、视频生成和超分增强能力，对外提供青焰自己的模型服务入口。",
-      en: "verdantflare is an agent-style model service for video generation, coordinating text understanding, storyboard creation, video generation, and upscaling through verdantflare's own service entry.",
-    },
-  },
-  {
-    question: { zh: "后续会支持更多模型能力吗？", en: "Will more model capabilities be supported later?" },
-    answer: {
-      zh: "会持续增强生成、编辑、超分和工作流能力，但官网对外统一以青焰模型服务呈现。",
-      en: "Generation, editing, upscaling, and workflow capabilities will continue to improve, while the website presents them as verdantflare model services.",
-    },
-  },
-];
 </script>
 
 <template>
@@ -669,6 +535,8 @@ const faqs = [
           v-for="item in navItems"
           :key="item.href"
           :href="item.href"
+          :class="{ active: route.name === 'home' && activeSection === item.section }"
+          :aria-current="route.name === 'home' && activeSection === item.section ? 'location' : undefined"
           :target="item.external ? '_blank' : undefined"
           :rel="item.external ? 'noopener noreferrer' : undefined"
           @click="handleNavClick($event, item)"
@@ -717,7 +585,7 @@ const faqs = [
           </p>
           <div class="hero-actions">
             <a class="button primary" href="#price">{{ text.heroPriceCta }}</a>
-            <a class="button" href="#flow">{{ text.heroFlowCta }}</a>
+            <a class="button" href="#solutions">{{ text.heroFlowCta }}</a>
           </div>
           <div class="hero-meta" aria-label="服务摘要">
             <div v-for="item in heroMeta" :key="getLabel(item.title)">
@@ -731,44 +599,6 @@ const faqs = [
           <div v-for="line in storyLines" :key="line.label" class="story-line">
             <b>{{ line.label }}</b>
             <span>{{ getLabel(line.text) }}</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="model" class="section dark">
-      <div class="wrap">
-        <p class="section-kicker">{{ text.modelKicker }}</p>
-        <h2 class="section-title">{{ text.modelTitle }}</h2>
-        <p class="section-lead">
-          {{ text.modelLead }}
-        </p>
-        <div class="section-actions">
-          <a class="button primary" :href="hubHref('/api/models', { entry: 'home-model' })">{{ text.modelCta }}</a>
-          <a class="button" href="/models">{{ text.publicModelCta }}</a>
-        </div>
-
-        <div class="intro-grid">
-          <figure class="feature-image">
-            <img
-              :src="assetPath('usecase-ad-storyboard.webp')"
-              :alt="
-                isEnglish
-                  ? 'Storyboard desk for ad creative testing'
-                  : '广告分镜和创意测试的工作台画面'
-              "
-              loading="lazy"
-            />
-          </figure>
-          <div class="plain-list">
-            <article
-              v-for="item in modelItems"
-              :key="getLabel(item.title)"
-              class="plain-item"
-            >
-              <h3>{{ getLabel(item.title) }}</h3>
-              <p>{{ getLabel(item.text) }}</p>
-            </article>
           </div>
         </div>
       </div>
@@ -812,17 +642,24 @@ const faqs = [
       </div>
     </section>
 
-    <section id="video" class="section light">
-      <div id="scenes" class="wrap">
-        <p class="section-kicker">{{ text.videoKicker }}</p>
-        <h2 class="section-title">{{ text.videoTitle }}</h2>
-        <p class="section-lead">
-          {{ text.videoLead }}
-        </p>
+    <section id="solutions" class="section light solutions-section">
+      <div class="wrap">
+        <p class="section-kicker">{{ text.solutionKicker }}</p>
+        <h2 class="section-title">{{ text.solutionTitle }}</h2>
+        <p class="section-lead">{{ text.solutionLead }}</p>
+        <div class="core-capabilities">
+          <article v-for="item in coreCapabilities" :key="item.number" class="core-capability">
+            <span>{{ item.number }}</span>
+            <h3>{{ getLabel(item.title) }}</h3>
+            <p>{{ getLabel(item.text) }}</p>
+          </article>
+        </div>
+        <div class="solutions-scenarios-heading">
+          <h3>{{ isEnglish ? 'Where ideas take shape' : '这些场景，从这里开始' }}</h3>
+          <p>{{ isEnglish ? 'Examples of creative directions, not a promise that every workflow is available for every organization.' : '创作方向示例；具体工作流与可用性以已发布应用及组织权益为准。' }}</p>
+        </div>
         <div class="section-actions">
-          <a class="button primary" :href="hubHref('/experience', { entry: 'home-video' })">
-            {{ text.videoCta }}
-          </a>
+          <a class="button primary" href="#apps">{{ text.solutionCta }}</a>
         </div>
 
         <div class="gallery" aria-label="使用场景样片">
@@ -863,69 +700,41 @@ const faqs = [
                   {{ getLabel(feature) }}
                 </li>
               </ul>
-              <a href="mailto:hello@verdantflarehub.com">{{ getLabel(item.cta) }}</a>
+              <a :href="item.href">{{ getLabel(item.cta) }} <span aria-hidden="true">↗</span></a>
             </article>
           </div>
-        </div>
-      </div>
-
-      <div id="flow" class="price-band dark">
-        <div class="wrap">
-          <p class="section-kicker">{{ text.workflowKicker }}</p>
-          <h2 class="section-title">{{ text.workflowTitle }}</h2>
-          <p class="section-lead">
-            {{ text.workflowLead }}
-          </p>
-
-          <div class="flow">
-            <article v-for="step in flowSteps" :key="step.step" class="flow-step">
-              <span>{{ step.step }}</span>
-              <h3>{{ getLabel(step.title) }}</h3>
-              <p>{{ getLabel(step.text) }}</p>
-            </article>
-          </div>
-        </div>
-      </div>
-
-      <div class="price-band light">
-        <div class="wrap">
-          <p class="section-kicker">{{ text.rulesKicker }}</p>
-          <h2 id="trust-title" class="section-title">
-            {{ text.rulesTitle }}
-          </h2>
-          <div class="trust">
-            <p class="section-lead">
-              {{ text.rulesLead }}
-            </p>
-            <div class="rules">
-              <div v-for="rule in rules" :key="getLabel(rule.label)" class="rule">
-                <b>{{ getLabel(rule.label) }}</b>
-                <span>{{ getLabel(rule.text) }}</span>
-              </div>
-            </div>
-          </div>
-          <div class="price-contact">
-            <div>
-              <p class="section-kicker">{{ text.priceKicker }}</p>
-              <h3>{{ text.priceTitle }}</h3>
-            </div>
-            <a class="button primary" href="mailto:hello@verdantflarehub.com">
-              hello@verdantflarehub.com
-            </a>
-          </div>
+          <p class="plan-note">{{ isEnglish ? 'No fixed public price is implied. Organization access, credits, validity, and billing are confirmed in Hub or an agreed service plan.' : '此处不展示虚构的固定价格；组织权限、额度、有效期和账单以 Hub 或已确认的服务方案为准。' }}</p>
         </div>
       </div>
     </section>
 
-    <section id="faq" class="section dark">
+    <section id="developers" class="section dark developers-section" aria-labelledby="developers-title">
       <div class="wrap">
-        <p class="section-kicker">{{ text.faqKicker }}</p>
-        <h2 class="section-title">{{ text.faqTitle }}</h2>
-        <div class="faq">
-          <article v-for="item in faqs" :key="getLabel(item.question)" class="faq-item">
-            <h3>{{ getLabel(item.question) }}</h3>
-            <p>{{ getLabel(item.answer) }}</p>
-          </article>
+        <p class="section-kicker">{{ text.developerKicker }}</p>
+        <h2 id="developers-title" class="section-title">{{ text.developerTitle }}</h2>
+        <p class="section-lead">{{ text.developerLead }}</p>
+        <div class="section-actions">
+          <a class="button primary" :href="hubHref('/api/models', { entry: 'home-developers' })">{{ text.developerCta }}</a>
+          <a class="button" href="/docs">{{ text.developerDocsCta }}</a>
+        </div>
+        <div class="public-model-preview">
+          <div class="public-model-preview-header">
+            <h3>{{ text.publicModelsTitle }}</h3>
+            <span>{{ text.publicModelsHint }}</span>
+          </div>
+          <p v-if="catalogState.loading" class="catalog-status">{{ text.catalogLoading }}</p>
+          <p v-else-if="catalogState.error" class="catalog-status" role="status">{{ text.catalogError }}</p>
+          <p v-else-if="!publicModelPreview.length" class="catalog-status">{{ text.catalogEmpty }}</p>
+          <div v-else class="public-model-rows">
+            <div v-for="model in publicModelPreview" :key="model.id" class="public-model-row">
+              <div>
+                <strong>{{ tModelName(model, locale) }}</strong>
+                <span>{{ tProvider(model.provider, locale) }}</span>
+              </div>
+              <p>{{ tModelSummary(model, locale) }}</p>
+            </div>
+          </div>
+          <p v-if="models.length > publicModelPreview.length" class="public-model-more">{{ isEnglish ? `Showing ${publicModelPreview.length} of ${models.length} published models. All access and calls remain in Hub.` : `展示 ${publicModelPreview.length} / ${models.length} 个已公开模型；实际授权与调用均在 Hub。` }}</p>
         </div>
       </div>
     </section>

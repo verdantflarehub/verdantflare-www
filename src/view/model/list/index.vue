@@ -1,215 +1,50 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-import { catalogState, modelCategories, models, providers } from "../../../catalog/public";
-import {
-  tCategory,
-  tMarket,
-  tModelName,
-  tModelSummary,
-  tProvider,
-} from "../i18n";
+import { computed } from "vue";
+import { catalogState, models } from "../../../catalog/public";
+import { tCategory, tModelName, tModelSummary, tProvider } from "../i18n";
 import { hubHref } from "../../../config/external";
-import { isOriginalChinese, localizeCatalog } from "../../../catalog/localize";
+import { isOriginalChinese } from "../../../catalog/localize";
 
-const props = defineProps({
-  locale: {
-    type: String,
-    default: "zh",
-  },
-});
-
-const search = ref("");
-const category = ref("全部能力");
-const provider = ref("全部供应商");
-const viewMode = ref("grid");
-const visibleCount = ref(9);
-const sentinel = ref(null);
-let observer;
-
-const filteredModels = computed(() => {
-  const keyword = search.value.trim().toLowerCase();
-
-  return models.filter((model) => {
-    const matchesKeyword =
-      !keyword ||
-      model.name.toLowerCase().includes(keyword) ||
-      tModelName(model, props.locale).toLowerCase().includes(keyword) ||
-      model.provider.toLowerCase().includes(keyword) ||
-      model.summary.toLowerCase().includes(keyword) ||
-      tModelSummary(model, props.locale).toLowerCase().includes(keyword);
-    const matchesCategory =
-      category.value === "全部能力" || model.categories.includes(category.value);
-    const matchesProvider =
-      provider.value === "全部供应商" || model.provider === provider.value;
-
-    return matchesKeyword && matchesCategory && matchesProvider;
-  });
-});
-
-const visibleModels = computed(() =>
-  filteredModels.value.slice(0, visibleCount.value)
-);
-
-const hasMore = computed(() => visibleCount.value < filteredModels.value.length);
-const text = computed(() => (key) => tMarket(props.locale, key));
-const allCapabilities = computed(() => text.value("allCapabilities"));
-const allProviders = computed(() => text.value("allProviders"));
-
-const loadMore = () => {
-  if (hasMore.value) visibleCount.value += 6;
-};
-
-watch([search, category, provider], () => {
-  visibleCount.value = 9;
-});
-
-onMounted(() => {
-  if (!("IntersectionObserver" in window) || !sentinel.value) return;
-
-  observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry?.isIntersecting) loadMore();
-    },
-    { rootMargin: "360px" }
-  );
-  observer.observe(sentinel.value);
-});
-
-onUnmounted(() => {
-  observer?.disconnect();
-});
+const props = defineProps({ locale: { type: String, default: "zh" } });
+const isEnglish = computed(() => props.locale === "en");
 </script>
 
 <template>
-  <main class="market-page market-list-page">
-    <section class="market-hero" aria-labelledby="market-title">
-      <div class="market-wrap market-hero-grid">
-        <div>
-          <p class="market-kicker">verdantflare Model Market</p>
-          <h1 id="market-title">{{ text("marketTitle") }}</h1>
-          <p>
-            {{ text("marketLead") }}
-          </p>
-          <div class="market-hero-actions">
-            <a v-if="models.length" class="button primary" :href="`/models/${models[0].id}`">
-              {{ text("recommended") }}
-            </a>
-            <a class="button" :href="hubHref('/api/models', { entry: 'models-hero' })">{{ text("apiCall") }}</a>
-          </div>
-        </div>
-
-        <div class="market-orbit" :aria-label="text('orbitLabel')">
-          <span>Models</span>
-          <strong>{{ models.length }}</strong>
-          <small>{{ text("orbitMeta") }}</small>
+  <main class="market-page public-directory-page">
+    <section class="market-hero" aria-labelledby="public-directory-title">
+      <div class="market-wrap">
+        <p class="market-kicker">VerdantFlare Models</p>
+        <h1 id="public-directory-title">{{ isEnglish ? "A guide to published models." : "公开模型，一目了然。" }}</h1>
+        <p>{{ isEnglish ? "Browse published capabilities and input types. This read-only directory does not show your organization's access, live availability, or actual billing." : "这里仅展示已公开的能力与输入资料。组织授权、实时可用性和实际计费，请登录 Hub 查看。" }}</p>
+        <div class="market-hero-actions">
+          <a class="button primary" :href="hubHref('/api/models', { entry: 'public-models' })">{{ isEnglish ? "Open the model catalog in Hub" : "进入 Hub 模型目录" }}</a>
+          <a class="button" href="/#developers">{{ isEnglish ? "Back to overview" : "返回开发者概览" }}</a>
         </div>
       </div>
     </section>
 
     <section class="market-section">
       <div class="market-wrap">
-        <div class="market-toolbar">
-          <label class="market-search">
-            <span>{{ text("search") }}</span>
-            <input
-              v-model="search"
-              type="search"
-              :placeholder="text('searchPlaceholder')"
-            />
-          </label>
-
-          <div class="market-selects">
-            <label>
-              <span>{{ text("capability") }}</span>
-              <select v-model="category">
-                <option value="全部能力">{{ allCapabilities }}</option>
-                <option v-for="item in modelCategories" :key="item" :value="item">
-                  {{ tCategory(item, locale) }}
-                </option>
-              </select>
-            </label>
-            <label>
-              <span>{{ text("provider") }}</span>
-              <select v-model="provider">
-                <option value="全部供应商">{{ allProviders }}</option>
-                <option v-for="item in providers" :key="item" :value="item">
-                  {{ tProvider(item, locale) }}
-                </option>
-              </select>
-            </label>
-            <label>
-              <span>{{ text("view") }}</span>
-              <select v-model="viewMode" :aria-label="text('viewAria')">
-                <option value="grid">{{ text("grid") }}</option>
-                <option value="list">{{ text("list") }}</option>
-              </select>
-            </label>
-          </div>
+        <div class="public-directory-heading">
+          <h2>{{ isEnglish ? "Published reference" : "已公开资料" }}</h2>
+          <span>{{ isEnglish ? "Read-only · source: Control public catalog" : "只读 · 来源：Control 公开目录" }}</span>
         </div>
-
-        <div class="market-filter-row" :aria-label="text('quickFilter')">
-          <button
-            :class="{ active: category === '全部能力' }"
-            type="button"
-            @click="category = '全部能力'"
-          >
-            {{ text("all") }}
-          </button>
-          <button
-            v-for="item in modelCategories"
-            :key="item"
-            :class="{ active: category === item }"
-            type="button"
-            @click="category = item"
-          >
-            {{ tCategory(item, locale) }}
-          </button>
-        </div>
-
-        <p v-if="catalogState.loading">{{ text("catalogLoading") }}</p>
-        <p v-else-if="catalogState.error" role="alert">{{ text("catalogError") }}{{ locale === "zh" ? catalogState.error : "" }}</p>
-        <p v-else-if="!models.length">{{ text("catalogEmpty") }}</p>
-        <div :class="['model-results', viewMode]">
-          <a
-            v-for="model in visibleModels"
-            :key="model.id"
-            class="model-card"
-            :href="`/models/${model.id}`"
-          >
-            <div class="model-card-top">
-              <div :class="['model-logo', model.accent]">
-                {{ tModelName(model, locale).slice(0, 1) }}
-              </div>
-              <div>
-                <h2>{{ tModelName(model, locale) }}</h2>
-                <div class="model-tags">
-                  <span v-for="tag in model.categories.slice(0, 2)" :key="tag">
-                    {{ tCategory(tag, locale) }}
-                  </span>
-                </div>
-              </div>
+        <p v-if="catalogState.loading" class="catalog-status">{{ isEnglish ? "Loading public models…" : "正在读取公开模型…" }}</p>
+        <p v-else-if="catalogState.error" class="catalog-status" role="status">{{ isEnglish ? "The public catalog is temporarily unavailable." : "公开目录暂时无法读取，请稍后再试。" }}</p>
+        <p v-else-if="!models.length" class="catalog-status">{{ isEnglish ? "No models have been published yet." : "暂无已公开模型。" }}</p>
+        <div v-else class="public-directory-list">
+          <article v-for="model in models" :key="model.id" class="public-directory-item">
+            <div class="public-directory-name">
+              <h3>{{ tModelName(model, locale) }}</h3>
+              <span>{{ tProvider(model.provider, locale) }}</span>
             </div>
-            <p :lang="isOriginalChinese(tModelSummary(model, locale), locale) ? 'zh-CN' : undefined"><small v-if="isOriginalChinese(tModelSummary(model, locale), locale)" class="catalog-source-note">{{ text("originalChinese") }}</small>{{ tModelSummary(model, locale) }}</p>
-            <div class="model-card-meta">
-              <span v-if="model.inputPrice">
-                <b>{{ text("input") }}</b>
-                <em>{{ localizeCatalog("modelPrice", model.inputPrice, locale) }} {{ localizeCatalog("modelPriceUnit", model.priceUnit, locale) }}</em>
-              </span>
-              <span v-if="model.outputPrice">
-                <b>{{ text("output") }}</b>
-                <em>{{ localizeCatalog("modelPrice", model.outputPrice, locale) }} {{ localizeCatalog("modelPriceUnit", model.priceUnit, locale) }}</em>
-              </span>
+            <div>
+              <div class="public-directory-categories">
+                <span v-for="category in model.categories" :key="category">{{ tCategory(category, locale) }}</span>
+              </div>
+              <p :lang="isOriginalChinese(tModelSummary(model, locale), locale) ? 'zh-CN' : undefined">{{ tModelSummary(model, locale) }}</p>
             </div>
-          </a>
-        </div>
-
-        <div ref="sentinel" class="market-load">
-          <button v-if="hasMore" class="button" type="button" @click="loadMore">
-            {{ text("loadMore") }}
-          </button>
-          <span v-else>
-            {{ text("allShown") }} {{ filteredModels.length }} {{ text("modelsUnit") }}
-          </span>
+          </article>
         </div>
       </div>
     </section>

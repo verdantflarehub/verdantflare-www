@@ -14,7 +14,7 @@ WWW 承载：
 
 WWW 不承载 API Key、组织权益、余额、订单、任务记录、客户项目或应用安装操作。相关 CTA 必须携带稳定 ID 和来源参数跳转 `hub.verdantflarehub.com`。
 
-首页顶部的“模型”和“应用”导航分别定位到 `/#model`、`/#apps`；相应区块提供公开目录入口和 Hub 业务入口。旧的模型订单地址仅展示公开套餐说明，不在 WWW 创建订单。
+首页顶部按“首页、应用、方案、套餐、开发者”排列，分别定位到 `/#home`、`/#apps`、`/#solutions`、`/#price`、`/#developers`。公开模型在开发者段及 `/models` 提供只读资料；实际授权、体验和调用进入 Hub。旧的模型订单地址仅展示公开套餐说明，不在 WWW 创建订单。
 
 ## 公开目录事实源
 
@@ -62,7 +62,7 @@ npm run preview
 ```bash
 docker build \
   -f docker/Dockerfile \
-  -t "${REGISTRY_ENDPOINT_ALIYUN}/wod/verdantflare:www-1.2.1" \
+  -t "${REGISTRY_ENDPOINT_ALIYUN}/wod/verdantflare:www-1.3.0" \
   .
 ```
 
