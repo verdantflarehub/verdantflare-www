@@ -18,7 +18,7 @@ const isEnglish = computed(() => props.locale === "en");
         <p>{{ isEnglish ? "Browse published capabilities and input types. This read-only directory does not show your organization's access, live availability, or actual billing." : "这里仅展示已公开的能力与输入资料。组织授权、实时可用性和实际计费，请登录 Hub 查看。" }}</p>
         <div class="market-hero-actions">
           <a class="button primary" :href="hubHref('/api/models', { entry: 'public-models' })">{{ isEnglish ? "Open the model catalog in Hub" : "进入 Hub 模型目录" }}</a>
-          <a class="button" href="/#developers">{{ isEnglish ? "Back to overview" : "返回开发者概览" }}</a>
+          <a class="button" href="/#model">{{ isEnglish ? "Back to model overview" : "返回模型概览" }}</a>
         </div>
       </div>
     </section>

@@ -14,6 +14,8 @@ WWW 承载：
 
 WWW 不承载 API Key、组织权益、余额、订单、任务记录、客户项目或应用安装操作。相关 CTA 必须携带稳定 ID 和来源参数跳转 `hub.verdantflarehub.com`。
 
+部署时 HTML 入口和 SPA 回退页使用 `Cache-Control: no-store`，带内容哈希的静态资源仍可长期缓存，避免浏览器刷新后继续载入旧版目录布局。
+
 首页顶部按“首页、模型、应用、方案、套餐、开发者”排列，分别定位到 `/#home`、`/#model`、`/#apps`、`/#solutions`、`/#price`、`/#developers`。公开模型在首页模型段及 `/models` 提供只读资料；开发者段说明 API 接入；实际授权、体验和调用进入 Hub。旧的模型订单地址仅展示公开套餐说明，不在 WWW 创建订单。
 
 ## 公开目录事实源
