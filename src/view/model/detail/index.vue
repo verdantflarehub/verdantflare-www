@@ -4,6 +4,7 @@ import { getModelById } from "../../../catalog/public";
 import { hubHref } from "../../../config/external";
 import { tCategory, tMarket, tModelName, tModelSummary } from "../i18n";
 import { isOriginalChinese, localizeCatalog } from "../../../catalog/localize";
+import ProviderLogo from "../ProviderLogo.vue";
 
 const props = defineProps({ modelId: String, locale: { type: String, default: "zh" } });
 const model = computed(() => getModelById(props.modelId));
@@ -28,7 +29,7 @@ const hasOriginalChinese = computed(() => model.value && [
       <div class="market-wrap">
         <a class="market-back" href="/models">{{ text("backToMarket") }}</a>
         <div class="model-detail-head">
-          <div class="model-logo large">{{ tModelName(model, locale).slice(0, 1) }}</div>
+          <ProviderLogo :url="model.providerIconUrl" :name="model.provider" large />
           <div>
             <div class="detail-title-row"><h1>{{ tModelName(model, locale) }}</h1><span v-if="model.categories[0]">{{ tCategory(model.categories[0], locale) }}</span></div>
             <p :lang="isOriginalChinese(summary, locale) ? 'zh-CN' : undefined">{{ summary }}</p>

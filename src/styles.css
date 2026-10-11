@@ -775,6 +775,24 @@ textarea {
   min-width: 0;
 }
 
+.public-model-row .public-model-identity,
+.public-directory-name {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.public-model-identity > div,
+.public-directory-name > div {
+  min-width: 0;
+}
+
+.public-model-identity span:not(.model-logo),
+.public-directory-name > div > span {
+  display: block;
+}
+
 .public-model-row strong {
   font-size: 16px;
   font-weight: 610;
@@ -1318,6 +1336,12 @@ textarea {
   width: 62px;
   height: 62px;
   font-size: 30px;
+}
+
+.model-logo img {
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
 }
 
 .model-logo.deepseek,

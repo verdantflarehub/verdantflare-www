@@ -4,6 +4,7 @@ import { catalogState, models } from "../../../catalog/public";
 import { tCategory, tModelName, tModelSummary, tProvider } from "../i18n";
 import { hubHref } from "../../../config/external";
 import { isOriginalChinese } from "../../../catalog/localize";
+import ProviderLogo from "../ProviderLogo.vue";
 
 const props = defineProps({ locale: { type: String, default: "zh" } });
 const isEnglish = computed(() => props.locale === "en");
@@ -35,8 +36,8 @@ const isEnglish = computed(() => props.locale === "en");
         <div v-else class="public-directory-list">
           <article v-for="model in models" :key="model.id" class="public-directory-item">
             <div class="public-directory-name">
-              <h3>{{ tModelName(model, locale) }}</h3>
-              <span>{{ tProvider(model.provider, locale) }}</span>
+              <ProviderLogo :url="model.providerIconUrl" :name="model.provider" />
+              <div><h3>{{ tModelName(model, locale) }}</h3><span>{{ tProvider(model.provider, locale) }}</span></div>
             </div>
             <div>
               <div class="public-directory-categories">

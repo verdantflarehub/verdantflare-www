@@ -4,6 +4,7 @@ import AppDetail from "./view/app/detail/index.vue";
 import AppList from "./view/app/list/index.vue";
 import ModelDetail from "./view/model/detail/index.vue";
 import ModelList from "./view/model/list/index.vue";
+import ProviderLogo from "./view/model/ProviderLogo.vue";
 import PublicContentView from "./view/content/PublicContentView.vue";
 import { hubHref, loginHref } from "./config/external";
 import { catalogState, marketApps, models, loadPublicCatalog } from "./catalog/public";
@@ -647,9 +648,9 @@ const coreCapabilities = [
           <p v-else-if="!publicModelPreview.length" class="catalog-status">{{ text.catalogEmpty }}</p>
           <div v-else class="public-model-rows">
             <div v-for="model in publicModelPreview" :key="model.id" class="public-model-row">
-              <div>
-                <strong>{{ tModelName(model, locale) }}</strong>
-                <span>{{ tProvider(model.provider, locale) }}</span>
+              <div class="public-model-identity">
+                <ProviderLogo :url="model.providerIconUrl" :name="model.provider" />
+                <div><strong>{{ tModelName(model, locale) }}</strong><span>{{ tProvider(model.provider, locale) }}</span></div>
               </div>
               <p>{{ tModelSummary(model, locale) }}</p>
             </div>
