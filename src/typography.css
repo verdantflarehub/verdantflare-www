@@ -7,6 +7,7 @@
   font-synthesis: none;
 }
 body { font-family: var(--font-ui); line-height: 1.7; }
+:lang(zh-CN) { text-autospace: normal; }
 button, input, select, textarea { font-family: inherit; }
 h1, h2, h3 { text-wrap: balance; line-break: strict; }
 p, .public-lead { text-wrap: pretty; line-break: strict; }
@@ -28,6 +29,7 @@ p, .public-lead { text-wrap: pretty; line-break: strict; }
 :lang(en) .hero h1 { letter-spacing: -.04em; }
 :lang(en) .section-title { max-width: 23ch; letter-spacing: -.035em; }
 :lang(en) :is(.hero-copy, .section-lead, .public-lead) { max-width: 56ch; line-height: 1.7; }
+:lang(en) :is(.hero-copy, .section-lead, .public-lead, .public-directory-item p) { hyphens: auto; }
 code, pre, kbd, samp { letter-spacing: normal; font-variant-ligatures: none; }
 @media (max-width: 640px) {
   .nav-links { gap: 10px; font-size: 13px; scroll-snap-type: x proximity; }

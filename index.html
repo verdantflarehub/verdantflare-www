@@ -8,6 +8,17 @@
       content="VerdantFlare 官网面向创作者、内容团队和开发者，提供公开模型、应用、视频生成解决方案、开发文档和 Hub 使用入口。"
     />
     <meta name="theme-color" content="#0b0f0c" />
+    <script>
+      (() => {
+        let selected;
+        try { selected = localStorage.getItem("verdantflare_theme"); } catch { /* storage may be unavailable */ }
+        const theme = selected === "light" || selected === "dark"
+          ? selected
+          : (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === "light" ? "#eef2ef" : "#0b0f0c";
+      })();
+    </script>
     <link rel="icon" type="image/png" href="/brand/verdantflare-logo.png" />
     <title>VerdantFlare | 模型、应用与视频生成解决方案</title>
   </head>

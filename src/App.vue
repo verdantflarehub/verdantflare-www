@@ -8,6 +8,7 @@ import PublicContentView from "./view/content/PublicContentView.vue";
 import { hubHref, loginHref } from "./config/external";
 import { catalogState, marketApps, models, loadPublicCatalog } from "./catalog/public";
 import { tModelName, tModelSummary, tProvider } from "./view/model/i18n";
+import { theme, toggleTheme } from "./theme";
 
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
@@ -173,7 +174,7 @@ const copy = {
     heroTitle: "让想法，",
     heroSubtitle: "有了画面。",
     heroCopy:
-      "从一句描述、一张参考图，到下一段视频。探索青焰的模型与创作应用，在 Hub 中体验，",
+      "从一句描述、一张参考图，到下一段视频。在 Hub 了解模型与应用，在支持的入口体验模型，",
     heroCopyEnd: "让灵感走向作品。",
     heroPriceCta: "咨询青焰套餐",
     heroFlowCta: "查看方案",
@@ -215,7 +216,7 @@ const copy = {
     heroTitle: "Your idea.",
     heroSubtitle: "In motion.",
     heroCopy:
-      "Start with a few words or a reference image. Explore models and creative apps, try them in Hub, and take your next video ",
+      "Start with a few words or a reference image. Discover models and apps in Hub, try supported models there, and take your next video ",
     heroCopyEnd: "from idea to screen.",
     heroPriceCta: "Consult Packages",
     heroFlowCta: "Explore Solutions",
@@ -559,6 +560,18 @@ const coreCapabilities = [
         <a class="nav-login" :href="sessionState === 'anonymous' ? loginHref('header-login') : hubHref('/', { entry: 'header-login' })">{{ sessionState === 'anonymous' ? text.login : text.enterHub }}</a>
         <button class="nav-lang" type="button" @click="toggleLocale">
           {{ langLabel }}
+        </button>
+        <button
+          class="nav-theme"
+          type="button"
+          :aria-label="theme === 'dark' ? (isEnglish ? 'Switch to light mode' : '切换到浅色模式') : (isEnglish ? 'Switch to dark mode' : '切换到深色模式')"
+          :title="theme === 'dark' ? (isEnglish ? 'Light mode' : '浅色模式') : (isEnglish ? 'Dark mode' : '深色模式')"
+          :aria-pressed="theme === 'light'"
+          @click="toggleTheme"
+        >
+          <svg v-if="theme === 'dark'" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" /></svg>
+          <svg v-else aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.98 13.1A9 9 0 0 1 10.9 3.02 9 9 0 1 0 20.98 13.1Z" /></svg>
+          <span>{{ theme === 'dark' ? (isEnglish ? 'Light' : '浅色') : (isEnglish ? 'Dark' : '深色') }}</span>
         </button>
       </div>
     </nav>
