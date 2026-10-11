@@ -57,6 +57,11 @@ textarea {
   font: inherit;
 }
 
+button,
+.button {
+  white-space: nowrap;
+}
+
 .site-header {
   position: fixed;
   z-index: 30;
@@ -1046,7 +1051,7 @@ textarea {
 }
 
 .site-footer {
-  padding: 34px 0;
+  padding: 34px 0 86px;
   background: #080b09;
   color: rgba(244, 241, 232, 0.62);
   font-size: 13px;

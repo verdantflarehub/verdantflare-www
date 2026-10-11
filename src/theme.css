@@ -1,5 +1,9 @@
 /* Theme changes the surrounding UI; photographs and application artwork keep their own colors. */
 .nav-theme {
+  position: fixed;
+  z-index: 40;
+  left: 20px;
+  bottom: max(20px, env(safe-area-inset-bottom));
   min-height: 44px;
   padding: 0 13px;
   display: inline-flex;
@@ -9,6 +13,7 @@
   border: 1px solid rgba(244, 241, 232, .2);
   border-radius: 999px;
   background: rgba(244, 241, 232, .06);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, .16);
   color: var(--paper);
   font-size: 13px;
   font-weight: 600;
@@ -232,7 +237,7 @@ html[data-theme="light"] .public-journey { border-color: rgba(21, 35, 30, .14); 
 html[data-theme="light"] .public-journey p { color: #53665a; }
 
 @media (max-width: 760px) {
-  .nav-theme { width: 40px; min-height: 40px; padding: 0; }
+  .nav-theme { left: 14px; bottom: max(14px, env(safe-area-inset-bottom)); width: 40px; min-height: 40px; padding: 0; }
   .nav-theme span { display: none; }
   html[data-theme="light"] .storyboard { color: #24382b; text-shadow: none; }
   html[data-theme="light"] .story-line { border-color: rgba(21, 35, 30, .2); }
