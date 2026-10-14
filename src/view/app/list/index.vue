@@ -1,14 +1,16 @@
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import {
   appCategories,
   catalogState,
   getCategoryLabel,
+  loadPublicCatalog,
   marketApps,
   tAppMarket,
 } from "../../../catalog/public";
 import { hubHref } from "../../../config/external";
 import { isOriginalChinese, localizeCatalog } from "../../../catalog/localize";
+import { appCardId, appCardIdFromHash, appDetailHref, appListContextForCatalog, appListHref, isAppListLocation, readAppListContext } from "../../../catalog/appNavigation";
 
 const props = defineProps({
   locale: {
@@ -17,10 +19,16 @@ const props = defineProps({
   },
 });
 
-const search = ref("");
-const category = ref("all");
-const viewMode = ref("grid");
-const visibleCount = ref(12);
+const initialContext = readAppListContext(window.location.search);
+const search = ref(initialContext.search);
+const searchInput = ref(null);
+const category = ref(initialContext.category);
+const viewMode = ref(initialContext.view);
+const visibleCount = ref(initialContext.count);
+let applyingContext = false;
+let restoreSequence = 0;
+let disposed = false;
+let cancelAnchorRestore = false;
 
 const text = computed(() => (key) => tAppMarket(props.locale, key));
 const filterCategories = computed(() =>
@@ -46,9 +54,61 @@ const filteredApps = computed(() => {
 
 const visibleApps = computed(() => filteredApps.value.slice(0, visibleCount.value));
 const hasMore = computed(() => visibleCount.value < filteredApps.value.length);
+const listContext = computed(() => ({ search: search.value, category: category.value, view: viewMode.value, count: visibleCount.value }));
+
+const saveContext = (appId = "") => {
+  if (!isAppListLocation(window.location.pathname, window.location.hash)) return;
+  const href = appListHref(listContext.value, appId);
+  if (`${window.location.pathname}${window.location.search}${window.location.hash}` === href) return;
+  try {
+    window.history.replaceState(window.history.state, "", href);
+  } catch {
+    // Filtering and explicit detail return links remain usable if history writes are restricted.
+  }
+};
+
+const restoreAnchor = async () => {
+  const sequence = ++restoreSequence;
+  const targetId = appCardIdFromHash(window.location.hash);
+  if (!targetId || catalogState.loading || catalogState.error || cancelAnchorRestore) return;
+  await nextTick();
+  if (disposed || sequence !== restoreSequence || cancelAnchorRestore) return;
+  const target = document.getElementById(targetId);
+  if (!target) return;
+  const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 72;
+  window.scrollTo({ top: Math.max(0, target.getBoundingClientRect().top + window.scrollY - headerHeight - 16), behavior: "instant" });
+};
+
+const restoreContext = () => {
+  if (!isAppListLocation(window.location.pathname, window.location.hash)) return;
+  const requested = readAppListContext(window.location.search);
+  const context = catalogState.loading || catalogState.error ? requested : appListContextForCatalog(requested, filterCategories.value.map((item) => item.id));
+  applyingContext = true;
+  search.value = context.search;
+  category.value = context.category;
+  viewMode.value = context.view;
+  visibleCount.value = context.count;
+  applyingContext = false;
+  cancelAnchorRestore = false;
+  if (context.category !== requested.category) saveContext();
+  restoreAnchor();
+};
+
+const cancelRestoreOnInteraction = (event) => {
+  if (event.type === "keydown" && !["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) return;
+  cancelAnchorRestore = true;
+  restoreSequence += 1;
+};
 
 const loadMore = () => {
   if (hasMore.value) visibleCount.value += 8;
+};
+
+const clearFilters = async () => {
+  search.value = "";
+  category.value = "all";
+  await nextTick();
+  searchInput.value?.focus();
 };
 
 const handleImageError = (event) => {
@@ -56,7 +116,37 @@ const handleImageError = (event) => {
 };
 
 watch([search, category], () => {
+  if (applyingContext) return;
   visibleCount.value = 12;
+  cancelAnchorRestore = true;
+  restoreSequence += 1;
+  saveContext();
+}, { flush: "sync" });
+
+watch([viewMode, visibleCount], () => {
+  if (!applyingContext) saveContext();
+}, { flush: "sync" });
+
+watch(() => catalogState.loading, (loading) => {
+  if (loading || catalogState.error || !isAppListLocation(window.location.pathname, window.location.hash)) return;
+  const valid = appListContextForCatalog(listContext.value, filterCategories.value.map((item) => item.id));
+  if (valid.category !== category.value) category.value = valid.category;
+  restoreAnchor();
+});
+
+onMounted(() => {
+  restoreContext();
+  window.addEventListener("popstate", restoreContext);
+  window.addEventListener("hashchange", restoreContext);
+  for (const event of ["wheel", "touchstart", "pointerdown", "keydown"]) window.addEventListener(event, cancelRestoreOnInteraction, { passive: true });
+});
+
+onUnmounted(() => {
+  disposed = true;
+  restoreSequence += 1;
+  window.removeEventListener("popstate", restoreContext);
+  window.removeEventListener("hashchange", restoreContext);
+  for (const event of ["wheel", "touchstart", "pointerdown", "keydown"]) window.removeEventListener(event, cancelRestoreOnInteraction);
 });
 </script>
 
@@ -71,7 +161,7 @@ watch([search, category], () => {
             {{ text("marketLead") }}
           </p>
           <div class="market-hero-actions">
-            <a v-if="marketApps.length" class="button primary" :href="`/apps/${marketApps[0].id}`">
+            <a v-if="marketApps.length" class="button primary" :href="appDetailHref(marketApps[0].id, listContext)" @click="saveContext(marketApps[0].id)">
               {{ text("recommended") }}
             </a>
             <a class="button" :href="hubHref('/market', { entry: 'apps-hero' })">Hub Market</a>
@@ -80,7 +170,7 @@ watch([search, category], () => {
 
         <div class="market-orbit" :aria-label="text('orbitLabel')">
           <span>Apps</span>
-          <strong>{{ marketApps.length }}</strong>
+          <strong>{{ catalogState.loading || catalogState.error ? "—" : marketApps.length }}</strong>
           <small>{{ text("orbitMeta") }}</small>
         </div>
       </div>
@@ -92,6 +182,7 @@ watch([search, category], () => {
           <label class="market-search">
             <span>{{ text("search") }}</span>
             <input
+              ref="searchInput"
               v-model="search"
               type="search"
               :placeholder="text('searchPlaceholder')"
@@ -125,6 +216,7 @@ watch([search, category], () => {
         <div class="market-filter-row" :aria-label="text('quickFilter')">
           <button
             :class="{ active: category === 'all' }"
+            :aria-pressed="category === 'all'"
             type="button"
             @click="category = 'all'"
           >
@@ -134,6 +226,7 @@ watch([search, category], () => {
             v-for="item in filterCategories"
             :key="item.id"
             :class="{ active: category === item.id }"
+            :aria-pressed="category === item.id"
             type="button"
             @click="category = item.id"
           >
@@ -141,15 +234,24 @@ watch([search, category], () => {
           </button>
         </div>
 
-        <p v-if="catalogState.loading">{{ text("catalogLoading") }}</p>
-        <p v-else-if="catalogState.error" role="alert">{{ text("catalogError") }}{{ locale === "zh" ? catalogState.error : "" }}</p>
-        <p v-else-if="!marketApps.length">{{ text("catalogEmpty") }}</p>
-        <div :class="['app-results', 'model-results', viewMode]">
+        <p v-if="catalogState.loading" class="catalog-status" role="status">{{ text("catalogLoading") }}</p>
+        <div v-else-if="catalogState.error" class="catalog-status catalog-feedback">
+          <p role="alert">{{ text("catalogError") }}</p>
+          <button class="button" type="button" @click="loadPublicCatalog">{{ text("retryCatalog") }}</button>
+        </div>
+        <p v-else-if="!marketApps.length" class="catalog-status" role="status">{{ text("catalogEmpty") }}</p>
+        <div v-else-if="!filteredApps.length" class="catalog-status catalog-feedback">
+          <p role="status">{{ text("noMatches") }}</p>
+          <button class="button" type="button" @click="clearFilters">{{ text("clearFilters") }}</button>
+        </div>
+        <div v-else :class="['app-results', 'model-results', viewMode]">
           <a
             v-for="app in visibleApps"
             :key="app.id"
             class="model-card app-market-card"
-            :href="`/apps/${app.id}`"
+            :id="appCardId(app.id)"
+            :href="appDetailHref(app.id, listContext)"
+            @click="saveContext(app.id)"
           >
             <div class="model-card-top">
               <div class="app-card-logo">
@@ -184,7 +286,7 @@ watch([search, category], () => {
           </a>
         </div>
 
-        <div class="market-load">
+        <div v-if="!catalogState.loading && !catalogState.error && filteredApps.length" class="market-load">
           <button v-if="hasMore" class="button" type="button" @click="loadMore">
             {{ text("loadMore") }}
           </button>

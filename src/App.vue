@@ -10,6 +10,7 @@ import { hubHref, loginHref } from "./config/external";
 import { catalogState, marketApps, models, loadPublicCatalog } from "./catalog/public";
 import { tModelName, tModelSummary, tProvider } from "./view/model/i18n";
 import { theme, toggleTheme } from "./theme";
+import { appCardIdFromHash, isAppListLocation } from "./catalog/appNavigation";
 
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
@@ -25,6 +26,7 @@ const activeSection = ref("home");
 
 const currentPath = ref(window.location.pathname);
 const currentHash = ref(window.location.hash);
+const currentSearch = ref(window.location.search);
 const locale = ref(localStorage.getItem("verdantflare_locale") || "zh");
 watch(locale, (value) => {
   document.documentElement.lang = value === "en" ? "en" : "zh-CN";
@@ -50,8 +52,11 @@ const refreshSessionWhenVisible = () => {
 };
 const modelRoute = (modelId) => models.some((model) => model.id === modelId)
   ? { name: "model-detail", modelId } : { name: "model-list" };
-const appRoute = (appId) => marketApps.some((app) => app.id === appId)
-  ? { name: "app-detail", appId } : { name: "app-list" };
+const appRoute = (appId) => {
+  try { appId = decodeURIComponent(appId); } catch { /* Preserve invalid legacy IDs for the existing list fallback. */ }
+  return marketApps.some((app) => app.id === appId)
+    ? { name: "app-detail", appId } : { name: "app-list" };
+};
 
 const route = computed(() => {
   const path = currentPath.value.replace(/\/+$/, "") || "/";
@@ -187,7 +192,7 @@ const copy = {
     appKicker: "Apps",
     appTitle: "好工具，让创作更顺手。",
     appLead:
-      "发现创作工具与工作流，了解版本、权限和运行条件。需要本地执行的应用，通过 Studio 安装到当前 Station。",
+      "发现创作工具与工作流，了解版本和运行条件。Hub 应用市场目前仅展示资料，经 Studio 安装到关联 Station 的分发链路仍在对接。",
     appCta: "进入应用市场",
     publicAppCta: "查看公开应用目录",
     solutionKicker: "Solutions",
@@ -229,7 +234,7 @@ const copy = {
     appKicker: "Apps",
     appTitle: "Good tools. More room to create.",
     appLead:
-      "Discover creative tools and workflows. Review versions, permissions, and requirements, then use Studio to install local apps on your active Station.",
+      "Discover creative tools and workflows, versions, and requirements. Hub App Market currently provides listings only; installation through Studio on your connected Station is still being integrated.",
     appCta: "Enter App Market",
     publicAppCta: "View Public Apps",
     solutionKicker: "Solutions",
@@ -288,6 +293,7 @@ const handleNavClick = (event, item) => {
 
 const scrollRouteToTop = () => {
   const path = window.location.pathname.replace(/\/+$/, "") || "/";
+  if (isAppListLocation(path, window.location.hash) && appCardIdFromHash(window.location.hash)) return;
   const hash = window.location.hash.replace(/^#\/?/, "").replace(/\/+$/, "");
   const shouldReset =
     hash === "login" ||
@@ -322,6 +328,7 @@ const scrollRouteToTop = () => {
 const handleNavigation = () => {
   currentPath.value = window.location.pathname;
   currentHash.value = window.location.hash;
+  currentSearch.value = window.location.search;
   scrollToHash();
   scrollRouteToTop();
   if (route.value.name === "external-login") {
@@ -434,8 +441,8 @@ const appItems = [
   {
     title: { zh: "版本和权限透明", en: "Transparent Versions and Permissions" },
     text: {
-      zh: "先了解公开版本与资源要求，在 Hub 查看授权，再由 Studio 管理当前 Station 的安装与运行。",
-      en: "Review versions and resource requirements, check access in Hub, and manage installation and runtime on your active Station through Studio.",
+      zh: "先在 Hub 了解公开版本与资源要求。Studio 管理关联 Station 的应用，Hub 发布版本的下载与安装分发仍在对接。",
+      en: "Review public versions and resource requirements in Hub. Studio manages apps on the connected Station; distribution of Hub releases for download and installation is still being integrated.",
     },
   },
 ];
@@ -589,6 +596,7 @@ const coreCapabilities = [
   <AppDetail
     v-else-if="route.name === 'app-detail'"
     :app-id="route.appId"
+    :route-search="currentSearch"
     :locale="locale"
   />
   <PublicContentView
@@ -644,8 +652,11 @@ const coreCapabilities = [
             <h3>{{ text.publicModelsTitle }}</h3>
             <span>{{ text.publicModelsHint }}</span>
           </div>
-          <p v-if="catalogState.loading" class="catalog-status">{{ text.catalogLoading }}</p>
-          <p v-else-if="catalogState.error" class="catalog-status" role="status">{{ text.catalogError }}</p>
+          <p v-if="catalogState.loading" class="catalog-status" role="status">{{ text.catalogLoading }}</p>
+          <div v-else-if="catalogState.error" class="catalog-status catalog-feedback">
+            <p role="alert">{{ text.catalogError }}</p>
+            <button class="button" type="button" @click="loadPublicCatalog">{{ isEnglish ? "Try again" : "重新加载" }}</button>
+          </div>
           <p v-else-if="!publicModelPreview.length" class="catalog-status">{{ text.catalogEmpty }}</p>
           <div v-else class="public-model-rows">
             <div v-for="model in publicModelPreview" :key="model.id" class="public-model-row">

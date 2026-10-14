@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from "vue";
-import { catalogState, models } from "../../../catalog/public";
+import { catalogState, loadPublicCatalog, models } from "../../../catalog/public";
 import { tCategory, tModelName, tModelSummary, tProvider } from "../i18n";
 import { hubHref } from "../../../config/external";
 import { isOriginalChinese } from "../../../catalog/localize";
@@ -30,8 +30,11 @@ const isEnglish = computed(() => props.locale === "en");
           <h2>{{ isEnglish ? "Published reference" : "已公开资料" }}</h2>
           <span>{{ isEnglish ? "Read-only · source: Control public catalog" : "只读 · 来源：Control 公开目录" }}</span>
         </div>
-        <p v-if="catalogState.loading" class="catalog-status">{{ isEnglish ? "Loading public models…" : "正在读取公开模型…" }}</p>
-        <p v-else-if="catalogState.error" class="catalog-status" role="status">{{ isEnglish ? "The public catalog is temporarily unavailable." : "公开目录暂时无法读取，请稍后再试。" }}</p>
+        <p v-if="catalogState.loading" class="catalog-status" role="status">{{ isEnglish ? "Loading public models…" : "正在读取公开模型…" }}</p>
+        <div v-else-if="catalogState.error" class="catalog-status catalog-feedback">
+          <p role="alert">{{ isEnglish ? "The public catalog is temporarily unavailable." : "公开目录暂时无法读取，请重试。" }}</p>
+          <button class="button" type="button" @click="loadPublicCatalog">{{ isEnglish ? "Try again" : "重新加载" }}</button>
+        </div>
         <p v-else-if="!models.length" class="catalog-status">{{ isEnglish ? "No models have been published yet." : "暂无已公开模型。" }}</p>
         <div v-else class="public-directory-list">
           <article v-for="model in models" :key="model.id" class="public-directory-item">

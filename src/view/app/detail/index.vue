@@ -3,19 +3,21 @@ import { computed } from "vue";
 import { getAppById, getCategoryLabel, tAppMarket } from "../../../catalog/public";
 import { hubHref } from "../../../config/external";
 import { isOriginalChinese, localizeCatalog } from "../../../catalog/localize";
+import { appListReturnHref } from "../../../catalog/appNavigation";
 
-const props = defineProps({ appId: String, locale: { type: String, default: "zh" } });
+const props = defineProps({ appId: String, locale: { type: String, default: "zh" }, routeSearch: { type: String, default: "" } });
 const app = computed(() => getAppById(props.appId));
 const text = computed(() => (key) => tAppMarket(props.locale, key));
 const summary = computed(() => localizeCatalog("appSummary", app.value?.summary, props.locale));
 const description = computed(() => localizeCatalog("appDescription", app.value?.description, props.locale));
 const hasOriginalChinese = computed(() => isOriginalChinese(summary.value, props.locale) || isOriginalChinese(description.value, props.locale));
+const returnHref = computed(() => appListReturnHref(props.appId, props.routeSearch));
 </script>
 
 <template>
   <main v-if="app" class="market-page app-detail-page">
     <section class="market-detail-hero app-detail-top"><div class="market-wrap">
-      <a class="app-back" href="/apps">{{ text("back") }}</a>
+      <a class="app-back" :href="returnHref">{{ text("back") }}</a>
       <div class="app-detail-identity"><span class="app-detail-icon"><i>{{ app.name.slice(0, 2) }}</i><img v-if="app.icon" :src="app.icon" :alt="app.name" /></span><div><h1>{{ app.name }}</h1><p :lang="isOriginalChinese(summary, locale) ? 'zh-CN' : undefined">{{ summary }}</p><span v-if="app.developer">{{ app.developer }}</span></div></div>
       <p v-if="hasOriginalChinese" class="catalog-source-note">{{ text("originalChinese") }}</p>
     </div></section>

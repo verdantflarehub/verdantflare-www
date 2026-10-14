@@ -761,6 +761,16 @@ button,
   border-top: 1px solid var(--line);
 }
 
+.catalog-feedback {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+}
+
+.catalog-feedback p { flex: 1 1 240px; margin: 0; }
+.catalog-feedback .button { flex: 0 0 auto; }
+
 .public-model-rows {
   border-top: 1px solid var(--line);
 }
@@ -3402,12 +3412,17 @@ button,
   .market-hero-grid,
   .market-toolbar,
   .model-results.list .model-card,
+  .app-list-market-page .app-results.list .app-market-card,
   .model-intro-grid,
   .api-test-grid,
   .login-shell,
   .app-topic-rail,
   .app-detail-layout {
     grid-template-columns: 1fr;
+  }
+
+  .app-list-market-page .app-results.list .model-card-meta {
+    min-width: 0;
   }
 
   .app-market-page {
@@ -3838,6 +3853,7 @@ button,
 
 .public-principles h2,
 .contact-layout h2,
+.contact-email h2,
 .public-journey h2 {
   margin: 72px 0 16px;
   font-size: 30px;
@@ -3846,6 +3862,7 @@ button,
 
 .public-principles p,
 .contact-layout > div > p,
+.contact-email > div > p,
 .public-journey p {
   margin: 0;
   color: #5f685f;
@@ -3879,9 +3896,12 @@ button,
   gap: 90px;
 }
 
-.contact-layout h2 {
+.contact-layout h2,
+.contact-email h2 {
   margin-top: 0;
 }
+
+.contact-email > div { max-width: 720px; }
 
 .contact-direct-links {
   display: grid;
@@ -3889,12 +3909,14 @@ button,
   margin-top: 34px;
 }
 
-.contact-direct-links a {
+.contact-direct-links a:not(.button) {
   padding-bottom: 12px;
   border-bottom: 1px solid var(--line-dark);
   color: #245f43;
   font-weight: 700;
 }
+
+.contact-direct-links .button { justify-self: start; }
 
 .contact-form {
   display: grid;
