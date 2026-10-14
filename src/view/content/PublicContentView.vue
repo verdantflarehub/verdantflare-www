@@ -18,33 +18,33 @@ const pages = {
     sections: [
       { title: { zh: "先验证，再进入生产", en: "Validate before production" }, text: { zh: "当前可体验已开放的文本模型；视频、参考图与画幅等输入按模型单独接入，是否可用请查看 Hub 的实际入口。", en: "Try enabled text models today. Video, reference images, and aspect-ratio controls require model-specific integration; check Hub for available entry points." } },
       { title: { zh: "任务追踪规划", en: "Planned task tracking" }, text: { zh: "视频方案规划保留任务状态、请求标识、模型版本、失败原因与结果地址；完整异步流程待对应能力接入和验证。", en: "The video workflow is planned to retain task status, request IDs, model versions, errors, and result locations. The complete asynchronous flow awaits integration and validation." } },
-      { title: { zh: "面向内容团队", en: "For content teams" }, text: { zh: "规划覆盖脚本验证、广告样片、商品展示和分镜预演；结果下载与 Studio 项目衔接以各入口实际开放能力为准。", en: "Planned use cases include script validation, ad samples, product visuals, and storyboard previs. Downloads and Studio project handoff depend on the capabilities available at each entry point." } },
+      { title: { zh: "让成果留下依据", en: "Keep the context behind the result" }, text: { zh: "视频是成果，不等于可编辑工程。VF 正在完善结果、来源与项目版本的衔接；下载、归档和后续复用以具体入口的实际支持为准。", en: "A video is an output, not necessarily an editable project. VF is improving the connection between results, provenance, and project versions; downloads, archiving, and reuse depend on the capabilities available at each entry point." } },
     ],
   },
   "solution-creator": {
-    eyebrow: { zh: "创作者解决方案", en: "Creator solution" },
-    title: { zh: "从灵感出发，把创作连起来。", en: "From first spark to a creative workflow." },
-    lead: { zh: "在 Hub 发现模型与应用，体验已开放的模型。应用市场当前仅展示资料；通过 Studio 向关联 Station 下载和安装的分发链路仍在对接。", en: "Discover models and apps in Hub and try enabled models. App Market currently provides listings only; downloading and installing published apps through Studio on a connected Station is still being integrated." },
+    eyebrow: { zh: "创作与资产复用", en: "Creation and asset reuse" },
+    title: { zh: "作品完成了，积累才刚开始。", en: "Finished work. A new starting point." },
+    lead: { zh: "一份角色参考、一套场景资料、一份真实工程，都值得留给下一次创作。VF 已有固定版本、来源记录与受控存储基础，正在完善从项目成果到资产、再到新项目的复用体验。", en: "A character reference, scene materials, or source project can be a starting point for your next creation. VF has foundations for fixed versions, provenance, and controlled storage. We’re improving the path from project outputs to reusable assets and new projects." },
     primary: { label: { zh: "浏览应用", en: "Browse apps" }, href: "/apps" },
     secondary: { label: { zh: "进入 Hub", en: "Open Hub" }, href: hubHref("/", { entry: "solution-creator" }) },
     image: "/assets/usecase-ad-storyboard.webp",
     sections: [
-      { title: { zh: "发现", en: "Discover" }, text: { zh: "按创作目标比较应用、模型、输入输出和资源条件，不先被部署细节打断。", en: "Compare apps, models, inputs, outputs, and resource requirements by creative goal." } },
-      { title: { zh: "验证", en: "Evaluate" }, text: { zh: "使用当前组织的 API Key 和真实额度体验已开放模型，并查看调用记录与用量。Hub 暂不提供应用在线试用。", en: "Try enabled models using your organization's API key and actual credits, then review call records and usage. Hub does not currently offer online app trials." } },
-      { title: { zh: "生产路径", en: "Production path" }, text: { zh: "正式项目由 Studio 管理，应用由关联 Station 执行。Hub 发布版本到 Studio 安装的链路待接通，当前请以 Studio 已安装、已授权的应用为准。", en: "Studio manages formal projects and the connected Station runs apps. Distribution from Hub releases to Studio installation is still pending; use the apps already installed and authorized in Studio." } },
+      { title: { zh: "保存，不只保留结果", en: "Keep more than the result" }, text: { zh: "从 Studio 进入 Project，记录项目修订和选用版本。结果素材与真实工程分开保留；应用没有提供的源文件，不会因入库而自动出现。", en: "Open Project through Studio to record revisions and selected versions. Keep output media distinct from source files; archiving cannot create source files an app never provided." } },
+      { title: { zh: "入库，不等于公开", en: "An asset library is not public sharing" }, text: { zh: "在 World 中登记明确选中的成果，保留来源与固定版本。资产授权与项目权限分别核对，不自动上传到公开市场；查找和预览体验仍在完善。", en: "Register explicitly selected outputs in World with provenance and fixed versions. Asset and project permissions are checked separately, with no automatic publication to a public market. Discovery and preview experiences are still being improved." } },
+      { title: { zh: "复用，不只是复制文件", en: "Reuse is more than copying files" }, text: { zh: "将资产固定版本带入下一项目，再检查应用、模型和依赖是否满足。已有引用保存入口，但各类工程的实际编辑、重跑与完整跨项目流程仍需逐项验证。", en: "Bring a fixed asset version into the next project, then check app, model, and dependency requirements. Reference saving is implemented; editing, rerunning, and complete cross-project workflows still require validation for each type of project." } },
     ],
   },
   "solution-enterprise": {
     eyebrow: { zh: "企业解决方案", en: "Enterprise solution" },
-    title: { zh: "让团队专注创作，让管理清晰有序。", en: "Room to create. Clarity to manage." },
-    lead: { zh: "通过组织、角色、权益和区域约束管理模型与应用访问；正式项目资产继续留在 Studio 与客户数据边界内。", en: "Control access through organizations, roles, entitlements, and regions while formal project assets remain in Studio." },
+    title: { zh: "让团队的成果，成为长期积累。", en: "Turn team output into lasting value." },
+    lead: { zh: "围绕项目版本、素材来源与资产复用，梳理团队的创作流程。平台权益由 Center 管理，私有项目和资产遵循客户部署的数据边界；实际交付范围需按环境与应用确认。", en: "Shape your team’s workflow around project versions, provenance, and asset reuse. Center manages platform access; private projects and assets follow your deployment’s data boundaries. Delivery scope depends on the environment and apps." },
     primary: { label: { zh: "联系企业顾问", en: "Contact enterprise" }, href: "mailto:hello@verdantflarehub.com?subject=VerdantFlare%20Enterprise" },
     secondary: { label: { zh: "查看公开套餐", en: "View public plans" }, href: "/pricing" },
     image: "/assets/usecase-previz-room.webp",
     sections: [
-      { title: { zh: "统一身份", en: "One identity" }, text: { zh: "使用统一账号登录，按组织与角色管理访问。切换团队时，对应授权随之切换。", en: "Sign in with one account and manage access by organization and role. Access follows the team you select." } },
-      { title: { zh: "显式权益", en: "Explicit entitlements" }, text: { zh: "应用、模型、API、体验额度和有效期均按组织计算，默认不因加入组织而自动开放。", en: "Apps, models, APIs, experience quota, and validity are explicitly granted per organization." } },
-      { title: { zh: "数据分界", en: "Data boundaries" }, text: { zh: "Center 管理平台权益和用量，不直接读取客户项目目录、未上传素材和本地工作版本。", en: "Center manages platform entitlement and usage without directly reading customer project files or local working versions." } },
+      { title: { zh: "版本有依据", en: "Know which version was used" }, text: { zh: "已有固定修订与资产引用基础，帮助记录项目选用了哪一版内容。版本比较、引用关系和团队复用体验仍在完善。", en: "Fixed revisions and asset references provide a foundation for recording which version a project used. Version comparisons, reference views, and team reuse experiences are still being improved." } },
+      { title: { zh: "权限分清楚", en: "Keep permissions distinct" }, text: { zh: "组织模型权益、项目成员权限与资产授权不是同一件事。能读取素材不等于取得商用许可，正式使用前仍需核对来源与授权范围。", en: "Organization model access, project membership, and asset grants are separate. Permission to read a file does not establish commercial rights; check its origin and license before use." } },
+      { title: { zh: "数据边界讲明白", en: "Be explicit about data boundaries" }, text: { zh: "Center 不直接读取客户私有资产。Station 可以在客户自己的基础设施运行，但不一定是个人电脑；调用外部模型时仍可能外发输入。备份、恢复与留存范围需单独确认。", en: "Center does not directly read private customer assets. A Station can run on customer infrastructure, not necessarily a personal computer; external model calls may still send inputs outside that boundary. Backup, recovery, and retention scope must be agreed separately." } },
     ],
   },
   developers: {
@@ -63,14 +63,14 @@ const pages = {
   docs: {
     eyebrow: { zh: "公开文档", en: "Documentation" },
     title: { zh: "找到入口，开始你的第一次创作。", en: "Find your way to your first creation." },
-    lead: { zh: "了解模型目录、已开放的模型体验与 API 接入，以及 Hub 应用市场、Studio 和 Station 各自的职责。", en: "Learn about model discovery, enabled model experiences, API access, and the roles of Hub App Market, Studio, and Station." },
+    lead: { zh: "先分清工具、项目与资产：在 Hub 了解模型和应用，从 Studio 进入项目与资产功能，由关联 Station 提供执行环境。具体能力以当前接入范围为准。", en: "Distinguish tools, projects, and assets: discover models and apps in Hub, access project and asset features through Studio, and run apps on the connected Station. Availability depends on your current integration." },
     primary: { label: { zh: "API 快速开始", en: "API quickstart" }, href: hubHref("/api/models", { entry: "docs" }) },
-    secondary: { label: { zh: "浏览应用", en: "Browse apps" }, href: "/apps" },
+    secondary: { label: { zh: "了解资产复用", en: "Explore asset reuse" }, href: "/solutions/creator" },
     image: "/assets/usecase-previz-room.webp",
     sections: [
       { title: { zh: "市场与 Hub", en: "Market and Hub" }, text: { zh: "WWW 展示公开资料；Hub 提供已开放的模型体验、API Key 与用量入口。Hub 应用市场当前仅展示应用资料，不提供应用在线试用。", en: "WWW presents public information. Hub provides enabled model experiences, API key management, and usage. Hub App Market currently displays app details without online app trials." } },
-      { title: { zh: "Studio 与 Station", en: "Studio and Station" }, text: { zh: "Studio 管理正式项目和关联 Station 的应用；安装和执行发生在 Station。Hub 已发布应用经 Studio 下载、安装的分发链路仍在对接。", en: "Studio manages formal projects and apps on the connected Station, where installation and execution take place. Distribution of published Hub apps through Studio is still being integrated." } },
-      { title: { zh: "安全与数据", en: "Security and data" }, text: { zh: "模型体验使用组织 API Key 和真实额度；正式项目与素材由 Studio 及其关联服务管理，体验结果不会自动进入正式项目。", en: "Model experiences use organization API keys and actual credits. Studio and its connected services manage formal projects and assets; experience results are not automatically added to a project." } },
+      { title: { zh: "项目与资产", en: "Projects and assets" }, text: { zh: "Studio 是统一入口，Project 管项目修订与固定引用，World 管跨项目资产，Artifact 管内容存储。已有基础能力，独立应用迁移与完整复用体验仍待完成验收。", en: "Studio is the shared entry point. Project manages revisions and fixed references, World manages cross-project assets, and Artifact stores content. Foundations exist, while independent app migration and the complete reuse experience still await full validation." } },
+      { title: { zh: "执行与交接", en: "Execution and handoff" }, text: { zh: "应用安装和执行发生在关联 Station，不默认在个人电脑。Hub 到 Studio 的应用分发仍在对接；模型体验结果不会自动进入正式项目，调用外部模型须核对输入外发范围。", en: "App installation and execution take place on the connected Station, not necessarily your personal computer. App distribution from Hub to Studio is still being integrated; model-experience results are not automatically added to projects. Check what inputs external model calls send out." } },
     ],
   },
   pricing: {
@@ -82,13 +82,13 @@ const pages = {
     image: "/assets/hero-glass-ad.webp",
     sections: [
       { title: { zh: "创作与体验", en: "Create & Explore" }, text: { zh: "浏览已公开能力，并在获得组织授权后使用已开放的在线体验；额度与用量在 Hub 查看。", en: "Discover published capabilities and try enabled experiences after organization access is granted; see credits and usage in Hub." } },
-      { title: { zh: "团队与企业接入", en: "Team & Enterprise" }, text: { zh: "围绕持续 API 调用、成员协作和正式项目交付，单独确认模型、额度与服务范围。", en: "For ongoing API use, team collaboration, and formal project delivery, confirm models, credits, and service scope separately." } },
+      { title: { zh: "团队与企业接入", en: "Team & Enterprise" }, text: { zh: "围绕 API、项目交付与资产积累需求，评估应用适配、部署和数据边界。模型额度、备份留存及服务范围单独确认，不默认包含完整资产管理交付。", en: "Review app integration, deployment, and data boundaries around your API, project delivery, and asset management needs. Model credits, backup retention, and service scope are agreed separately; a complete asset management rollout is not included by default." } },
     ],
   },
   contact: {
     eyebrow: { zh: "联系团队", en: "Contact" },
     title: { zh: "聊聊你想做的事。", en: "Tell us what you want to make." },
-    lead: { zh: "无论是验证一个想法，还是为团队接入模型，都可以通过邮件联系我们。", en: "Whether you’re testing an idea or bringing models to your team, get in touch by email." },
+    lead: { zh: "无论是验证一个想法、接入模型，还是梳理团队的项目与资产流程，都可以通过邮件联系我们。", en: "Whether you’re testing an idea, integrating models, or planning your team’s project and asset workflow, get in touch by email." },
     image: "/assets/usecase-ad-storyboard.webp",
     sections: [],
   },
@@ -129,7 +129,7 @@ const text = (value) => value?.[props.locale] || value?.zh || "";
       <div class="public-wrap contact-email">
         <div>
           <h2>{{ locale === 'en' ? 'Contact us by email' : '通过邮件联系团队' }}</h2>
-          <p>{{ locale === 'en' ? 'Tell us about your goals, model or API requirements, and team needs. The button opens your email application; review and send your message there.' : '欢迎说明创作目标、模型或 API 接入需求，以及团队情况。点击按钮会打开邮件应用，由你确认内容后发送。' }}</p>
+          <p>{{ locale === 'en' ? 'Tell us about your creative goals, asset types, existing tools, and deployment needs. Please do not include private assets or credentials. The button opens your email application; review and send your message there.' : '欢迎说明创作目标、资产类型、现有工具与部署需求；无需附上私有素材或凭据。点击按钮会打开邮件应用，由你确认内容后发送。' }}</p>
           <div class="contact-direct-links">
             <a class="button primary" href="mailto:hello@verdantflarehub.com">{{ locale === 'en' ? 'Write an inquiry' : '撰写咨询邮件' }}</a>
             <a href="mailto:hello@verdantflarehub.com">hello@verdantflarehub.com</a>
@@ -141,8 +141,8 @@ const text = (value) => value?.[props.locale] || value?.zh || "";
     <section v-else class="public-journey">
       <div class="public-wrap">
         <div>
-          <h2>{{ locale === 'en' ? 'Make your next move in Hub.' : '下一步，在 Hub 中开始。' }}</h2>
-          <p>{{ locale === 'en' ? 'Sign in to explore models and app listings, and review your organization’s API access and credits.' : '登录后浏览模型与应用资料，并查看当前组织的 API 使用权限和额度。' }}</p>
+          <h2>{{ locale === 'en' ? 'Discover tools in Hub.' : '下一步，先在 Hub 了解工具。' }}</h2>
+          <p>{{ locale === 'en' ? 'Browse model and app listings, and use enabled model experiences with the required access. Hub does not offer online app trials or manage private project assets. App distribution to Studio is still being integrated.' : '浏览模型与应用资料，按权限体验已开放模型。Hub 不提供应用在线试用，也不管理私有项目资产；向 Studio 分发应用的链路仍在对接。' }}</p>
         </div>
         <a class="button primary" :href="hubHref('/', { entry: page })">{{ locale === 'en' ? 'Open Hub' : '进入 Hub' }}</a>
       </div>

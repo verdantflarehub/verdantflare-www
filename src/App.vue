@@ -182,34 +182,34 @@ const copy = {
     login: "登录",
     enterHub: "进入 Hub",
     brandName: "青焰",
-    heroTitle: "让想法，",
-    heroSubtitle: "有了画面。",
+    heroTitle: "每次创作，",
+    heroSubtitle: "都是新起点。",
     heroCopy:
-      "从一句描述、一张参考图，到下一段视频。在 Hub 了解模型与应用，在支持的入口体验模型，",
-    heroCopyEnd: "让灵感走向作品。",
+      "不只得到一份结果，更让成果有版本、来源可追溯。VF 正在完善从项目到资产、再到下一次创作的复用体验，",
+    heroCopyEnd: "让创作持续积累。",
     heroPriceCta: "咨询青焰套餐",
-    heroFlowCta: "查看方案",
+    heroFlowCta: "了解资产复用",
     modelKicker: "Models",
     modelTitle: "先认识模型，再决定如何使用。",
     modelLead: "从已公开的模型资料了解能力与适用场景。这里只提供只读信息；登录 Hub 后再确认组织授权、在线体验和 API 接入。",
     modelCta: "进入 Hub 模型市场",
     publicModelCta: "查看完整公开目录",
     appKicker: "Apps",
-    appTitle: "好工具，让创作更顺手。",
+    appTitle: "选对工具，也看清留下什么。",
     appLead:
       "发现创作工具与工作流，了解版本和运行条件。Hub 应用市场目前仅展示资料，经 Studio 安装到关联 Station 的分发链路仍在对接。",
     appCta: "进入应用市场",
     publicAppCta: "查看公开应用目录",
     solutionKicker: "Solutions",
-    solutionTitle: "从发现能力，到完成作品。",
-    solutionLead: "青焰把模型、应用与创作环境连接起来。先找到适合的能力，在支持的入口验证，再把确认的工作流带入正式创作。",
-    solutionCta: "查看应用与场景",
+    solutionTitle: "让每一次创作，成为下一次创作的起点。",
+    solutionLead: "成果不该止于一次下载。VF 已有固定版本、来源记录与受控存储基础，正在完善资产查找、预览和跨项目复用；具体开放范围以接入环境和应用验证为准。",
+    solutionCta: "了解创作与复用",
     packagesKicker: "Plans",
     packagesTitle: "按使用阶段，选择合作方式。",
     packagesLead: "两个使用层级，从能力验证到团队接入。这里只说明服务形态；实际模型、额度、有效期和价格以 Hub 权益或双方确认的方案为准。",
     developerKicker: "Developers",
     developerTitle: "从了解能力，到第一次调用。",
-    developerLead: "在 Hub 查看组织可用模型与额度，创建 API Key，按接入说明调用，并跟踪任务与用量。真实授权和结算始终以业务系统为准。",
+    developerLead: "在 Hub 核对组织可用模型与额度，由有权限的管理员创建 API Key，再按说明接入工作流。模型调用与项目资产管理分别授权，体验结果不会自动归档到项目。",
     developerCta: "进入 API Center",
     developerDocsCta: "查看接入说明",
     publicModelsTitle: "已公开的模型",
@@ -218,40 +218,40 @@ const copy = {
     catalogEmpty: "暂无公开模型，具体可用能力请以 Hub 为准。",
     catalogError: "公开目录暂时无法读取，请稍后再试。",
     footerBrand: "青焰 · VerdantFlare",
-    footerLinks: "模型 · 应用 · 创作",
+    footerLinks: "模型 · 应用 · 创作资产",
   },
   en: {
     login: "Login",
     enterHub: "Open Hub",
     brandName: "VerdantFlare",
-    heroTitle: "Your idea.",
-    heroSubtitle: "In motion.",
+    heroTitle: "Create today.",
+    heroSubtitle: "Build on it.",
     heroCopy:
-      "Start with a few words or a reference image. Discover models and apps in Hub, try supported models there, and take your next video ",
-    heroCopyEnd: "from idea to screen.",
+      "Go beyond a finished file, with versions and traceable origins. We’re improving how work becomes reusable assets for your next project. ",
+    heroCopyEnd: "Keep building.",
     heroPriceCta: "Consult Packages",
-    heroFlowCta: "Explore Solutions",
+    heroFlowCta: "Explore asset reuse",
     modelKicker: "Models",
     modelTitle: "Know the model before you use it.",
     modelLead: "Explore published capabilities and use cases here. This is read-only information; sign in to Hub to check organization access, online experience, and API integration.",
     modelCta: "Open Hub Model Market",
     publicModelCta: "View Full Public Catalog",
     appKicker: "Apps",
-    appTitle: "Good tools. More room to create.",
+    appTitle: "Choose your tools. Know what you keep.",
     appLead:
       "Discover creative tools and workflows, versions, and requirements. Hub App Market currently provides listings only; installation through Studio on your connected Station is still being integrated.",
     appCta: "Enter App Market",
     publicAppCta: "View Public Apps",
     solutionKicker: "Solutions",
-    solutionTitle: "From capability to finished work.",
-    solutionLead: "VerdantFlare connects models, apps, and creative environments. Find the right capability, validate it where supported, then take a proven workflow into production.",
-    solutionCta: "Explore Apps and Scenarios",
+    solutionTitle: "Make every creation a starting point.",
+    solutionLead: "Your work should go beyond a download. VF has foundations for fixed versions, provenance, and controlled storage. Asset discovery, previews, and reuse across projects are being improved; availability depends on your environment and validated app support.",
+    solutionCta: "Explore creation and reuse",
     packagesKicker: "Plans",
     packagesTitle: "Choose how you work with us.",
     packagesLead: "Two levels, from validating a capability to team integration. This page explains service shapes only; models, credits, validity, and pricing follow Hub entitlements or your confirmed agreement.",
     developerKicker: "Developers",
     developerTitle: "From discovery to your first call.",
-    developerLead: "In Hub, check available models and credits, create an API key, follow the integration guide, and track tasks and usage. Business access and billing remain authoritative there.",
+    developerLead: "Check your organization’s models and credits in Hub, have an authorized administrator create an API key, and integrate it into your workflow. Model access and project assets have separate permissions; experience results are not automatically archived to a project.",
     developerCta: "Open API Center",
     developerDocsCta: "Read Integration Guide",
     publicModelsTitle: "Published models",
@@ -260,7 +260,7 @@ const copy = {
     catalogEmpty: "No public models yet. Check Hub for available capabilities.",
     catalogError: "The public catalog is temporarily unavailable. Please try again later.",
     footerBrand: "VerdantFlare",
-    footerLinks: "Models · Apps · Creation",
+    footerLinks: "Models · Apps · Creative assets",
   },
 };
 
@@ -387,8 +387,8 @@ onUnmounted(() => {
 
 const heroMeta = [
   {
-    title: { zh: "核心能力", en: "Core" },
-    text: { zh: "文本到视频 / 分镜成片", en: "Text-to-video / storyboard to clip" },
+    title: { zh: "重点方向", en: "Focus" },
+    text: { zh: "项目成果与资产复用", en: "Project outputs and asset reuse" },
   },
   {
     title: { zh: "服务形态", en: "Service" },
@@ -406,41 +406,41 @@ const heroMeta = [
 
 const storyLines = [
   {
-    label: "Prompt",
+    label: "Project",
     text: {
-      zh: "一支 8 秒产品广告片，清晨自然光，玻璃杯中冰块缓慢落下。",
-      en: "An 8-second product ad, morning natural light, ice dropping into a glass.",
+      zh: "从项目出发：保存成果的固定版本，留下真实来源。",
+      en: "Start with a project: preserve fixed versions and their origins.",
     },
   },
   {
-    label: "Frame",
+    label: "Asset",
     text: {
-      zh: "close-up / slow motion / product reveal / soft morning light",
-      en: "close-up / slow motion / product reveal / soft morning light",
+      zh: "明确选择后入库：区分结果素材、真实工程与依赖。",
+      en: "Choose what to keep: distinguish media, source files, and dependencies.",
     },
   },
   {
-    label: "Delivery",
+    label: "Reuse",
     text: {
-      zh: "青焰模型服务咨询，额度和交付方式在开通前确认。",
-      en: "Consult VerdantFlare model services; confirm credits and delivery before activation.",
+      zh: "目标是带入下一项目继续创作；完整复用体验仍在完善。",
+      en: "Bring it into your next project. The full reuse experience is still being developed.",
     },
   },
 ];
 
 const appItems = [
   {
-    title: { zh: "本地 AI 与 Agent", en: "Local AI and Agents" },
+    title: { zh: "先看输入与输出", en: "Start with inputs and outputs" },
     text: {
-      zh: "公开目录可涵盖本地模型、对话入口和智能体应用；具体条目以已发布资料为准。",
-      en: "The public catalog can cover local models, chat surfaces, and agent apps; listed items depend on published records.",
+      zh: "了解应用使用什么素材、产生什么结果。有图片或视频，不等于同时拥有可编辑工程；请以具体应用的实际支持为准。",
+      en: "Check what an app takes in and produces. An image or video does not imply an editable source project; support depends on the app.",
     },
   },
   {
-    title: { zh: "创作与工作流", en: "Creation and Workflows" },
+    title: { zh: "再看能否继续使用", en: "Check what you can reuse" },
     text: {
-      zh: "浏览已发布的创作与自动化工具，选择适合自己的工作流；安装前先核对运行条件。",
-      en: "Explore published creative and automation tools, and check their requirements before installing.",
+      zh: "关注工程格式、模型与插件依赖，以及项目和资产接入范围。文件已保存，不代表能在任意环境编辑或重跑。",
+      en: "Review source formats, model and plugin dependencies, and project or asset integration. A saved file is not a guarantee it can be edited or rerun anywhere.",
     },
   },
   {
@@ -455,40 +455,40 @@ const appItems = [
 const scenes = [
   {
     index: "01 / Script",
-    title: { zh: "短视频脚本成片", en: "Short Video Scripts" },
+    title: { zh: "角色资料，留给下一段故事", en: "Characters for the next story" },
     text: {
-      zh: "把脚本、分镜或镜头描述转成视频素材，用于内容前期验证。",
-      en: "Turn scripts, storyboards, or shot descriptions into video assets for early content validation.",
+      zh: "目标是把选定的角色参考与设定按版本保存，供后续项目查找和选用；不承诺自动还原角色模型或保证生成一致性。",
+      en: "The goal is to version selected character references and notes for later projects, without promising automatic character reconstruction or consistent generation.",
     },
     image: "usecase-script-video.webp",
     alt: { zh: "短视频脚本成片创作者工作室", en: "Creator studio for short video script generation" },
   },
   {
     index: "02 / Ad",
-    title: { zh: "广告创意测试", en: "Ad Creative Testing" },
+    title: { zh: "品牌素材，不必从头整理", en: "Build on brand materials" },
     text: {
-      zh: "快速生成多版视觉方向，用于投放素材、产品卖点和品牌短片预览。",
-      en: "Generate multiple visual directions for ad assets, product messages, and brand film previews.",
+      zh: "围绕已选定的视觉素材、来源与使用范围组织下一轮创作。跨项目选用与许可说明是正在完善的重点。",
+      en: "Organize the next creative round around selected visuals, their origins, and permitted use. Cross-project selection and license information are areas we’re improving.",
     },
     image: "usecase-ad-storyboard.webp",
     alt: { zh: "广告创意测试分镜工作台", en: "Storyboard desk for ad creative testing" },
   },
   {
     index: "03 / Product",
-    title: { zh: "电商产品展示", en: "Ecommerce Product Display" },
+    title: { zh: "产品版本，保留迭代依据", en: "Keep the history behind a product visual" },
     text: {
-      zh: "围绕商品图、卖点和场景描述生成动态素材，提高内容迭代速度。",
-      en: "Create dynamic assets from product images, selling points, and scene prompts to speed up iteration.",
+      zh: "用固定版本关联商品参考与成果，明确这次选用了哪份素材；后续更新不应悄悄替换旧项目的引用。",
+      en: "Link product references and outputs through fixed versions, so later updates do not silently replace assets used by an earlier project.",
     },
     image: "usecase-ecommerce.webp",
     alt: { zh: "电商产品展示视频静帧", en: "Video still for ecommerce product display" },
   },
   {
     index: "04 / Previz",
-    title: { zh: "故事板与分镜预演", en: "Storyboard Previsualization" },
+    title: { zh: "真实工程，才能继续编辑", en: "Keep source files for the next edit" },
     text: {
-      zh: "为导演、设计师和创意团队提供低成本的视频预览。",
-      en: "Provide low-cost video previews for directors, designers, and creative teams.",
+      zh: "如应用实际提供工程或工作流，应连同依赖保留。能否重新打开或运行，仍需对应应用与当前 Station 验证。",
+      en: "Where an app provides source files or workflows, preserve their dependencies too. Reopening or running them requires validation with the app and current Station.",
     },
     image: "usecase-previz-room.webp",
     alt: { zh: "故事板与分镜预演空间", en: "Storyboard and previs workspace" },
@@ -515,12 +515,12 @@ const packages = [
     label: "02 / Scale",
     title: { zh: "团队与企业接入", en: "Team & Enterprise" },
     text: {
-      zh: "适合需要持续调用、成员协作和正式项目交付的组织。",
-      en: "For organizations that need ongoing API use, collaboration, and formal project delivery.",
+      zh: "围绕团队的模型接入、项目交付与资产积累需求，确认适合的服务范围。",
+      en: "Define a service scope around your team’s model access, project delivery, and asset management needs.",
     },
     features: [
       { zh: "按组织管理成员、角色与能力授权", en: "Manage members, roles, and access by organization" },
-      { zh: "结合 API、Studio 与 Station 执行生产流程", en: "Bring API, Studio, and Station into production workflows" },
+      { zh: "共同评估资产流程、部署与数据边界", en: "Review asset workflows, deployment, and data boundaries together" },
       { zh: "单独确认模型范围、额度和服务边界", en: "Confirm model scope, credits, and service boundaries" },
     ],
     cta: { zh: "联系团队", en: "Contact the Team" },
@@ -531,18 +531,18 @@ const packages = [
 const coreCapabilities = [
   {
     number: "01",
-    title: { zh: "模型与 API", en: "Models & API" },
-    text: { zh: "从公开资料了解模型能力；在 Hub 核对组织授权、额度，并通过 API 接入自己的工作流。", en: "Explore model capabilities publicly, then check organization access and credits in Hub before integrating via API." },
+    title: { zh: "Project：记住创作过程", en: "Project: keep the context" },
+    text: { zh: "从 Studio 进入项目，记录成果的修订与选用的资产版本，让下一次创作有据可循。能否继续编辑或运行，仍以对应应用的实际支持为准。", en: "Open your project through Studio to track revisions and selected asset versions, giving future work a clear starting point. Further editing or execution depends on the app’s actual support." },
   },
   {
     number: "02",
-    title: { zh: "应用与工作流", en: "Apps & workflows" },
-    text: { zh: "发现已发布应用和创作流程；只有获得组织权益后，才能在对应运行环境中使用。", en: "Discover published apps and creative workflows; use them in the right runtime after access is granted." },
+    title: { zh: "World：积累可复用资产", en: "World: build an asset library" },
+    text: { zh: "明确选择后将成果登记为资产，保留来源和固定版本。资产入库不等于公开发布，查找、预览与跨项目复用体验正在完善。", en: "Explicitly select outputs to register as assets with fixed versions and provenance. Registration is not public sharing; discovery, previews, and cross-project reuse are being improved." },
   },
   {
     number: "03",
-    title: { zh: "Studio 与 Station", en: "Studio & Station" },
-    text: { zh: "在 Studio 管理正式项目，由当前 Station 安装、运行已授权应用，保持项目资产与平台权益的边界。", en: "Manage formal projects in Studio and run entitled apps on the active Station, keeping project assets and platform access separate." },
+    title: { zh: "Station：明确执行与数据边界", en: "Station: know where work runs" },
+    text: { zh: "应用在关联 Station 上执行，内容由 Artifact 受控存储。本地不默认指你的电脑；调用外部模型时，仍需核对素材外发范围。", en: "Apps run on the connected Station, with content managed by Artifact. Local does not necessarily mean your computer; external model calls require checking what data is sent out." },
   },
 ];
 
@@ -622,7 +622,7 @@ const coreCapabilities = [
     >
       <div class="hero-inner">
         <div>
-          <p class="eyebrow">{{ isEnglish ? 'VerdantFlare · Creative intelligence' : '青焰 · 让创作发生' }}</p>
+          <p class="eyebrow">{{ isEnglish ? 'VerdantFlare · Build on your work' : '青焰 · 让创作持续积累' }}</p>
           <h1 id="hero-title"><span class="headline-phrase">{{ text.heroTitle }}</span><span class="headline-phrase">{{ text.heroSubtitle }}</span></h1>
           <p class="hero-copy">
             {{ text.heroCopy }}<span class="keep-phrase">{{ text.heroCopyEnd }}</span>
@@ -639,7 +639,7 @@ const coreCapabilities = [
           </div>
         </div>
 
-        <div class="storyboard" aria-label="视频创作流程示例">
+        <div class="storyboard" :aria-label="isEnglish ? 'Project to asset reuse: product direction' : '从项目到资产复用：产品建设方向'">
           <div v-for="line in storyLines" :key="line.label" class="story-line">
             <b>{{ line.label }}</b>
             <span>{{ getLabel(line.text) }}</span>
@@ -700,8 +700,8 @@ const coreCapabilities = [
               :src="assetPath('usecase-script-video.webp')"
               :alt="
                 isEnglish
-                  ? 'App workflows and AI application market preview'
-                  : '应用市场和 AI 工作流预览画面'
+                  ? 'Illustration of a creative workspace, not a product screenshot'
+                  : '创作工作区示意图，非产品界面截图'
               "
               loading="lazy"
             />
@@ -733,14 +733,14 @@ const coreCapabilities = [
           </article>
         </div>
         <div class="solutions-scenarios-heading">
-          <h3>{{ isEnglish ? 'Where ideas take shape' : '这些场景，从这里开始' }}</h3>
-          <p>{{ isEnglish ? 'Examples of creative directions, not a promise that every workflow is available for every organization.' : '创作方向示例；具体工作流与可用性以已发布应用及组织权益为准。' }}</p>
+          <h3>{{ isEnglish ? 'What reuse could look like' : '下一次创作，可以怎样继续' }}</h3>
+          <p>{{ isEnglish ? 'Illustrated use cases, not customer results or proof of completed workflows. Availability depends on the app, permissions, and environment.' : '以下为场景示意，并非客户案例或已完成流程的证明。实际可用范围以应用、权限和环境验证为准。' }}</p>
         </div>
         <div class="section-actions">
-          <a class="button primary" href="#apps">{{ text.solutionCta }}</a>
+          <a class="button primary" href="/solutions/creator">{{ text.solutionCta }}</a>
         </div>
 
-        <div class="gallery" aria-label="使用场景样片">
+        <div class="gallery" :aria-label="isEnglish ? 'Illustrated asset reuse scenarios' : '资产复用场景示意'">
           <article v-for="scene in scenes" :key="getLabel(scene.title)" class="scene">
             <img
               :src="assetPath(scene.image)"
