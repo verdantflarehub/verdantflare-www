@@ -1076,6 +1076,15 @@ button,
   flex-wrap: wrap;
 }
 
+.footer-legal-links {
+  display: inline-flex;
+  gap: 18px;
+}
+
+.footer-legal-links a:hover {
+  color: var(--green);
+}
+
 .market-page {
   min-height: 100svh;
   padding-top: 72px;

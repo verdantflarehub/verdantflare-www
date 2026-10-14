@@ -6,6 +6,8 @@ import ModelDetail from "./view/model/detail/index.vue";
 import ModelList from "./view/model/list/index.vue";
 import ProviderLogo from "./view/model/ProviderLogo.vue";
 import PublicContentView from "./view/content/PublicContentView.vue";
+import LegalDocumentView from "./view/legal/LegalDocumentView.vue";
+import { resolveLegalRoute } from "./view/legal/legalRoute";
 import { hubHref, loginHref } from "./config/external";
 import { catalogState, marketApps, models, loadPublicCatalog } from "./catalog/public";
 import { tModelName, tModelSummary, tProvider } from "./view/model/i18n";
@@ -139,6 +141,9 @@ const route = computed(() => {
   if (path === "/login") {
     return { name: "external-login" };
   }
+
+  const legalRoute = resolveLegalRoute(path);
+  if (legalRoute) return legalRoute;
 
   const contentRoutes = {
     "/solutions/video": "solution-video",
@@ -604,6 +609,11 @@ const coreCapabilities = [
     :page="route.page"
     :locale="locale"
   />
+  <LegalDocumentView
+    v-else-if="route.name === 'legal-document'"
+    :document="route.document"
+    :locale="locale"
+  />
   <main v-else-if="route.name !== 'external-login'" id="home">
     <section
       class="hero"
@@ -793,6 +803,7 @@ const coreCapabilities = [
     <div class="footer-inner">
       <span>{{ text.footerBrand }}</span>
       <span>{{ text.footerLinks }}</span>
+      <span class="footer-legal-links"><a href="/terms">{{ isEnglish ? 'Terms' : '服务条款' }}</a><a href="/privacy">{{ isEnglish ? 'Privacy' : '隐私政策' }}</a></span>
     </div>
   </footer>
 </template>
