@@ -1,9 +1,12 @@
 const trimTrailingSlash = (value) => value.replace(/\/+$/, "");
+const useAiDomain = typeof window !== "undefined" && window.location.hostname === "www.verdantflare.ai";
 
 export const hubBaseUrl = trimTrailingSlash(
-  import.meta.env.VITE_HUB_URL || "https://hub.verdantflarehub.com"
+  useAiDomain ? "https://hub.verdantflare.ai" : (import.meta.env.VITE_HUB_URL || "https://hub.verdantflarehub.com")
 );
-const loginUrl = import.meta.env.VITE_LOGIN_URL || "https://login.verdantflarehub.com/sign-in";
+const loginUrl = useAiDomain
+  ? "https://login.verdantflare.ai/sign-in"
+  : (import.meta.env.VITE_LOGIN_URL || "https://login.verdantflarehub.com/sign-in");
 
 export const hubHref = (path, params = {}) => {
   const url = new URL(path, `${hubBaseUrl}/`);
