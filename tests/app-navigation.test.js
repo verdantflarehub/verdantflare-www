@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { appCardId, appCardIdFromHash, appDetailHref, appListContextForCatalog, appListHref, appListReturnHref, isAppListLocation, readAppListContext } from "../src/catalog/appNavigation.js";
+import { appCardId, appCardIdFromHash, appDetailHref, appListContextForCatalog, appListHref, appListReturnHref, canonicalPublicAppLocation, isAppListLocation, readAppListContext, resolvedPublicAppId } from "../src/catalog/appNavigation.js";
 
 const context = { search: "图像 & video", category: "creative", view: "list", count: 28 };
 
@@ -57,4 +57,12 @@ test("card anchors and detail links encode identifiers and tolerate malformed fr
   assert.equal(appCardIdFromHash("#app-card-%ZZ"), "");
   assert.equal(appCardIdFromHash("#app-card-"), "");
   assert.equal(appCardIdFromHash("#apps"), "");
+});
+
+test("public Blender legacy links canonicalize only while the canonical app is visible", () => {
+  assert.equal(resolvedPublicAppId("blender-mcp", []), "blender-mcp");
+  assert.equal(resolvedPublicAppId("blender-mcp", [{ id: "blender" }]), "blender");
+  assert.deepEqual(canonicalPublicAppLocation("/apps/blender-mcp/history", "", [{ id: "blender" }]), { pathname: "/apps/blender/history", hash: "" });
+  assert.deepEqual(canonicalPublicAppLocation("/", "#app-market/detail/blender-mcp", [{ id: "blender" }]), { pathname: "/", hash: "#app-market/detail/blender" });
+  assert.deepEqual(canonicalPublicAppLocation("/apps/blender-mcp", "", []), { pathname: "/apps/blender-mcp", hash: "" });
 });

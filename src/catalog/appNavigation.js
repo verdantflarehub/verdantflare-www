@@ -24,6 +24,17 @@ const listQuery = (context) => {
 
 export const appCardId = (appId) => `${CARD_PREFIX}${appId}`;
 
+export const resolvedPublicAppId = (id, apps) =>
+  id === "blender-mcp" && apps.some((app) => app.id === "blender") ? "blender" : id;
+
+export const canonicalPublicAppLocation = (pathname, hash, apps) => {
+  if (!apps.some((app) => app.id === "blender")) return { pathname, hash };
+  return {
+    pathname: pathname.replace(/^(\/(?:apps|app\/detail|app\/history|view\/app\/detail|view\/app\/history)\/)blender-mcp(?=\/|$)/, "$1blender"),
+    hash: hash.replace(/^(#\/?app-market\/(?:detail|history)\/)blender-mcp(?=\/|$)/, "$1blender"),
+  };
+};
+
 export const appCardIdFromHash = (hash = "") => {
   try {
     const id = decodeURIComponent(hash.replace(/^#/, ""));

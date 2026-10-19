@@ -12,7 +12,7 @@ import { hubHref, loginHref } from "./config/external";
 import { catalogState, marketApps, models, loadPublicCatalog } from "./catalog/public";
 import { tModelName, tModelSummary, tProvider } from "./view/model/i18n";
 import { theme, toggleTheme } from "./theme";
-import { appCardIdFromHash, isAppListLocation } from "./catalog/appNavigation";
+import { appCardIdFromHash, canonicalPublicAppLocation, isAppListLocation, resolvedPublicAppId } from "./catalog/appNavigation";
 
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
@@ -56,9 +56,18 @@ const modelRoute = (modelId) => models.some((model) => model.id === modelId)
   ? { name: "model-detail", modelId } : { name: "model-list" };
 const appRoute = (appId) => {
   try { appId = decodeURIComponent(appId); } catch { /* Preserve invalid legacy IDs for the existing list fallback. */ }
+  appId = resolvedPublicAppId(appId, marketApps);
   return marketApps.some((app) => app.id === appId)
     ? { name: "app-detail", appId } : { name: "app-list" };
 };
+
+watch(marketApps, () => {
+  const { pathname, hash } = canonicalPublicAppLocation(window.location.pathname, window.location.hash, marketApps);
+  if (pathname === window.location.pathname && hash === window.location.hash) return;
+  window.history.replaceState(window.history.state, "", `${pathname}${window.location.search}${hash}`);
+  currentPath.value = pathname;
+  currentHash.value = hash;
+});
 
 const route = computed(() => {
   const path = currentPath.value.replace(/\/+$/, "") || "/";
