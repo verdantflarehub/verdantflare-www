@@ -8,8 +8,10 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 env:
+  IMAGE_NAME: ghcr.io/verdantflarehub/verdantflare-www
   VERSION: ${{ github.ref == 'refs/heads/dev' && 'www-1.3.10-dev.1' || 'www-1.3.10' }}
 
 concurrency:
@@ -36,40 +38,24 @@ jobs:
 
       - name: Build html
         env:
-          VITE_HUB_URL: ${{ github.ref == 'refs/heads/dev' && 'https://hub.dev.verdantflarehub.com' || 'https://hub.verdantflarehub.com' }}
-          VITE_LOGIN_URL: ${{ github.ref == 'refs/heads/dev' && 'https://login.dev.verdantflarehub.com/sign-in' || 'https://login.verdantflarehub.com/sign-in' }}
+          VITE_HUB_URL: ${{ github.ref == 'refs/heads/dev' && 'https://hub.dev.verdantflarehub.com' || 'https://hub.verdantflare.ai' }}
+          VITE_LOGIN_URL: ${{ github.ref == 'refs/heads/dev' && 'https://login.dev.verdantflarehub.com/sign-in' || 'https://login.verdantflare.ai/sign-in' }}
         run: npm run build
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Set image metadata
-        id: image
-        env:
-          REGISTRY_ENDPOINT: ${{ secrets.REGISTRY_ENDPOINT_ALIYUN }}
-        run: |
-          registry_endpoint="${REGISTRY_ENDPOINT%/}"
-
-          if [ -z "$registry_endpoint" ]; then
-            echo "REGISTRY_ENDPOINT_ALIYUN is required" >&2
-            exit 1
-          fi
-
-          echo "registry_endpoint=$registry_endpoint" >> "$GITHUB_OUTPUT"
-          echo "image_namespace=$registry_endpoint/wod" >> "$GITHUB_OUTPUT"
-          echo "image_name=$registry_endpoint/wod/verdantflare" >> "$GITHUB_OUTPUT"
-
-      - name: Login to Aliyun Container Registry
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ${{ steps.image.outputs.registry_endpoint }}
-          username: ${{ secrets.REGISTRY_USER_ALIYUN }}
-          password: ${{ secrets.REGISTRY_PASSWORD_ALIYUN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Refuse an existing image tag
-        run: '! docker buildx imagetools inspect "${{ steps.image.outputs.image_name }}:${{ env.VERSION }}" >/dev/null 2>&1'
+        run: '! docker buildx imagetools inspect "${{ env.IMAGE_NAME }}:${{ env.VERSION }}" >/dev/null 2>&1'
 
-      - name: Build image
+      - name: Build and push image
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -78,17 +64,16 @@ jobs:
           push: true
           provenance: false
           sbom: false
-          tags: ${{ steps.image.outputs.image_name }}:${{ env.VERSION }}
+          tags: ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
           build-args: |
             AUTHOR=${{ github.repository_owner }}
             VERSION=${{ env.VERSION }}
-            NGINX_BASE=${{ steps.image.outputs.image_namespace }}/nginx:1.27
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Image push success
         run: |
-          echo "${{ steps.image.outputs.image_name }}:${{ env.VERSION }} built and pushed successfully!"
+          echo "${{ env.IMAGE_NAME }}:${{ env.VERSION }} built and pushed successfully!"
 
   deploy:
     name: Deploy WWW to Kubernetes
@@ -119,8 +104,7 @@ jobs:
               --embed-certs=true
           else
             kubectl config set-cluster verdantflare \
-              --server="$KUBERNETES_SERVER" \
-              --insecure-skip-tls-verify=true
+              --server="$KUBERNETES_SERVER"
           fi
 
           kubectl config set-credentials github-actions --token="$KUBERNETES_TOKEN"
@@ -129,9 +113,21 @@ jobs:
             --user=github-actions \
             --namespace=verdantflare
 
-      - name: Update WWW deployment
+      - name: Configure GHCR pull secret and update WWW deployment
+        env:
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          image="registry.cn-qingdao.aliyuncs.com/wod/verdantflare:${VERSION}"
+          set -eu
+          kubectl --context verdantflare -n verdantflare create secret docker-registry ghcr-pull \
+            --docker-server=ghcr.io \
+            --docker-username="$GHCR_USER" \
+            --docker-password="$GHCR_TOKEN" \
+            --dry-run=client -o yaml | kubectl --context verdantflare -n verdantflare apply -f -
+          kubectl --context verdantflare -n verdantflare patch serviceaccount default \
+            -p '{"imagePullSecrets":[{"name":"ghcr-pull"}]}'
+
+          image="${IMAGE_NAME}:${VERSION}"
           kubectl --context verdantflare -n verdantflare set image deployment/verdantflare-www verdantflare-www="$image"
           kubectl --context verdantflare -n verdantflare rollout status deployment/verdantflare-www --timeout=5m
           kubectl --context verdantflare -n verdantflare get deployment/verdantflare-www -o jsonpath='{.spec.template.spec.containers[?(@.name=="verdantflare-www")].image}{"\n"}'
